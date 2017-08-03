@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.bt_read = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -39,6 +38,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.bt_clear = new System.Windows.Forms.Button();
             this.bt_check = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.label4 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // bt_read
@@ -51,14 +58,6 @@
             this.bt_read.UseVisualStyleBackColor = true;
             this.bt_read.Click += new System.EventHandler(this.bt_read_Click);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(12, 47);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(425, 19);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
@@ -67,6 +66,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(425, 172);
             this.listBox1.TabIndex = 2;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // textBox2
             // 
@@ -78,7 +78,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(55, 295);
+            this.textBox3.Location = new System.Drawing.Point(55, 291);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(382, 19);
             this.textBox3.TabIndex = 1;
@@ -86,7 +86,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(55, 332);
+            this.textBox4.Location = new System.Drawing.Point(55, 321);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(382, 19);
             this.textBox4.TabIndex = 1;
@@ -100,7 +100,6 @@
             this.label1.Size = new System.Drawing.Size(27, 12);
             this.label1.TabIndex = 3;
             this.label1.Text = "path";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -110,12 +109,11 @@
             this.label2.Size = new System.Drawing.Size(26, 12);
             this.label2.TabIndex = 3;
             this.label2.Text = "ｼｰﾄ";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 335);
+            this.label3.Location = new System.Drawing.Point(14, 328);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 12);
             this.label3.TabIndex = 3;
@@ -129,6 +127,7 @@
             this.bt_clear.TabIndex = 0;
             this.bt_clear.Text = "clear";
             this.bt_clear.UseVisualStyleBackColor = true;
+            this.bt_clear.Click += new System.EventHandler(this.bt_clear_Click);
             // 
             // bt_check
             // 
@@ -140,13 +139,102 @@
             this.bt_check.UseVisualStyleBackColor = true;
             this.bt_check.Click += new System.EventHandler(this.bt_check_Click);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(71, 25);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(33, 16);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "or";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(119, 25);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(41, 16);
+            this.radioButton2.TabIndex = 5;
+            this.radioButton2.Text = "and";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(69, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(0, 12);
+            this.label4.TabIndex = 5;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(12, 47);
+            this.richTextBox1.Multiline = false;
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.richTextBox1.Size = new System.Drawing.Size(310, 19);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(328, 47);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(30, 12);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "layer";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.AccessibleDescription = "layerはandになります。";
+            this.richTextBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolTip;
+            this.richTextBox2.Location = new System.Drawing.Point(362, 47);
+            this.richTextBox2.MaxLength = 3;
+            this.richTextBox2.Multiline = false;
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.richTextBox2.Size = new System.Drawing.Size(73, 19);
+            this.richTextBox2.TabIndex = 7;
+            this.richTextBox2.Text = "";
+            this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 354);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(43, 12);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "レイヤー";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(55, 347);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 19);
+            this.textBox1.TabIndex = 9;
+            // 
             // search
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(447, 360);
+            this.ClientSize = new System.Drawing.Size(484, 393);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.richTextBox2);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -154,7 +242,6 @@
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.bt_check);
             this.Controls.Add(this.bt_clear);
             this.Controls.Add(this.bt_read);
@@ -169,7 +256,6 @@
         #endregion
 
         private System.Windows.Forms.Button bt_read;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
@@ -179,6 +265,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button bt_clear;
         private System.Windows.Forms.Button bt_check;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

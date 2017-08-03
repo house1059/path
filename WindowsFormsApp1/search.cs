@@ -8,71 +8,62 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.VisualBasic;
 
 namespace WindowsFormsApp1
 {
     public partial class search : Form
     {
-        private const String PATH_VERSION = "◎PathV4";
-
-
-
-        Dictionary<string, int> partsDic = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
-        List<pathData> partsList = new List<pathData>();    //パーソナルデータ
-
-
-        List<string> filterList = new List<string>();       //filterのコレクション
-//        List<parentData> parentList = new List<parentData>();       //子の親リスト
-
-
+        program p;
+        List<string> orList = new List<string>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        List<string> andList = new List<string>();
+        List<string> resultList = new List<string>();   //現在決定済みの方
 
         public search()
         {
             InitializeComponent();
+            p = new program();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
+  
         private void search_DragOver(object sender, DragEventArgs e)
         {
             
         }
 
+
+        //即時検索のイベント
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            
+        }
+
+
+        //検索の実態
+        private void TextFormSearch( )
+        {
+            if (richTextBox1.Text == "" && richTextBox2.Text == "")
+            {
+                listBox1.DataSource = null;
+                return;
+            }
+
             //検索開始
             // Shutdown the painting of the ListBox as items are added.
-            listBox1.BeginUpdate();
 
-            
-
-            // Allow the ListBox to repaint and display the new items.
-            listBox1.EndUpdate();
-
+            orList = p.TextSearch(richTextBox1.Text, richTextBox2.Text, true);
+            andList = p.TextSearch(richTextBox1.Text, richTextBox2.Text ,false);
+            ViewUpdate();   //再描画
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
 
-        }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        //pathﾌｧｲﾙの読込
         private void bt_read_Click(object sender, EventArgs e)
         {
-
             //ダイアログボックスの表示
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "◎PathFile(*.txt)|*.txt;|全てのﾌｧｲﾙ(*.*)|*.*";
@@ -80,119 +71,73 @@ namespace WindowsFormsApp1
 
             if (fd.ShowDialog() == DialogResult.OK)
             {
-                readPathFile(fd.FileName);
-            }
-            else
-            {
-                return;
+                p.ReadPathFile(fd.FileName);
+                label4.Text = fd.SafeFileName;
             }
 
+        }
+
+
+
+        //clearボタン
+        private void bt_clear_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+            richTextBox1.Focus();
         }
 
         private void bt_check_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("test");
+
         }
 
-
-        //ﾌｧｲﾙﾊﾟｽを渡して読込む
-        private void readPathFile(string filePath )
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            //◎pathﾃｷｽﾄを読込む　
-            StreamReader stream = new StreamReader(filePath ,Encoding.GetEncoding("shift_jis"));
-            string str = stream.ReadLine();     //日付
-
-            
-
-            if (stream.ReadLine() != PATH_VERSION)
-            {
-                MessageBox.Show("◎PathV4のファイルではありません", "注意!", MessageBoxButtons.OK);
-                stream.Close();
-                return;
-            }
-            str = stream.ReadLine();     //'//制御タグ
-
-
-
-            string[] st1, st2, strFilter;
- 
-            //コレクション作成の処理
-            while (!stream.EndOfStream)
-            {
-                st1 = stream.ReadLine().Split('\t');   //タブでカット
-                st2 = st1[0].Split('\\');              //配列の０番目を\でファイル名を取り出す
-                strFilter = st1[3].Split('：');        //全角デリミット　部品名の取り出し
-
-                pathData p = new pathData();
-                p.filePath = st1[0];
-                p.sheetName = st1[1];
-                p.address = st1[2];
-                p.value = st1[3];
-
-
-
-                //パーソナルデータが存在しない場合は作成
-                if (partsDic.ContainsKey(p.value) == false)
-                {
-                    partsList.Add( new pathData());   //パーソナルパターンを追加
-                    partsDic.Add(p.value, partsList.Count - 1);
-                    partsList[partsDic[p.value]].value = p.value;   //自分自身の登録
-                }
-
-                RegistChild(st1[4].Split(','), p);      //子どもを登録
-                              
-                int i = partsDic[p.value];  //Listのインデックスを取得
-                partsList[i].parentList.AddRange(p.parentList); //親の情報を加算
-                p.parentList = partsList[i].parentList;
-                partsList[i] = p;                       //上書き（子は上書きでＯＫ）
-                
-
-
-                if (strFilter.Count() > 0 && filterList.Contains(strFilter[0]))
-                {
-                    filterList.Add(strFilter[0]);   //フィルターを登録
-                }
-
-
-            }
+            ViewUpdate();   //再描画
         }
 
-        //子どもの情報を追加
-        private void RegistChild( string[] pts , pathData p)
+  
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            TextFormSearch();   //検索
+        }
+
+        private void ViewUpdate()   //再描画の処理
+        {
+            listBox1.BeginUpdate();
+            if (radioButton1.Checked == true)
+            {
+                resultList = orList;
+            }
+            else
+            {
+                resultList = andList;
+            }
+            listBox1.DataSource = resultList;
+
+            // Allow the ListBox to repaint and display the new items.
+            listBox1.EndUpdate();
+        }
+
+
+
+        ////データを選択した時
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            //pts～pteまでを登録
-            foreach (string s in pts)
-            {
-                switch (s.ToUpper()) {
-                    case "PTS":
-                    case "PTE":
-                    case "":
-                        break;
+            pathData src = p.getPathData(resultList[listBox1.SelectedIndex]);
 
-                    default:
-                        //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
-                        if (partsDic.ContainsKey(s) == false) { 
-                            partsList.Add( new pathData());     //空のﾃﾞｰﾀを作成
-                            partsDic.Add(s, partsList.Count -1);   //インデックス番号を登録
-                            partsList[partsDic[s]].value = s;   //自分自身の登録
-                        }
-                        partsList[partsDic[s]].parentList.Add(p.value); //親を登録
-                        p.childList.Add(s);                               //子の情報を貯める
-                        break;
-                }
-            }
+            textBox2.Text = src.filePath;
+            textBox3.Text = src.sheetName;
+            textBox4.Text = src.address;
+            textBox1.Text = src.layer;
+
         }
 
-        //検索モジュール
-        private string[] textSearch()
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
-
-
-            return x;
+            TextFormSearch();   //検索
         }
-
-
-
     }
 }
