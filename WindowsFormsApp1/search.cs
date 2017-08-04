@@ -15,9 +15,9 @@ namespace WindowsFormsApp1
     public partial class search : Form
     {
         program p;
-        List<string> orList = new List<string>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        List<string> andList = new List<string>();
-        List<string> resultList = new List<string>();   //現在決定済みの方
+        List<string> resultList  = new List<string>();   //listBox1の結果
+
+        BindingSource bindingSrc = new BindingSource(); 
 
         public search()
         {
@@ -42,7 +42,10 @@ namespace WindowsFormsApp1
         //検索の実態
         private void TextFormSearch( )
         {
-            if (richTextBox1.Text == "" && richTextBox2.Text == "")
+
+
+            p.TextSearch(richTextBox1.Text, comboBox1.Text);
+            if (richTextBox1.Text == "" && comboBox1.Text == "")
             {
                 listBox1.DataSource = null;
                 return;
@@ -50,10 +53,22 @@ namespace WindowsFormsApp1
 
             //検索開始
             // Shutdown the painting of the ListBox as items are added.
-
-            orList = p.TextSearch(richTextBox1.Text, richTextBox2.Text, true);
-            andList = p.TextSearch(richTextBox1.Text, richTextBox2.Text ,false);
             ViewUpdate();   //再描画
+
+        }
+
+
+        //画面クリア
+        private void ViewClear()
+        {
+            richTextBox1.Clear();
+            richTextBox1.Focus();
+            comboBox1.Text = "";
+            textBox1.Text = ""; //レイヤー
+            textBox2.Text = ""; //ファイルパス
+            textBox3.Text = ""; //シート名
+            textBox4.Text = ""; //ｱﾄﾞﾚｽ
+
 
         }
 
@@ -73,7 +88,15 @@ namespace WindowsFormsApp1
             {
                 p.ReadPathFile(fd.FileName);
                 label4.Text = fd.SafeFileName;
+
+                TextFormSearch();   //検索
+                bindingSrc.DataSource = p.resultLayer;
+                bindingSrc.Add("");
+                comboBox1.DataSource = bindingSrc;
+
             }
+            
+            ViewUpdate();   //再描画
 
         }
 
@@ -82,8 +105,7 @@ namespace WindowsFormsApp1
         //clearボタン
         private void bt_clear_Click(object sender, EventArgs e)
         {
-            richTextBox1.Clear();
-            richTextBox1.Focus();
+            ViewClear();
         }
 
         private void bt_check_Click(object sender, EventArgs e)
@@ -108,13 +130,19 @@ namespace WindowsFormsApp1
             listBox1.BeginUpdate();
             if (radioButton1.Checked == true)
             {
-                resultList = orList;
+                resultList = p.resultList1; //なんかもったいないのでリファクタ対象
             }
             else
             {
-                resultList = andList;
+                resultList = p.resultList2;
             }
             listBox1.DataSource = resultList;
+             //comboBox1.DataSource = resultList;　⇒　これで出ないのでDataSourceの使い方が間違っている？
+
+            //comboBox1.DisplayMember = "layer";
+            //comboBox1.DataSource = null;
+            //comboBox1.DataSource = p.resultLayer;
+
 
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
@@ -126,6 +154,12 @@ namespace WindowsFormsApp1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+            if(listBox1.SelectedIndex == -1)
+            {
+                return;
+            }
+
+
             pathData src = p.getPathData(resultList[listBox1.SelectedIndex]);
 
             textBox2.Text = src.filePath;
@@ -136,6 +170,16 @@ namespace WindowsFormsApp1
         }
 
         private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+            //TextFormSearch();   //検索
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void comboBox1_TextChanged(object sender, EventArgs e)
         {
             TextFormSearch();   //検索
         }

@@ -32,16 +32,18 @@ namespace WindowsFormsApp1
         private const String PATH_VERSION = "◎PathV4";
 
         Dictionary<string, int> partsDic = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
-        List<pathData> partsList = new List<pathData>();    //パーソナルデータ
-        List<string> filterList = new List<string>();       //filterのコレクション
+       
+        //アクセサ
+        public List<pathData> partsList { get; } = new List<pathData>();    //パーソナルデータ
+        public List<string> filterList { get; } = new List<string>();       //filterのコレクション
 
-        //パーツリストへのアクセサ
-        public List<pathData> PartsList {
-            get
-            {
-                return this.partsList;
-            }
-        }
+        public List<pathData> orList { get; private set; } = new List<pathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        public List<pathData> andList { get; private set; } = new List<pathData>();
+        public List<pathData> layerList { get; private set; } = new List<pathData>();  //全体から読込んだlayser番号リスト
+        public List<string> resultList1 { get; private set; } = new List<string>();    //
+        public List<string> resultList2 { get; private set; } = new List<string>();    //
+        public List<string> resultLayer { get; private set; } = new List<string>();    //
+
 
         //パーツ単品問い合わせ
         public pathData getPathData( string s)
@@ -80,8 +82,12 @@ namespace WindowsFormsApp1
                 p.address = st1[2];
                 p.value = st1[3];
                 p.wideValue = Strings.StrConv( st1[3].ToUpper(),VbStrConv.Wide);
-                p.layer = Strings.StrConv( st1[st1.Length -1].ToString().ToUpper(),VbStrConv.Wide);   //レイヤー情報を取得
 
+                //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
+                int layer;
+                if( int.TryParse(st1[st1.Length - 1],out layer)){
+                    p.layer = Strings.StrConv( st1[st1.Length - 1].ToUpper(),VbStrConv.Wide);
+                }
 
                 //パーソナルデータが存在しない場合は作成
                 if (partsDic.ContainsKey(p.value) == false)
@@ -142,48 +148,84 @@ namespace WindowsFormsApp1
         }
 
 
-        //検索モジュール　（ここで一括で受けて子モジュールに流す）
-        public List<string> TextSearch(string textBox1, string textBox2 ,bool b)
+
+        /// <summary>
+        /// 検索モジュール　ここで一括で受ける
+        /// </summary>
+        /// <param name="txt1">検索フィールド</param>
+        /// <param name="txt2">レイヤーフィールド</param>
+        public void TextSearch(string txt1, string txt2 )
         {
 
-            textBox1 = textBox1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
-            string[] s = textBox1.Split(' ');   //２語検索可能
-            List<pathData> p = new List<pathData>();    //or検索の場合は0から増やす
+            //全体から検索した情報
 
-            if (b == false){
-                p = partsList;               //and検索の場合は最大値から減らす
-            }
-            List<string> amList = new List<string>();
+            orList = TextSearchPathData(txt1);
+            andList = TextSearchPathData(txt1 , partsList);
 
-            //検索
-            for(int i = 0; i< s.Length; i++)
-            {
-                //or検索
-                if (b == true)
-                {
-                    p.AddRange(PathDataSearch(s[i],this.partsList));    //ローカルのパーツリストを引数とする
-                }
-                else
-                //and検索
-                {
-                    p = PathDataSearch(s[i],p);     //自身を引数として範囲を狭める
-                }
-            }
+            //layerも加味した検索
+            orList = PathDataSearchLayer(txt2, orList);
+            andList = PathDataSearchLayer(txt2, andList);
+            layerList = PathDataSearchLayer("", partsList);
 
-            //さらにlayer情報で範囲を狭める
-            if (textBox2 != "")
-            {
-                p = PathDataSearchLayer(textBox2, p);
-            }
 
-            //指定範囲のvalueを返す
-            foreach (pathData ps in p)
-            {
-                amList.Add(ps.value);
-            }
-            return amList;
+            resultList1 = PathDataSearchValueList(orList);
+            resultList2 = PathDataSearchValueList(andList);
+            resultLayer = PathDataSearchLayerList(layerList);
+
+
+
         }
 
+        /// <summary>
+        /// 検索フィールドの情報を渡してpathDataを返す
+        /// overLoad　pathがあればpathの範囲内で減らす検索を行う
+        /// </summary>
+        /// <param name="txt1">検索フィールドの情報</param>
+        /// <param name="path"></param>
+        /// <returns>pathDataのList</returns>
+        /// 
+        private List<pathData> TextSearchPathData(string txt1, List<pathData> p)
+        {
+
+            //デフォルトでは全て返却
+            if (txt1 == "") return partsList;
+
+            txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
+            string[] s = txt1.Split(' ');   //２語検索可能
+
+            //検索
+            for (int i = 0; i < s.Length; i++)
+            {
+                //and検索
+                p = PathDataSearch(s[i], p);     //自身を引数として範囲を狭める
+            }
+            return p;
+        }
+
+
+        /// <summary>
+        /// 検索フィールドの情報を渡してpathDataを返す
+        /// overLoad　pathがなければ追加していく検索を行う
+        /// </summary>
+        /// <param name="txt1">フィールド</param>
+        /// <returns></returns>
+        private List<pathData> TextSearchPathData( string txt1)
+        {
+            //デフォルトでは全て返却
+            if (txt1 == "") return partsList;
+
+            txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
+            string[] s = txt1.Split(' ');   //２語検索可能
+            List<pathData> p = new List<pathData>();    //or検索の場合は0から増やす
+
+            //検索
+            for (int i = 0; i < s.Length; i++)
+            {
+            //or検索
+                p.AddRange(PathDataSearch(s[i], this.partsList));    //ローカルのパーツリストを引数とする                }
+            }
+            return p;
+        }
 
 
         //pathDataの検索
@@ -201,24 +243,61 @@ namespace WindowsFormsApp1
             return p;
         }
 
-        //pathDataのlayer番号検索
-        private List<pathData> PathDataSearchLayer(string s, List<pathData> list)
+        //pathDataのlayer番号を含むpathDataを返す
+        /// <summary>
+        /// レイヤー番号を含むpathDataを返す
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns>List</returns>
+        private List<pathData> PathDataSearchLayer(string s ,List<pathData> ptlist)
         {
+
+            if (s == "") return ptlist;
+
             List<pathData> p = new List<pathData>();
-            foreach (pathData ps in list)  //ローカル優先
+            foreach (pathData ps in ptlist)  //指定リストから
             {
                 //layer nullがあるので事前にチェック
                 if(ps.layer == null)
                 {
                     continue;
-                //全角+大文字で検索するように
-                }else if (ps.layer.Equals(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
+                //数字の検索（完全一致）
+                }else if ( ps.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Wide)))
                 {
                     p.Add(ps);
                 }
             }
             return p;
         }
+
+        //与えられたpathDataリストからユニークなlayer番号を抽出
+        private List<string> PathDataSearchLayerList(List<pathData> pList)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            List<string> list = new List<string>();
+            foreach (pathData ps in pList)  //ローカル優先
+            {
+                if ( ps.layer != null &&  dic.ContainsKey(ps.layer) == false)
+                {
+                    dic.Add( ps.layer , null);
+                    list.Add(ps.layer);
+                }
+            }
+            return list;
+        }
+
+        //与えられたpathDataリストからvalueを返す
+        private List<string> PathDataSearchValueList(List<pathData> pList)
+        {
+            List<string> list = new List<string>();
+            foreach (pathData ps in pList)  //ローカル優先
+            {
+                    list.Add(ps.value);
+            }
+            return list;
+        }
+
+
 
     }
 

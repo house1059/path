@@ -43,9 +43,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // bt_read
@@ -190,20 +190,6 @@
             this.label5.TabIndex = 6;
             this.label5.Text = "layer";
             // 
-            // richTextBox2
-            // 
-            this.richTextBox2.AccessibleDescription = "layerはandになります。";
-            this.richTextBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolTip;
-            this.richTextBox2.Location = new System.Drawing.Point(362, 47);
-            this.richTextBox2.MaxLength = 3;
-            this.richTextBox2.Multiline = false;
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.richTextBox2.Size = new System.Drawing.Size(73, 19);
-            this.richTextBox2.TabIndex = 7;
-            this.richTextBox2.Text = "";
-            this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -220,6 +206,21 @@
             this.textBox1.Size = new System.Drawing.Size(100, 19);
             this.textBox1.TabIndex = 9;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DisplayMember = "selectLayer";
+            this.comboBox1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(385, 44);
+            this.comboBox1.MaxLength = 3;
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(52, 20);
+            this.comboBox1.Sorted = true;
+            this.comboBox1.TabIndex = 10;
+            this.comboBox1.ValueMember = "layer";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.TextChanged += new System.EventHandler(this.comboBox1_TextChanged);
+            // 
             // search
             // 
             this.AllowDrop = true;
@@ -227,9 +228,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.ClientSize = new System.Drawing.Size(484, 393);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label4);
@@ -270,9 +271,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
