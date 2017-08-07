@@ -14,15 +14,25 @@ namespace WindowsFormsApp1
 {
     public partial class search : Form
     {
-        program p;
-        List<string> resultList  = new List<string>();   //listBox1の結果
+        public BindingSource recentSrc = new BindingSource();  //検索履歴に対するbindingSrc
 
-        BindingSource bindingSrc = new BindingSource(); 
+
+
+        program p;
+        recent re;
+        List<string> resultList  = new List<string>();   //listBox1の結果
+        BindingSource bindingSrc { get; } = new BindingSource();  //listBox1（検索結果に対するbindingSrc）
+
+
+
 
         public search()
         {
             InitializeComponent();
             p = new program();
+            re = new recent();
+            
+            
         }
 
   
@@ -182,6 +192,21 @@ namespace WindowsFormsApp1
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
             TextFormSearch();   //検索
+        }
+
+
+        /// <summary>
+        /// 検索結果をDBCした場合、現在の表示を検索履歴をAddして窓に検索結果を反映
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBox1_DoubleClick(object sender, EventArgs e)
+        {
+
+            recentSrc.Add(listBox1.SelectedItem.ToString());
+            richTextBox1.Text = listBox1.SelectedItem.ToString();
+            
+
         }
     }
 }

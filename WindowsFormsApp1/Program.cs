@@ -21,9 +21,14 @@ namespace WindowsFormsApp1
         [STAThread]
         static void Main()
         {
+            search sForm = new search();
+
+
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new search());
+            Application.Run(sForm);
         }
     }
 
@@ -44,6 +49,8 @@ namespace WindowsFormsApp1
         public List<string> resultList2 { get; private set; } = new List<string>();    //
         public List<string> resultLayer { get; private set; } = new List<string>();    //
 
+
+   
 
         //パーツ単品問い合わせ
         public pathData getPathData( string s)

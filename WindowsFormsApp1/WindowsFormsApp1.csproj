@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="pathData.cs" />
+    <Compile Include="recent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="recent.Designer.cs">
+      <DependentUpon>recent.cs</DependentUpon>
+    </Compile>
     <Compile Include="search.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="recent.resx">
+      <DependentUpon>recent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="search.resx">
       <DependentUpon>search.cs</DependentUpon>
     </EmbeddedResource>
