@@ -106,7 +106,6 @@ namespace WindowsFormsApp1
                 p.parentList = partsList[i].parentList;
                 partsList[i] = p;                       //上書き（子は上書きでＯＫ）
 
-
                 if (strFilter.Count() > 0 && filterList.Contains(strFilter[0]))
                 {
                     filterList.Add(strFilter[0]);   //フィルターを登録
