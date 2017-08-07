@@ -13,14 +13,27 @@ namespace WindowsFormsApp1
     public partial class recent : Form
     {
         //別のフォームから値を受け取るよう
-        public string argument { get; }
+        //public string argument { get; }
 
         BindingSource recentSrc = new BindingSource();  //検索履歴用Listデータｾｯﾄ
+
 
         public recent()
         {
             InitializeComponent();
+
+            listBox_recent.DataSource = recentSrc;
+            //listBox_recent.DataSource = 
         }
+
+        public void recentDataAdd( string b)
+        {
+
+
+            recentSrc.Insert(0, b);
+            listBox_recent.SelectedIndex = 0;
+        }
+
 
 
 

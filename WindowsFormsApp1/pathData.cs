@@ -1,11 +1,20 @@
-﻿using Excel = Microsoft.Office.Interop.Excel;
+﻿//#define EXCEL_ON
+
+//Excelがある場合のみ
+#if EXCEL_ON
+using Excel = Microsoft.Office.Interop.Excel;
+#endif
+
+
 using System.Collections.Generic;
 
 namespace WindowsFormsApp1
 {
     public class pathData
     {
+#if EXCEL_ON
         public Excel.Workbook wb;
+#endif
         public string filePath { get; set; }
         public string fileName { get; set; }
         public string sheetName { get; set; }

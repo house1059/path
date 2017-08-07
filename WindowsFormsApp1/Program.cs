@@ -21,14 +21,9 @@ namespace WindowsFormsApp1
         [STAThread]
         static void Main()
         {
-            search sForm = new search();
-
-
-
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(sForm);
+            Application.Run(new search());
         }
     }
 

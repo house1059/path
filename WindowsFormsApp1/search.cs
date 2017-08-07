@@ -14,10 +14,7 @@ namespace WindowsFormsApp1
 {
     public partial class search : Form
     {
-        public BindingSource recentSrc = new BindingSource();  //検索履歴に対するbindingSrc
-
-
-
+     
         program p;
         recent re;
         List<string> resultList  = new List<string>();   //listBox1の結果
@@ -31,7 +28,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
             p = new program();
             re = new recent();
-            
+            re.Show();
             
         }
 
@@ -202,10 +199,15 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-
-            recentSrc.Add(listBox1.SelectedItem.ToString());
+            //現在の表示しているテキストを検索履歴へ送る
+            re.recentDataAdd(richTextBox1.Text);
             richTextBox1.Text = listBox1.SelectedItem.ToString();
             
+
+        }
+
+        private void search_Load(object sender, EventArgs e)
+        {
 
         }
     }

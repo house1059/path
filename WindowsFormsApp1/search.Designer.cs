@@ -249,6 +249,7 @@
             this.Controls.Add(this.bt_read);
             this.Name = "search";
             this.Text = "NSS　部品検索";
+            this.Load += new System.EventHandler(this.search_Load);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.search_DragOver);
             this.ResumeLayout(false);
             this.PerformLayout();
