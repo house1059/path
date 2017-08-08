@@ -26,19 +26,35 @@ namespace WindowsFormsApp1
             //listBox_recent.DataSource = 
         }
 
-        public void recentDataAdd( string b)
+        public void recentDataInsert( string b)
         {
-
+            listBox_recent.BeginUpdate();
 
             recentSrc.Insert(0, b);
             listBox_recent.SelectedIndex = 0;
+            //listBox_recent.SelectedItems.
+
+            //とりあえず履歴は１０個まで ⇒　リファクタ
+            if (recentSrc.Count > 9)
+            {
+                recentSrc.RemoveAt(9);
+            }
+
+            listBox_recent.EndUpdate();
+
+
         }
 
+        private void programBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //検索履歴の選択変更　⇒　programに通知を行いメインフォームのrichTextを書き換える
 
 
-
-
-
-
+        }
     }
 }

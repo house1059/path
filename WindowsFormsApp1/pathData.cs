@@ -1,9 +1,12 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
 //Excelがある場合のみ
 #if EXCEL_ON
-using Excel = Microsoft.Office.Interop.Excel;
+using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOMオブジェクト  ClosedXMLに移行できればそのうち
 #endif
+
+
+
 
 
 using System.Collections.Generic;
@@ -13,7 +16,10 @@ namespace WindowsFormsApp1
     public class pathData
     {
 #if EXCEL_ON
+
+        public Excel._Application ex;
         public Excel.Workbook wb;
+        public Excel.Worksheet sheet;
 #endif
         public string filePath { get; set; }
         public string fileName { get; set; }
@@ -31,7 +37,21 @@ namespace WindowsFormsApp1
         {
             parentList = new List<string>();
             childList = new List<string>();
+
         }
+
+        public void WorkBooksOpen()
+        {
+        //    ex = new Excel.Application();
+          //  wb = ex.Workbooks.Open(this.filePath, true, true);
+
+            ex.Workbooks.Open(this.filePath, true, true);
+            ex.OnSheetActivate = this.sheetName;
+
+            ex.Visible = true;
+
+        }
+
 
     }
 

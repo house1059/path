@@ -45,6 +45,13 @@ namespace WindowsFormsApp1
         public List<string> resultLayer { get; private set; } = new List<string>();    //
 
 
+        //検索履歴用のﾃﾞｰﾀﾊﾞｲﾝﾄﾞ
+        //public BindingSource bindingRecent { get; } = new BindingSource();　⇒　リファクタ時に使用
+
+
+
+
+
    
 
         //パーツ単品問い合わせ

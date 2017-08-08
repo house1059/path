@@ -33,12 +33,14 @@
             // 
             // listBox_recent
             // 
+            this.listBox_recent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.listBox_recent.FormattingEnabled = true;
             this.listBox_recent.ItemHeight = 12;
             this.listBox_recent.Location = new System.Drawing.Point(-2, 25);
             this.listBox_recent.Name = "listBox_recent";
             this.listBox_recent.Size = new System.Drawing.Size(288, 244);
             this.listBox_recent.TabIndex = 0;
+            this.listBox_recent.SelectedIndexChanged += new System.EventHandler(this.listBox_recent_SelectedIndexChanged);
             // 
             // recent
             // 

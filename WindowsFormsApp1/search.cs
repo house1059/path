@@ -200,9 +200,12 @@ namespace WindowsFormsApp1
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //現在の表示しているテキストを検索履歴へ送る
-            re.recentDataAdd(richTextBox1.Text);
-            richTextBox1.Text = listBox1.SelectedItem.ToString();
+            re.recentDataInsert(listBox1.SelectedItem.ToString());
             
+            //Excelをオープンさせる
+            p.partsList.Contains( )
+
+
 
         }
 
