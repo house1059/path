@@ -206,7 +206,7 @@ namespace WindowsFormsApp1
             pathData pd = p.partsList.Find( new pathData() );
            // p.partsList.Contains( )
 
-
+             
 
         }
 
