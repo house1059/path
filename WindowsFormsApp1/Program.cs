@@ -34,15 +34,15 @@ namespace WindowsFormsApp1
         Dictionary<string, int> partsDic = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
        
         //アクセサ
-        public List<pathData> partsList { get; } = new List<pathData>();    //パーソナルデータ
+        public List<PathData> partsList { get; } = new List<PathData>();    //パーソナルデータ
         public List<string> filterList { get; } = new List<string>();       //filterのコレクション
 
 
         //オブジェクトで管理するように変更します。
         
-        public List<pathData> orList { get; private set; } = new List<pathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        public List<pathData> andList { get; private set; } = new List<pathData>();
-        public List<pathData> layerList { get; private set; } = new List<pathData>();  //全体から読込んだlayser番号リスト
+        public List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        public List<PathData> andList { get; private set; } = new List<PathData>();
+        public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayser番号リスト
         public List<string> resultLayer { get; private set; } = new List<string>();    //
        
         /*    
@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
    
 
         //パーツ単品問い合わせ
-        public pathData getPathData( string s)
+        public PathData getPathData( string s)
         {
             return partsList[partsDic[s]];
         }
@@ -91,7 +91,7 @@ namespace WindowsFormsApp1
                 st2 = st1[0].Split('\\');              //配列の０番目を\でファイル名を取り出す
                 strFilter = st1[3].Split('：');        //全角デリミット　部品名の取り出し
 
-                pathData p = new pathData();
+                PathData p = new PathData();
                 p.filePath = st1[0];
                 p.sheetName = st1[1];
                 p.address = st1[2];
@@ -107,7 +107,7 @@ namespace WindowsFormsApp1
                 //パーソナルデータが存在しない場合は作成
                 if (partsDic.ContainsKey(p.value) == false)
                 {
-                    partsList.Add(new pathData());   //パーソナルパターンを追加
+                    partsList.Add(new PathData());   //パーソナルパターンを追加
                     partsDic.Add(p.value, partsList.Count - 1);
                     partsList[partsDic[p.value]].value = p.value;   //自分自身の登録
                     partsList[partsDic[p.value]].wideValue = Strings.StrConv(p.value,VbStrConv.Wide);   //自分自身の登録
@@ -131,7 +131,7 @@ namespace WindowsFormsApp1
         }
 
         //子どもの情報を追加
-        private void RegistChild(string[] pts, pathData p)
+        private void RegistChild(string[] pts, PathData p)
         {
 
             //pts～pteまでを登録
@@ -148,7 +148,7 @@ namespace WindowsFormsApp1
                         //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
                         if (partsDic.ContainsKey(s) == false)
                         {
-                            partsList.Add(new pathData());     //空のﾃﾞｰﾀを作成
+                            partsList.Add(new PathData());     //空のﾃﾞｰﾀを作成
                             partsDic.Add(s, partsList.Count - 1);   //インデックス番号を登録
                             partsList[partsDic[s]].value = s;   //自分自身の登録
                             partsList[partsDic[s]].wideValue =Strings.StrConv( s,VbStrConv.Wide);   //自分自身の登録
@@ -192,7 +192,7 @@ namespace WindowsFormsApp1
         /// <param name="path"></param>
         /// <returns>pathDataのList</returns>
         /// 
-        private List<pathData> TextSearchPathData(string txt1, List<pathData> p)
+        private List<PathData> TextSearchPathData(string txt1, List<PathData> p)
         {
 
             //デフォルトでは全て返却
@@ -217,14 +217,14 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="txt1">フィールド</param>
         /// <returns></returns>
-        private List<pathData> TextSearchPathData( string txt1)
+        private List<PathData> TextSearchPathData( string txt1)
         {
             //デフォルトでは全て返却
             if (txt1 == "") return partsList;
 
             txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
             string[] s = txt1.Split(' ');   //２語検索可能
-            List<pathData> p = new List<pathData>();    //or検索の場合は0から増やす
+            List<PathData> p = new List<PathData>();    //or検索の場合は0から増やす
 
             //検索
             for (int i = 0; i < s.Length; i++)
@@ -237,10 +237,10 @@ namespace WindowsFormsApp1
 
 
         //pathDataの検索
-        private List<pathData> PathDataSearch(string s, List<pathData> list )
+        private List<PathData> PathDataSearch(string s, List<PathData> list )
         {
-            List<pathData> p = new List<pathData>();
-            foreach (pathData ps in list)  //ローカル優先
+            List<PathData> p = new List<PathData>();
+            foreach (PathData ps in list)  //ローカル優先
             {
                 //全角+大文字で検索するように
                 if (ps.wideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
@@ -257,13 +257,13 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="s"></param>
         /// <returns>List</returns>
-        private List<pathData> PathDataSearchLayer(string s ,List<pathData> ptlist)
+        private List<PathData> PathDataSearchLayer(string s ,List<PathData> ptlist)
         {
 
             if (s == "") return ptlist;
 
-            List<pathData> p = new List<pathData>();
-            foreach (pathData ps in ptlist)  //指定リストから
+            List<PathData> p = new List<PathData>();
+            foreach (PathData ps in ptlist)  //指定リストから
             {
                 //layer nullがあるので事前にチェック
                 if(ps.layer == null)
@@ -279,11 +279,11 @@ namespace WindowsFormsApp1
         }
 
         //与えられたpathDataリストからユニークなlayer番号を抽出
-        private List<string> PathDataSearchLayerList(List<pathData> pList)
+        private List<string> PathDataSearchLayerList(List<PathData> pList)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             List<string> list = new List<string>();
-            foreach (pathData ps in pList)  //ローカル優先
+            foreach (PathData ps in pList)  //ローカル優先
             {
                 if ( ps.layer != null &&  dic.ContainsKey(ps.layer) == false)
                 {
@@ -295,10 +295,10 @@ namespace WindowsFormsApp1
         }
 
         //与えられたpathDataリストからvalueを返す
-        private List<string> PathDataSearchValueList(List<pathData> pList)
+        private List<string> PathDataSearchValueList(List<PathData> pList)
         {
             List<string> list = new List<string>();
-            foreach (pathData ps in pList)  //ローカル優先
+            foreach (PathData ps in pList)  //ローカル優先
             {
                     list.Add(ps.value);
             }

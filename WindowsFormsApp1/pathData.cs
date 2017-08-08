@@ -1,4 +1,4 @@
-﻿#define EXCEL_ON
+﻿//#define EXCEL_ON
 
 //Excelがある場合のみ
 #if EXCEL_ON
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace WindowsFormsApp1
 {
-    public class pathData
+    public class PathData
     {
 #if EXCEL_ON
 
@@ -33,7 +33,7 @@ namespace WindowsFormsApp1
         public List<string> childList;     //子リスト
 
         //ｺﾝｽﾄﾗｸﾀ
-        public pathData()
+        public PathData()
         {
             parentList = new List<string>();
             childList = new List<string>();
@@ -42,13 +42,14 @@ namespace WindowsFormsApp1
 
         public void WorkBooksOpen()
         {
-        //    ex = new Excel.Application();
-          //  wb = ex.Workbooks.Open(this.filePath, true, true);
-
+            //    ex = new Excel.Application();
+            //  wb = ex.Workbooks.Open(this.filePath, true, true);
+#if EXCEL_ON
             ex.Workbooks.Open(this.filePath, true, true);
             ex.OnSheetActivate = this.sheetName;
 
             ex.Visible = true;
+#endif
 
         }
 

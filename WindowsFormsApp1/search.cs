@@ -16,18 +16,29 @@ namespace WindowsFormsApp1
     {
      
         program p;
-        recent re;
+        Recent re;
         List<string> resultList  = new List<string>();   //listBox1の結果
         BindingSource bindingSrc { get; } = new BindingSource();  //listBox1（検索結果に対するbindingSrc）
 
-
+        private static Recent _recentInstance;
+        public static Recent RecentIncetance
+        {
+            get
+            {
+                return _recentInstance;
+            }
+            set
+            {
+                _recentInstance = value;
+            }
+        }
 
 
         public search()
         {
             InitializeComponent();
             p = new program();
-            re = new recent();
+            re = new Recent();
             re.Show();
             
         }
@@ -165,7 +176,7 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            pathData src = p.getPathData(listBox1.SelectedValue.ToString());
+            PathData src = p.getPathData(listBox1.SelectedValue.ToString());
 
 
 
@@ -203,7 +214,7 @@ namespace WindowsFormsApp1
             re.recentDataInsert(listBox1.SelectedValue.ToString());
             
             //Excelをオープンさせる
-            pathData pd = p.partsList.Find( new pathData() );
+           // pathData pd = p.partsList.Find( new pathData() );
            // p.partsList.Contains( )
 
              

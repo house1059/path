@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class recent
+    partial class Recent
     {
         /// <summary>
         /// Required designer variable.
@@ -42,14 +42,14 @@
             this.listBox_recent.TabIndex = 0;
             this.listBox_recent.SelectedIndexChanged += new System.EventHandler(this.listBox_recent_SelectedIndexChanged);
             // 
-            // recent
+            // Recent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.listBox_recent);
-            this.Name = "recent";
-            this.Text = "recent";
+            this.Name = "Recent";
+            this.Text = "Recent";
             this.ResumeLayout(false);
 
         }
