@@ -10,15 +10,14 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class recent : Form
+    public partial class Recent : Form
     {
         //別のフォームから値を受け取るよう
         //public string argument { get; }
 
         BindingSource recentSrc = new BindingSource();  //検索履歴用Listデータｾｯﾄ
 
-
-        public recent()
+        public Recent()
         {
             InitializeComponent();
 
