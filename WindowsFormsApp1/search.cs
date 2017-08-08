@@ -135,20 +135,19 @@ namespace WindowsFormsApp1
         private void ViewUpdate()   //再描画の処理
         {
             listBox1.BeginUpdate();
+
+            listBox1.ValueMember = "value";
+            listBox1.DisplayMember = "wideValue";
+
+
             if (radioButton1.Checked == true)
             {
-                resultList = p.resultList1; //なんかもったいないのでリファクタ対象
+                listBox1.DataSource = p.partsList;
             }
             else
             {
-                resultList = p.resultList2;
+                listBox1.DataSource = p.andList;
             }
-            listBox1.DataSource = resultList;
-             //comboBox1.DataSource = resultList;　⇒　これで出ないのでDataSourceの使い方が間違っている？
-
-            //comboBox1.DisplayMember = "layer";
-            //comboBox1.DataSource = null;
-            //comboBox1.DataSource = p.resultLayer;
 
 
             // Allow the ListBox to repaint and display the new items.
@@ -166,8 +165,9 @@ namespace WindowsFormsApp1
                 return;
             }
 
+            pathData src = p.getPathData(listBox1.SelectedValue.ToString());
 
-            pathData src = p.getPathData(resultList[listBox1.SelectedIndex]);
+
 
             textBox2.Text = src.filePath;
             textBox3.Text = src.sheetName;
@@ -200,10 +200,11 @@ namespace WindowsFormsApp1
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //現在の表示しているテキストを検索履歴へ送る
-            re.recentDataInsert(listBox1.SelectedItem.ToString());
+            re.recentDataInsert(listBox1.SelectedValue.ToString());
             
             //Excelをオープンさせる
-            p.partsList.Contains( )
+            pathData pd = p.partsList.Find( new pathData() );
+           // p.partsList.Contains( )
 
 
 

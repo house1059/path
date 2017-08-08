@@ -37,13 +37,18 @@ namespace WindowsFormsApp1
         public List<pathData> partsList { get; } = new List<pathData>();    //パーソナルデータ
         public List<string> filterList { get; } = new List<string>();       //filterのコレクション
 
+
+        //オブジェクトで管理するように変更します。
+        
         public List<pathData> orList { get; private set; } = new List<pathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
         public List<pathData> andList { get; private set; } = new List<pathData>();
         public List<pathData> layerList { get; private set; } = new List<pathData>();  //全体から読込んだlayser番号リスト
+        public List<string> resultLayer { get; private set; } = new List<string>();    //
+       
+        /*    
         public List<string> resultList1 { get; private set; } = new List<string>();    //
         public List<string> resultList2 { get; private set; } = new List<string>();    //
-        public List<string> resultLayer { get; private set; } = new List<string>();    //
-
+        */
 
         //検索履歴用のﾃﾞｰﾀﾊﾞｲﾝﾄﾞ
         //public BindingSource bindingRecent { get; } = new BindingSource();　⇒　リファクタ時に使用
@@ -59,6 +64,7 @@ namespace WindowsFormsApp1
         {
             return partsList[partsDic[s]];
         }
+
 
 
         //ﾌｧｲﾙﾊﾟｽを渡して読込む
@@ -174,12 +180,7 @@ namespace WindowsFormsApp1
             andList = PathDataSearchLayer(txt2, andList);
             layerList = PathDataSearchLayer("", partsList);
 
-
-            resultList1 = PathDataSearchValueList(orList);
-            resultList2 = PathDataSearchValueList(andList);
-            resultLayer = PathDataSearchLayerList(layerList);
-
-
+            resultLayer = PathDataSearchLayerList(layerList);   //⇒データバインディングするのであればList<string>よりList<dataPath>が向いている
 
         }
 

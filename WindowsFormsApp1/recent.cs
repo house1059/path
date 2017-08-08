@@ -23,7 +23,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             listBox_recent.DataSource = recentSrc;
-            //listBox_recent.DataSource = 
+            
         }
 
         public void recentDataInsert( string b)
@@ -32,12 +32,11 @@ namespace WindowsFormsApp1
 
             recentSrc.Insert(0, b);
             listBox_recent.SelectedIndex = 0;
-            //listBox_recent.SelectedItems.
-
-            //とりあえず履歴は１０個まで ⇒　リファクタ
-            if (recentSrc.Count > 9)
+            
+            //とりあえず履歴は２０個まで ⇒　リファクタ
+            if (recentSrc.Count > 19)
             {
-                recentSrc.RemoveAt(9);
+                recentSrc.RemoveAt(19);
             }
 
             listBox_recent.EndUpdate();
