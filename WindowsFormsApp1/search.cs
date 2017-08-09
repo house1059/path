@@ -20,7 +20,6 @@ namespace WindowsFormsApp1
         public string recentReceive { get; set; } = "";
 
         Recent re;
-
         program p;
         List<string> resultList  = new List<string>();   //listBox1の結果
         BindingSource bindingSrc { get; } = new BindingSource();  //layer用 cmdboxなので
@@ -58,8 +57,8 @@ namespace WindowsFormsApp1
         {
 
 
-            p.TextSearch(recentReceive, comboBox1.Text);
-            if (recentReceive == "" && comboBox1.Text == "")
+            p.TextSearch(richTextBox1.Text, comboBox1.Text);
+            if (richTextBox1.Text == "" && comboBox1.Text == "")
             {
                 listBox1.DataSource = null;
                 return;
@@ -141,7 +140,6 @@ namespace WindowsFormsApp1
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            recentReceive = richTextBox1.Text;  //ラップする。
             TextFormSearch();   //検索
         }
 
