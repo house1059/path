@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.VisualBasic;
-using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOMオブジェクト  ClosedXMLに移行できればそのうち
-using System.Runtime.InteropServices;
 
 
 namespace WindowsFormsApp1
@@ -240,86 +238,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-
-
-            Excel._Application ex = null; ;
-            Excel._Workbook wb = null;
-            Excel.Worksheet sh = null;
-            Excel.Range rn = null;
-
-            try
-            {
-                ex = new Excel.Application();
-                wb = ex.Workbooks.Open(path.filePath, true, true);
-                sh = ex.Sheets[path.sheetName];
-                sh.Select();
-
-                rn = ex.Range[path.address, path.address];
-                rn.Select();
-
-                ex.Visible = true;
-                System.Threading.Thread.Sleep(1000);
-
-                Marshal.ReleaseComObject(rn);
-                Marshal.ReleaseComObject(sh);
-                Marshal.ReleaseComObject(wb);
-                Marshal.ReleaseComObject(ex);
-
-
-            }
-            finally{
-                GC.Collect();
-            }
-                
-                
-                //Excel.Workbook wb = ex.Sheets[path.sheetName];
-            //ex.range[path.address ,path.address].select();
-
-            
-            /**
-            var excelApplication = new Microsoft.Office.Interop.Excel.Application();
-            try
-            {
-                Workbooks workbooks = excelApplication.Workbooks;
-                try
-                {
-                    Workbook workbook = workbooks.Open(path.filePath);
-                    try
-                    {
-                        Sheets worksheets = workbook.Sheets;
-                        try
-                        {
-                            Worksheet worksheet = worksheets[path.sheetName];
-                            try
-                            {
-                                excelApplication.Visible = true;
-                            }
-                            finally { Marshal.ReleaseComObject(worksheet); }
-                        }
-                        finally { Marshal.ReleaseComObject(worksheets); }
-                    }
-                    finally
-                    {
-                        if (workbook != null)
-                        {
-                            workbook.Close(false);
-                        }
-                        Marshal.ReleaseComObject(workbook);
-                    }
-                }
-                finally { Marshal.ReleaseComObject(workbooks); }
-            }
-            finally
-            {
-                Marshal.ReleaseComObject(excelApplication);
-            }
-        */
-
-
-
-
+            program.ExcelOpen(listBox1.SelectedValue.ToString());
 
         }
 

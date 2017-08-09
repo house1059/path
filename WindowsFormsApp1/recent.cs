@@ -58,11 +58,13 @@ namespace WindowsFormsApp1
         {
             PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
             contextMenuStrip1.Items[0].Enabled = false;  //開くNG
-
-
+            contextMenuStrip1.Items[2].Enabled = false;  //親リストNG
 
             if (path.wbOK)
                 contextMenuStrip1.Items[0].Enabled = true;  //開くOK
+
+            if (path.filePath != "" && path.sheetName != "" && path.address != "")
+                contextMenuStrip1.Items[2].Enabled = true;  //親リストOK
 
         }
         
@@ -74,38 +76,7 @@ namespace WindowsFormsApp1
 
         private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
-
-
-            Excel._Application ex = null; ;
-            Excel._Workbook wb = null;
-            Excel.Worksheet sh = null;
-            Excel.Range rn = null;
-
-            try
-            {
-                ex = new Excel.Application();
-                wb = ex.Workbooks.Open(path.filePath, true, true);
-                sh = ex.Sheets[path.sheetName];
-                sh.Select();
-
-                rn = ex.Range[path.address, path.address];
-                rn.Select();
-
-                ex.Visible = true;
-                System.Threading.Thread.Sleep(1000);
-
-                Marshal.ReleaseComObject(rn);
-                Marshal.ReleaseComObject(sh);
-                Marshal.ReleaseComObject(wb);
-                Marshal.ReleaseComObject(ex);
-
-
-            }
-            finally
-            {
-                GC.Collect();
-            }
+            program.ExcelOpen(listBox_recent.SelectedValue.ToString());
         }
     }
 }

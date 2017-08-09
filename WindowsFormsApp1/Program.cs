@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
+using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOMオブジェクト  ClosedXMLに移行できればそのうち
+using System.Runtime.InteropServices;
 
 
 namespace WindowsFormsApp1
@@ -64,6 +66,51 @@ namespace WindowsFormsApp1
         {
             return partsList[partsDic[s]];
         }
+
+        //Excelオープン
+        public static void ExcelOpen(PathData path)
+        {
+            _ExcelOpen(path);
+        }
+
+        public static void ExcelOpen(string s)
+        {
+            _ExcelOpen( getPathData(s));
+        }
+
+
+        private static void _ExcelOpen(PathData path)
+        {
+            Excel._Application ex = null; ;
+            Excel._Workbook wb = null;
+            Excel.Worksheet sh = null;
+            Excel.Range rn = null;
+
+            try
+            {
+                ex = new Excel.Application();
+                wb = ex.Workbooks.Open(path.filePath, true, true);
+                sh = ex.Sheets[path.sheetName];
+                sh.Select();
+
+                rn = ex.Range[path.address, path.address];
+                rn.Select();
+
+                ex.Visible = true;
+                System.Threading.Thread.Sleep(1000);
+
+                Marshal.ReleaseComObject(rn);
+                Marshal.ReleaseComObject(sh);
+                Marshal.ReleaseComObject(wb);
+                Marshal.ReleaseComObject(ex);
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
+
 
 
 
