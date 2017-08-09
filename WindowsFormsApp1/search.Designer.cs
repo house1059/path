@@ -28,8 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.bt_read = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.開くOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.履歴RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.親リストPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
@@ -46,6 +52,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bt_read
@@ -63,6 +70,7 @@
             this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBox1.ContextMenuStrip = this.contextMenuStrip1;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(12, 72);
@@ -71,6 +79,41 @@
             this.listBox1.TabIndex = 2;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.開くOToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.履歴RToolStripMenuItem,
+            this.親リストPToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 98);
+            // 
+            // 開くOToolStripMenuItem
+            // 
+            this.開くOToolStripMenuItem.Name = "開くOToolStripMenuItem";
+            this.開くOToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.開くOToolStripMenuItem.Text = "開く(&O)";
+            this.開くOToolStripMenuItem.Click += new System.EventHandler(this.開くOToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // 履歴RToolStripMenuItem
+            // 
+            this.履歴RToolStripMenuItem.Name = "履歴RToolStripMenuItem";
+            this.履歴RToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.履歴RToolStripMenuItem.Text = "履歴(&R)";
+            this.履歴RToolStripMenuItem.Click += new System.EventHandler(this.履歴RToolStripMenuItem_Click);
+            // 
+            // 親リストPToolStripMenuItem
+            // 
+            this.親リストPToolStripMenuItem.Name = "親リストPToolStripMenuItem";
+            this.親リストPToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.親リストPToolStripMenuItem.Text = "親リスト(&P)";
             // 
             // textBox2
             // 
@@ -267,6 +310,7 @@
             this.Text = "NSS　部品検索";
             this.Load += new System.EventHandler(this.search_Load);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.search_DragOver);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,6 +336,11 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 開くOToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 履歴RToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 親リストPToolStripMenuItem;
     }
 }
 

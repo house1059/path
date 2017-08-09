@@ -51,6 +51,7 @@
             this.MaximizeBox = false;
             this.Name = "Recent";
             this.Text = "Recent";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Recent_FormClosing);
             this.ResumeLayout(false);
 
         }

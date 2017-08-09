@@ -66,5 +66,11 @@ namespace WindowsFormsApp1
             }
 
         }
+        
+        private void Recent_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Visible = false;
+            e.Cancel = true;
+        }
     }
 }
