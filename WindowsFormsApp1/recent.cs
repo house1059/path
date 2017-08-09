@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
 
 
 namespace WindowsFormsApp1
@@ -49,6 +47,7 @@ namespace WindowsFormsApp1
 
         private void programBindingSource_CurrentChanged(object sender, EventArgs e)
         {
+
 
         }
 

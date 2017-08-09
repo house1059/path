@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define EXCEL_ON
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,9 +8,11 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 using Microsoft.VisualBasic;
+
+#if EXCEL_ON
 using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOMオブジェクト  ClosedXMLに移行できればそのうち
 using System.Runtime.InteropServices;
-
+#endif
 
 namespace WindowsFormsApp1
 {
@@ -81,6 +85,8 @@ namespace WindowsFormsApp1
 
         private static void _ExcelOpen(PathData path)
         {
+
+#if EXCEL_ON
             Excel._Application ex = null; ;
             Excel._Workbook wb = null;
             Excel.Worksheet sh = null;
@@ -108,6 +114,12 @@ namespace WindowsFormsApp1
             {
                 GC.Collect();
             }
+#else
+            MessageBox.Show("Excelを機能を切っているので起動はしませんがここを通ります");
+#endif
+
+
+
         }
 
 
