@@ -1,4 +1,4 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
 //Excelがある場合のみ
 #if EXCEL_ON

@@ -12,33 +12,28 @@ using Microsoft.VisualBasic;
 
 namespace WindowsFormsApp1
 {
-    public partial class search : Form
+    public partial class Search : Form
     {
-     
-        program p;
+
+        //子フォームからアクセスできるプロパティを作成
+        public string recentReceive { get; set; } = "";
+
         Recent re;
+        program p;
         List<string> resultList  = new List<string>();   //listBox1の結果
         BindingSource bindingSrc { get; } = new BindingSource();  //listBox1（検索結果に対するbindingSrc）
 
-        private static Recent _recentInstance;
-        public static Recent RecentIncetance
-        {
-            get
-            {
-                return _recentInstance;
-            }
-            set
-            {
-                _recentInstance = value;
-            }
-        }
+
+       
 
 
-        public search()
+
+        public Search()
         {
             InitializeComponent();
             p = new program();
             re = new Recent();
+            re.seach = this;    //子フォームに親のインスタンスを通知
             re.Show();
             
         }
@@ -62,8 +57,8 @@ namespace WindowsFormsApp1
         {
 
 
-            p.TextSearch(richTextBox1.Text, comboBox1.Text);
-            if (richTextBox1.Text == "" && comboBox1.Text == "")
+            p.TextSearch(recentReceive, comboBox1.Text);
+            if (recentReceive == "" && comboBox1.Text == "")
             {
                 listBox1.DataSource = null;
                 return;
@@ -74,6 +69,10 @@ namespace WindowsFormsApp1
             ViewUpdate();   //再描画
 
         }
+
+
+
+
 
 
         //画面クリア
@@ -107,10 +106,11 @@ namespace WindowsFormsApp1
                 p.ReadPathFile(fd.FileName);
                 label4.Text = fd.SafeFileName;
 
-                TextFormSearch();   //検索
                 bindingSrc.DataSource = p.resultLayer;
-                bindingSrc.Add("");
+                bindingSrc.Insert(0,"");
                 comboBox1.DataSource = bindingSrc;
+                comboBox1.SelectedIndex = 0;
+                TextFormSearch();   //検索
 
             }
             
@@ -140,6 +140,7 @@ namespace WindowsFormsApp1
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
+            recentReceive = richTextBox1.Text;  //ラップする。
             TextFormSearch();   //検索
         }
 
@@ -153,7 +154,7 @@ namespace WindowsFormsApp1
 
             if (radioButton1.Checked == true)
             {
-                listBox1.DataSource = p.partsList;
+                listBox1.DataSource = p.orList;
             }
             else
             {
@@ -192,10 +193,6 @@ namespace WindowsFormsApp1
             //TextFormSearch();   //検索
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
 
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
@@ -211,7 +208,7 @@ namespace WindowsFormsApp1
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //現在の表示しているテキストを検索履歴へ送る
-            re.recentDataInsert(listBox1.SelectedValue.ToString());
+            re.recentDataInsert( p.getPathData(listBox1.SelectedValue.ToString()));
             
             //Excelをオープンさせる
            // pathData pd = p.partsList.Find( new pathData() );

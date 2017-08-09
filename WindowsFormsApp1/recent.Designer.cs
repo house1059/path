@@ -33,7 +33,7 @@
             // 
             // listBox_recent
             // 
-            this.listBox_recent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.listBox_recent.ForeColor = System.Drawing.Color.Gray;
             this.listBox_recent.FormattingEnabled = true;
             this.listBox_recent.ItemHeight = 12;
             this.listBox_recent.Location = new System.Drawing.Point(-2, 25);
@@ -48,6 +48,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.listBox_recent);
+            this.MaximizeBox = false;
             this.Name = "Recent";
             this.Text = "Recent";
             this.ResumeLayout(false);

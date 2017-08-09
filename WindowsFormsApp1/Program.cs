@@ -23,7 +23,7 @@ namespace WindowsFormsApp1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new search());
+            Application.Run(new Search());
         }
     }
 
@@ -42,7 +42,7 @@ namespace WindowsFormsApp1
         
         public List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
         public List<PathData> andList { get; private set; } = new List<PathData>();
-        public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayser番号リスト
+        public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
         public List<string> resultLayer { get; private set; } = new List<string>();    //
        
         /*    
@@ -101,7 +101,7 @@ namespace WindowsFormsApp1
                 //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
                 int layer;
                 if( int.TryParse(st1[st1.Length - 1],out layer)){
-                    p.layer = Strings.StrConv( st1[st1.Length - 1].ToUpper(),VbStrConv.Wide);
+                    p.layer = Strings.StrConv( st1[st1.Length - 1].ToUpper(),VbStrConv.Narrow); //数値に変換したいので小文字
                 }
 
                 //パーソナルデータが存在しない場合は作成
@@ -220,7 +220,7 @@ namespace WindowsFormsApp1
         private List<PathData> TextSearchPathData( string txt1)
         {
             //デフォルトでは全て返却
-            if (txt1 == "") return partsList;
+            if ( txt1 == "") return partsList;
 
             txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
             string[] s = txt1.Split(' ');   //２語検索可能
@@ -278,20 +278,23 @@ namespace WindowsFormsApp1
             return p;
         }
 
-        //与えられたpathDataリストからユニークなlayer番号を抽出
+        //与えられたpathDataリストからユニークなlayer番号を抽出　一旦数値変換⇒ソートしてstringで返す
         private List<string> PathDataSearchLayerList(List<PathData> pList)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            List<string> list = new List<string>();
+            List<int> intList = new List<int>();
+
+
             foreach (PathData ps in pList)  //ローカル優先
             {
                 if ( ps.layer != null &&  dic.ContainsKey(ps.layer) == false)
                 {
                     dic.Add( ps.layer , null);
-                    list.Add(ps.layer);
+                    intList.Add(int.Parse(ps.layer));
                 }
             }
-            return list;
+            intList.Sort();
+            return intList.ConvertAll(s => s.ToString());
         }
 
         //与えられたpathDataリストからvalueを返す

@@ -68,19 +68,19 @@
     <Compile Include="Recent.Designer.cs">
       <DependentUpon>Recent.cs</DependentUpon>
     </Compile>
-    <Compile Include="search.cs">
+    <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="search.Designer.cs">
-      <DependentUpon>search.cs</DependentUpon>
+    <Compile Include="Search.Designer.cs">
+      <DependentUpon>Search.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Recent.resx">
       <DependentUpon>Recent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="search.resx">
-      <DependentUpon>search.cs</DependentUpon>
+    <EmbeddedResource Include="Search.resx">
+      <DependentUpon>Search.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

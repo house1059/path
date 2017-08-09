@@ -15,21 +15,29 @@ namespace WindowsFormsApp1
         //別のフォームから値を受け取るよう
         //public string argument { get; }
 
-        BindingSource recentSrc = new BindingSource();  //検索履歴用Listデータｾｯﾄ
+        public Search seach { get; set; }
+
+
+        BindingSource recentSrc;  //検索履歴用Listデータｾｯﾄ
 
         public Recent()
         {
             InitializeComponent();
 
-            listBox_recent.DataSource = recentSrc;
-            
+            recentSrc = new BindingSource();
+            //recentSrc.DataMember = "value";
+            listBox_recent.ValueMember = "value";
+            listBox_recent.DisplayMember = "wideValue";
+
         }
 
-        public void recentDataInsert( string b)
+        public void recentDataInsert( PathData p)
         {
             listBox_recent.BeginUpdate();
-
-            recentSrc.Insert(0, b);
+            recentSrc.Insert(0, p);
+            listBox_recent.ValueMember = "value";
+            listBox_recent.DisplayMember = "wideValue";
+            listBox_recent.DataSource = recentSrc;
             listBox_recent.SelectedIndex = 0;
             
             //とりあえず履歴は２０個まで ⇒　リファクタ
@@ -51,7 +59,11 @@ namespace WindowsFormsApp1
         private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
         {
             //検索履歴の選択変更　⇒　programに通知を行いメインフォームのrichTextを書き換える
+            if( seach != null)
+            {
+    
 
+            }
 
         }
     }
