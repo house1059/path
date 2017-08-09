@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
+
 
 namespace WindowsFormsApp1
 {
@@ -39,12 +42,7 @@ namespace WindowsFormsApp1
             listBox_recent.DisplayMember = "wideValue";
             listBox_recent.DataSource = recentSrc;
             listBox_recent.SelectedIndex = 0;
-            
-            //とりあえず履歴は２０個まで ⇒　リファクタ
-            if (recentSrc.Count > 19)
-            {
-                recentSrc.RemoveAt(19);
-            }
+
 
             listBox_recent.EndUpdate();
 
@@ -58,12 +56,13 @@ namespace WindowsFormsApp1
 
         private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //検索履歴の選択変更　⇒　programに通知を行いメインフォームのrichTextを書き換える
-            if( seach != null)
-            {
-    
+            PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
+            contextMenuStrip1.Items[0].Enabled = false;  //開くNG
 
-            }
+
+
+            if (path.wbOK)
+                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
 
         }
         
@@ -71,6 +70,42 @@ namespace WindowsFormsApp1
         {
             this.Visible = false;
             e.Cancel = true;
+        }
+
+        private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
+
+
+            Excel._Application ex = null; ;
+            Excel._Workbook wb = null;
+            Excel.Worksheet sh = null;
+            Excel.Range rn = null;
+
+            try
+            {
+                ex = new Excel.Application();
+                wb = ex.Workbooks.Open(path.filePath, true, true);
+                sh = ex.Sheets[path.sheetName];
+                sh.Select();
+
+                rn = ex.Range[path.address, path.address];
+                rn.Select();
+
+                ex.Visible = true;
+                System.Threading.Thread.Sleep(1000);
+
+                Marshal.ReleaseComObject(rn);
+                Marshal.ReleaseComObject(sh);
+                Marshal.ReleaseComObject(wb);
+                Marshal.ReleaseComObject(ex);
+
+
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
     }
 }

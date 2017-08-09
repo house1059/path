@@ -175,14 +175,21 @@ namespace WindowsFormsApp1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            if(listBox1.SelectedIndex == -1)
+            contextMenuStrip1.Items[0].Enabled = false;      //開くNG
+            contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
+
+            if (listBox1.SelectedIndex == -1)
             {
                 return;
             }
 
-            PathData src = p.getPathData(listBox1.SelectedValue.ToString());
+            PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+            if (src.wbOK)
+                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
 
-
+            if(src.parentList.Count > 0)
+                contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
+            
 
             textBox2.Text = src.filePath;
             textBox3.Text = src.sheetName;
@@ -211,7 +218,7 @@ namespace WindowsFormsApp1
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //現在の表示しているテキストを検索履歴へ送る
-            re.recentDataInsert( p.getPathData(listBox1.SelectedValue.ToString()));
+            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
             
             //Excelをオープンさせる
            // pathData pd = p.partsList.Find( new pathData() );
@@ -234,7 +241,7 @@ namespace WindowsFormsApp1
         private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            PathData path = p.getPathData(listBox1.SelectedValue.ToString());
+            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
 
 
             Excel._Application ex = null; ;

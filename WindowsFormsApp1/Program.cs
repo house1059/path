@@ -31,10 +31,10 @@ namespace WindowsFormsApp1
     {
         private const String PATH_VERSION = "◎PathV4";
 
-        Dictionary<string, int> partsDic = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
+        public static Dictionary<string, int> partsDic { get; } = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
        
         //アクセサ
-        public List<PathData> partsList { get; } = new List<PathData>();    //パーソナルデータ
+        public static List<PathData> partsList { get; } = new List<PathData>();    //パーソナルデータ
         public List<string> filterList { get; } = new List<string>();       //filterのコレクション
 
 
@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
    
 
         //パーツ単品問い合わせ
-        public PathData getPathData( string s)
+        public static PathData getPathData( string s)
         {
             return partsList[partsDic[s]];
         }
@@ -97,6 +97,12 @@ namespace WindowsFormsApp1
                 p.address = st1[2];
                 p.value = st1[3];
                 p.wideValue = Strings.StrConv( st1[3].ToUpper(),VbStrConv.Wide);
+                //ココで開くOK,NGの判定を行う
+                if( p.filePath != "" && p.sheetName != "" && p.address != "")
+                {
+                    p.wbOK = true;
+                }
+
 
                 //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
                 int layer;
@@ -230,7 +236,7 @@ namespace WindowsFormsApp1
             for (int i = 0; i < s.Length; i++)
             {
             //or検索
-                p.AddRange(PathDataSearch(s[i], this.partsList));    //ローカルのパーツリストを引数とする                }
+                p.AddRange(PathDataSearch(s[i], partsList));    //ローカルのパーツリストを引数とする                }
             }
             return p;
         }

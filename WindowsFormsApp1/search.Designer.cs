@@ -92,8 +92,9 @@
             // 
             // 開くOToolStripMenuItem
             // 
+            this.開くOToolStripMenuItem.Enabled = false;
             this.開くOToolStripMenuItem.Name = "開くOToolStripMenuItem";
-            this.開くOToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.開くOToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.開くOToolStripMenuItem.Text = "開く(&O)";
             this.開くOToolStripMenuItem.Click += new System.EventHandler(this.開くOToolStripMenuItem_Click);
             // 
@@ -111,6 +112,7 @@
             // 
             // 親リストPToolStripMenuItem
             // 
+            this.親リストPToolStripMenuItem.Enabled = false;
             this.親リストPToolStripMenuItem.Name = "親リストPToolStripMenuItem";
             this.親リストPToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.親リストPToolStripMenuItem.Text = "親リスト(&P)";
