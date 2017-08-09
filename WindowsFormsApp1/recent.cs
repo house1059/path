@@ -16,9 +16,7 @@ namespace WindowsFormsApp1
     public partial class Recent : Form
     {
         //別のフォームから値を受け取るよう
-        //public string argument { get; }
-
-        public Search seach { get; set; }
+        public RichTextBox SearchRichTextBox { get; set; }
 
 
         BindingSource recentSrc;  //検索履歴用Listデータｾｯﾄ
@@ -63,7 +61,7 @@ namespace WindowsFormsApp1
             if (path.wbOK)
                 contextMenuStrip1.Items[0].Enabled = true;  //開くOK
 
-            if (path.filePath != "" && path.sheetName != "" && path.address != "")
+            if (path.parentList.Count > 0)
                 contextMenuStrip1.Items[2].Enabled = true;  //親リストOK
 
         }
@@ -77,6 +75,24 @@ namespace WindowsFormsApp1
         private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
         {
             program.ExcelOpen(listBox_recent.SelectedValue.ToString());
+        }
+
+        private void 親リストPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
+            CustomList pForm = new CustomList(path.parentList, path.value);
+            pForm.SearchRichTextBox = this.SearchRichTextBox;   //巡り巡って親のTextBoxになります。
+        }
+
+        private void listBox_recent_DoubleClick(object sender, EventArgs e)
+        {
+            //ListBoxのオブジェクトが飛んできます。
+            if ((ListBox)sender != null)
+            {
+                //MyListをダブルクリックした場合、メイン画面のtext入力を書き換えたい
+                ListBox list = (ListBox)sender;
+                this.SearchRichTextBox.Text = list.Text;
+            }
         }
     }
 }

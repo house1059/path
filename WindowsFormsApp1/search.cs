@@ -20,12 +20,11 @@ namespace WindowsFormsApp1
         public string recentReceive { get; set; } = "";
 
         Recent re;
+
         program p;
         List<string> resultList  = new List<string>();   //listBox1の結果
-        BindingSource bindingSrc { get; } = new BindingSource();  //listBox1（検索結果に対するbindingSrc）
-
-
-       
+        BindingSource bindingSrc { get; } = new BindingSource();  //layer用 cmdboxなので
+        BindingSource pListSrc { get; } = new BindingSource();      //親の一時リスト
 
 
 
@@ -34,7 +33,8 @@ namespace WindowsFormsApp1
             InitializeComponent();
             p = new program();
             re = new Recent();
-            re.seach = this;    //子フォームに親のインスタンスを通知
+
+            re.SearchRichTextBox = this.richTextBox1;    //子フォームに親のインスタンスを通知
             re.Visible = false;
             
         }
@@ -155,11 +155,11 @@ namespace WindowsFormsApp1
 
             if (radioButton1.Checked == true)
             {
-                listBox1.DataSource = p.orList;
+                listBox1.DataSource = program.orList;
             }
             else
             {
-                listBox1.DataSource = p.andList;
+                listBox1.DataSource = program.andList;
             }
 
 
@@ -175,6 +175,7 @@ namespace WindowsFormsApp1
 
             contextMenuStrip1.Items[0].Enabled = false;      //開くNG
             contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
+            contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
 
             if (listBox1.SelectedIndex == -1)
             {
@@ -185,14 +186,24 @@ namespace WindowsFormsApp1
             if (src.wbOK)
                 contextMenuStrip1.Items[0].Enabled = true;  //開くOK
 
-            if(src.parentList.Count > 0)
+            if (src.parentList.Count > 0)
+            {
                 contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
-            
+                contextMenuStrip2.Items[3].Enabled = true;  //親リストでの右クリック親リスト切り離しOK
+            }
 
             textBox2.Text = src.filePath;
             textBox3.Text = src.sheetName;
             textBox4.Text = src.address;
             textBox1.Text = src.layer;
+
+
+            //親リストにバインディング
+            pListSrc.DataSource = src.parentList;
+            listBox_pList.DisplayMember = "wideValue";
+            listBox_pList.ValueMember = "value";
+            listBox_pList.DataSource = pListSrc;
+
 
         }
 
@@ -217,12 +228,7 @@ namespace WindowsFormsApp1
         {
             //現在の表示しているテキストを検索履歴へ送る
             re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            
-            //Excelをオープンさせる
-           // pathData pd = p.partsList.Find( new pathData() );
-           // p.partsList.Contains( )
-
-             
+            re.Visible = true;  //MyListを開く   
 
         }
 
@@ -244,7 +250,113 @@ namespace WindowsFormsApp1
 
         private void 履歴RToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+        }
+
+     
+
+        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            contextMenuStrip2.Items[0].Enabled = false;     //開くNG
+            contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
+      
+            if (listBox_pList.SelectedIndex == -1 )
+                return;
+
+
+            //open可能
+            if( program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+                contextMenuStrip2.Items[0].Enabled = true;     //開くNG
+
+            //MyListOK
+            contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
+
+
+      
+
+
+        }
+
+
+        //子リスト切り離し
+        private void list切り離しCToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked == true)
+            {
+                CustomList pForm = new CustomList(program.orList, richTextBox1.Text);
+                pForm.SearchRichTextBox = this.richTextBox1;
+            }
+            else
+            {
+                CustomList pForm = new CustomList(program.andList, richTextBox1.Text);
+                pForm.SearchRichTextBox = this.richTextBox1;
+            }
+
+        }
+
+        //MyListへDBクリックと同じ処理
+        private void myListへMToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
             re.Visible = true;
+        }
+
+        private void myListの表示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+
+
+        private void myListの表示ToolStripMenuItem_Click_2(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+
+
+        /// <summary>
+        /// 親プレビュー側のコンテキスト
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 開くOToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_pList.SelectedValue.ToString());
+        }
+
+        private void myListの表示ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+        //親リストを切り離す
+        private void list切り離しCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
+            CustomList pForm = new CustomList(path.parentList,path.value);
+            pForm.SearchRichTextBox = this.richTextBox1;
+        }
+
+        private void myListへMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox_pList.SelectedValue.ToString()));
+        }
+
+        private void listBox_pList_DoubleClick(object sender, EventArgs e)
+        {
+            //親リストをダブルクリックした場合のみ、検索対象とする
+            if ((ListBox)sender != null)
+            {
+                ListBox list = (ListBox)sender;
+                this.richTextBox1.Text = list.Text;
+            }
+
         }
     }
 }

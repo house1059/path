@@ -61,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomList.Designer.cs">
+      <DependentUpon>CustomList.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathData.cs" />
     <Compile Include="Recent.cs">
       <SubType>Form</SubType>
@@ -76,6 +82,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CustomList.resx">
+      <DependentUpon>CustomList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Recent.resx">
       <DependentUpon>Recent.cs</DependentUpon>
     </EmbeddedResource>

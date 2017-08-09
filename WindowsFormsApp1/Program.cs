@@ -37,13 +37,13 @@ namespace WindowsFormsApp1
        
         //アクセサ
         public static List<PathData> partsList { get; } = new List<PathData>();    //パーソナルデータ
-        public List<string> filterList { get; } = new List<string>();       //filterのコレクション
+        public static List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        public static List<PathData> andList { get; private set; } = new List<PathData>();
 
 
-        //オブジェクトで管理するように変更します。
         
-        public List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        public List<PathData> andList { get; private set; } = new List<PathData>();
+        //オブジェクトで管理するように変更します。
+        public static List<string> filterList { get; } = new List<string>();       //filterのコレクション
         public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
         public List<string> resultLayer { get; private set; } = new List<string>();    //
        
@@ -206,7 +206,7 @@ namespace WindowsFormsApp1
                             partsList[partsDic[s]].value = s;   //自分自身の登録
                             partsList[partsDic[s]].wideValue =Strings.StrConv( s,VbStrConv.Wide);   //自分自身の登録
                         }
-                        partsList[partsDic[s]].parentList.Add(p.value); //親を登録
+                        partsList[partsDic[s]].parentList.Add(p); //親を登録
                         p.childList.Add(s);                               //子の情報を貯める
                         break;
                 }
