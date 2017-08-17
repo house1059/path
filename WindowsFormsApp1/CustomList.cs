@@ -13,12 +13,12 @@ namespace WindowsFormsApp1
     public partial class CustomList : Form
     {
         //別のフォームから値を受け取るよう
-        public RichTextBox SearchRichTextBox { get; set; }
+        public RichTextBox SearchRichTextBox { get; set; } = new RichTextBox();
         public Label titleLabel { get; set; } = new Label();
         public Label parentChildLabel { get; set; } = new Label();
         BindingSource dataSrc = null;
 
-        public CustomList(List<PathData> p )
+        public CustomList(List<PathData> p , string s )
         {
             InitializeComponent();
             dataSrc = new BindingSource();
@@ -28,21 +28,15 @@ namespace WindowsFormsApp1
             listBox_parent.DisplayMember = "wideValue";
 
             listBox_parent.DataSource = dataSrc;
-            label1 = titleLabel;
-            label2 = parentChildLabel;
-
-            this.Show();
+            this.label1.Text = s;
         }
 
-        private void ParentList_Load(object sender, EventArgs e)
-        {
 
-        }
+
+
 
         private void listBox_parent_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-
             PathData path = program.getPathData(listBox_parent.SelectedValue.ToString());
             contextMenuStrip1.Items[0].Enabled = false;  //開くNG
             contextMenuStrip1.Items[2].Enabled = false;  //MyListNG
@@ -57,10 +51,6 @@ namespace WindowsFormsApp1
 
             contextMenuStrip1.Items[2].Enabled = true;  //MyListOK
             contextMenuStrip1.Items[3].Enabled = true;  //List切り離しOK
-
-
-
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -69,6 +59,7 @@ namespace WindowsFormsApp1
             {
                 //MyListのラベルをダブルクリックした場合、メイン画面のtext入力を書き換えたい
                 Label label = (Label)sender;
+
                 this.SearchRichTextBox.Text = label.Text;
             }
         }
@@ -83,5 +74,7 @@ namespace WindowsFormsApp1
                 this.SearchRichTextBox.Text = list.Text;
             }
         }
+
+
     }
 }

@@ -122,7 +122,6 @@
             this.Controls.Add(this.listBox_parent);
             this.Name = "CustomList";
             this.Text = "CustomList";
-            this.Load += new System.EventHandler(this.ParentList_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
