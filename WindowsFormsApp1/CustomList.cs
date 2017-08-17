@@ -16,7 +16,9 @@ namespace WindowsFormsApp1
         public RichTextBox SearchRichTextBox { get; set; } = new RichTextBox();
         public Label titleLabel { get; set; } = new Label();
         public Label parentChildLabel { get; set; } = new Label();
+        public Recent re { get; set; }
         BindingSource dataSrc = null;
+      
 
         public CustomList(List<PathData> p , string s )
         {
@@ -24,11 +26,13 @@ namespace WindowsFormsApp1
             dataSrc = new BindingSource();
             dataSrc.DataSource = p;
 
-            listBox_parent.ValueMember = "value";
-            listBox_parent.DisplayMember = "wideValue";
+            listBox_Custom.ValueMember = "value";
+            listBox_Custom.DisplayMember = "wideValue";
 
-            listBox_parent.DataSource = dataSrc;
+            listBox_Custom.DataSource = dataSrc;
             this.label1.Text = s;
+
+            
         }
 
 
@@ -37,20 +41,18 @@ namespace WindowsFormsApp1
 
         private void listBox_parent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PathData path = program.getPathData(listBox_parent.SelectedValue.ToString());
-            contextMenuStrip1.Items[0].Enabled = false;  //開くNG
-            contextMenuStrip1.Items[2].Enabled = false;  //MyListNG
-            contextMenuStrip1.Items[3].Enabled = false;  //List切り離しNG
+            PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
+            contextCustomMenuStrip.Items[0].Enabled = false;  //開くNG
+            contextCustomMenuStrip.Items[2].Enabled = false;  //MyListNG
 
             //何も選択していない場合は終了
-            if (listBox_parent.SelectedIndex == -1)
+            if (listBox_Custom.SelectedIndex == -1)
                 return;
 
             if (path.wbOK)
-                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
+                contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
 
-            contextMenuStrip1.Items[2].Enabled = true;  //MyListOK
-            contextMenuStrip1.Items[3].Enabled = true;  //List切り離しOK
+            contextCustomMenuStrip.Items[2].Enabled = true;  //MyListOK
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -75,6 +77,15 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_Custom.SelectedValue.ToString());
+        }
 
+        private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox_Custom.SelectedValue.ToString()));
+            re.Visible = true;
+        }
     }
 }

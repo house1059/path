@@ -207,7 +207,7 @@ namespace WindowsFormsApp1
             }
 
             //メイン画面はダブルクリックで開く仕様に変更
-            PathData p = program.partsDic[listBox1.SelectedItem.ToString()];
+            PathData p = program.partsDic[listBox1.SelectedValue.ToString()];
             if(p.wbOK)
                 program.ExcelOpen(p.value);
 
@@ -420,6 +420,7 @@ namespace WindowsFormsApp1
             CustomList pForm = new CustomList( path.childList , listBox1.SelectedValue.ToString());
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "子";
+            pForm.re = re;
             pForm.Show();
         }
 
@@ -445,6 +446,7 @@ namespace WindowsFormsApp1
             CustomList pForm = new CustomList(path.childList, listBox1.SelectedValue.ToString());
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "親";
+            pForm.re = re;
             pForm.Show();
         }
 
