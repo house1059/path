@@ -15,15 +15,18 @@ namespace WindowsFormsApp1
         public bool wbOK { get; set; }               //開くことが可能か否か　ファイルパス、シート名、ｱﾄﾞﾚｽがない場合はNG
 
         public List<PathData> parentList;    //親リスト
-        public List<string> childList;     //子リスト
+        public List<PathData> childList;     //子リスト
 
         //ｺﾝｽﾄﾗｸﾀ
         public PathData()
         {
             parentList = new List<PathData>();
-            childList = new List<string>();
+            childList = new List<PathData>();
 
         }
+
+
+
     }
 
 

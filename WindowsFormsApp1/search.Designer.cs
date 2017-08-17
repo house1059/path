@@ -73,7 +73,7 @@
             // myListの表示ToolStripMenuItem
             // 
             myListの表示ToolStripMenuItem.Name = "myListの表示ToolStripMenuItem";
-            myListの表示ToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            myListの表示ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             myListの表示ToolStripMenuItem.Text = "MyListの表示";
             myListの表示ToolStripMenuItem.Click += new System.EventHandler(this.myListの表示ToolStripMenuItem_Click_2);
             // 
@@ -112,26 +112,26 @@
             this.toolStripMenuItem3,
             myListの表示ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(148, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 104);
             // 
             // 開くOToolStripMenuItem
             // 
             this.開くOToolStripMenuItem.Enabled = false;
             this.開くOToolStripMenuItem.Name = "開くOToolStripMenuItem";
-            this.開くOToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.開くOToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.開くOToolStripMenuItem.Text = "開く(&O)";
             this.開くOToolStripMenuItem.Click += new System.EventHandler(this.開くOToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 6);
             // 
             // myListへMToolStripMenuItem1
             // 
             this.myListへMToolStripMenuItem1.Enabled = false;
             this.myListへMToolStripMenuItem1.Name = "myListへMToolStripMenuItem1";
-            this.myListへMToolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
+            this.myListへMToolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
             this.myListへMToolStripMenuItem1.Text = "MyListへ(&M)";
             this.myListへMToolStripMenuItem1.Click += new System.EventHandler(this.myListへMToolStripMenuItem1_Click);
             // 
@@ -139,14 +139,14 @@
             // 
             this.list切り離しCToolStripMenuItem1.Enabled = false;
             this.list切り離しCToolStripMenuItem1.Name = "list切り離しCToolStripMenuItem1";
-            this.list切り離しCToolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
+            this.list切り離しCToolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
             this.list切り離しCToolStripMenuItem1.Text = "List切り離し(&C)";
             this.list切り離しCToolStripMenuItem1.Click += new System.EventHandler(this.list切り離しCToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(144, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 6);
             // 
             // textBox2
             // 
@@ -327,6 +327,7 @@
             this.listBox_pList.TabIndex = 11;
             this.listBox_pList.SelectedIndexChanged += new System.EventHandler(this.listBox_pList_SelectedIndexChanged);
             this.listBox_pList.DoubleClick += new System.EventHandler(this.listBox_pList_DoubleClick);
+            this.listBox_pList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_pList_MouseMove);
             // 
             // contextMenuStrip2
             // 
@@ -338,26 +339,26 @@
             this.toolStripMenuItem4,
             this.myListの表示ToolStripMenuItem1});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(160, 104);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(176, 104);
             // 
             // 開くOToolStripMenuItem1
             // 
             this.開くOToolStripMenuItem1.Enabled = false;
             this.開くOToolStripMenuItem1.Name = "開くOToolStripMenuItem1";
-            this.開くOToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+            this.開くOToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
             this.開くOToolStripMenuItem1.Text = "開く(&O)";
             this.開くOToolStripMenuItem1.Click += new System.EventHandler(this.開くOToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(156, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(172, 6);
             // 
             // myListへMToolStripMenuItem
             // 
             this.myListへMToolStripMenuItem.Enabled = false;
             this.myListへMToolStripMenuItem.Name = "myListへMToolStripMenuItem";
-            this.myListへMToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.myListへMToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.myListへMToolStripMenuItem.Text = "MyListへ(&M)";
             this.myListへMToolStripMenuItem.Click += new System.EventHandler(this.myListへMToolStripMenuItem_Click);
             // 
@@ -365,19 +366,19 @@
             // 
             this.list切り離しCToolStripMenuItem.Enabled = false;
             this.list切り離しCToolStripMenuItem.Name = "list切り離しCToolStripMenuItem";
-            this.list切り離しCToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.list切り離しCToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.list切り離しCToolStripMenuItem.Text = "親List切り離し(&C)";
             this.list切り離しCToolStripMenuItem.Click += new System.EventHandler(this.list切り離しCToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(156, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(172, 6);
             // 
             // myListの表示ToolStripMenuItem1
             // 
             this.myListの表示ToolStripMenuItem1.Name = "myListの表示ToolStripMenuItem1";
-            this.myListの表示ToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+            this.myListの表示ToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
             this.myListの表示ToolStripMenuItem1.Text = "MyListの表示";
             this.myListの表示ToolStripMenuItem1.Click += new System.EventHandler(this.myListの表示ToolStripMenuItem1_Click);
             // 
@@ -400,6 +401,9 @@
             this.listBox_cList.Name = "listBox_cList";
             this.listBox_cList.Size = new System.Drawing.Size(307, 148);
             this.listBox_cList.TabIndex = 13;
+            this.listBox_cList.SelectedIndexChanged += new System.EventHandler(this.listBox_cList_SelectedIndexChanged);
+            this.listBox_cList.DoubleClick += new System.EventHandler(this.listBox_cList_DoubleClick);
+            this.listBox_cList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_cList_MouseMove);
             // 
             // label8
             // 

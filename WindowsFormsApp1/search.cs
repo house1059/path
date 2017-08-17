@@ -23,7 +23,8 @@ namespace WindowsFormsApp1
         program p;
         List<string> resultList  = new List<string>();   //listBox1の結果
         BindingSource bindingSrc { get; } = new BindingSource();  //layer用 cmdboxなので
-        BindingSource pListSrc { get; } = new BindingSource();      //親の一時リスト
+        BindingSource pListParentSrc { get; } = new BindingSource();      //親の一時リスト
+        BindingSource pListChildSrc { get; } = new BindingSource();       //子の一時リスト
 
 
 
@@ -171,24 +172,15 @@ namespace WindowsFormsApp1
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            contextMenuStrip1.Items[0].Enabled = false;      //開くNG
-            contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
-            contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
+    
 
             if (listBox1.SelectedIndex == -1)
             {
                 return;
             }
 
+            MainToolStrip();
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
-            if (src.wbOK)
-                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
-
-            if (src.parentList.Count > 0)
-            {
-                contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
-                contextMenuStrip2.Items[3].Enabled = true;  //親リストでの右クリック親リスト切り離しOK
-            }
 
             textBox2.Text = src.filePath;
             textBox3.Text = src.sheetName;
@@ -197,10 +189,18 @@ namespace WindowsFormsApp1
 
 
             //親リストにバインディング
-            pListSrc.DataSource = src.parentList;
+            pListParentSrc.DataSource = src.parentList;
             listBox_pList.DisplayMember = "wideValue";
             listBox_pList.ValueMember = "value";
-            listBox_pList.DataSource = pListSrc;
+            listBox_pList.DataSource = pListParentSrc;
+
+
+            //子リストにバインディング
+            pListChildSrc.DataSource = src.childList;
+            listBox_cList.DisplayMember = "wideValue";
+            listBox_cList.ValueMember = "value";
+            listBox_cList.DataSource = pListChildSrc;
+
 
 
         }
@@ -258,28 +258,91 @@ namespace WindowsFormsApp1
 
         }
 
-        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// メイン検索リストのツールStripメニュー変化
+        /// </summary>
+        private void MainToolStrip()
         {
+            contextMenuStrip1.Items[0].Enabled = false;      //開くNG
+            contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
+            contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
 
+            PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+            if (src.wbOK)
+                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
+
+            if (src.parentList.Count > 0)
+            {
+                contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
+                contextMenuStrip2.Items[3].Enabled = true;  //親リストでの右クリック親リスト切り離しOK
+            }
+
+
+        }
+
+        /// <summary>
+        /// 子リストのツールStripメニュー変化
+        /// </summary>
+        private void CListToolStrip()
+        {
             contextMenuStrip2.Items[0].Enabled = false;     //開くNG
             contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
-      
-            if (listBox_pList.SelectedIndex == -1 )
+
+            if (listBox_cList.SelectedIndex == -1)
                 return;
 
 
             //open可能
-            if( program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+            if (program.getPathData(listBox_cList.SelectedValue.ToString()).wbOK)
                 contextMenuStrip2.Items[0].Enabled = true;     //開くNG
 
             //MyListOK
             contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
-
-
-      
-
-
         }
+
+
+        /// <summary>
+        /// 親リストのツールStripメニュー変化
+        /// </summary>
+        private void PListToolStrip()
+        {
+            contextMenuStrip2.Items[0].Enabled = false;     //開くNG
+            contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
+
+            if (listBox_pList.SelectedIndex == -1)
+                return;
+
+
+            //open可能
+            if (program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+                contextMenuStrip2.Items[0].Enabled = true;     //開くNG
+
+            //MyListOK
+            contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
+        }
+
+
+
+
+        /// <summary>
+        /// 親リストの選択を変えた場合
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PListToolStrip();
+        }
+        /// <summary>
+        /// 子リストの選択を変えた場合
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBox_cList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CListToolStrip();
+        }
+
 
 
         //子リスト切り離し
@@ -355,6 +418,30 @@ namespace WindowsFormsApp1
                 this.richTextBox1.Text = list.Text;
             }
 
+        }
+
+
+        private void listBox_cList_DoubleClick(object sender, EventArgs e)
+        {
+
+            //子リストをダブルクリックした場合、検索対象とする
+            if ((ListBox)sender != null)
+            {
+                ListBox list = (ListBox)sender;
+                this.richTextBox1.Text = list.Text;
+            }
+
+
+        }
+
+        private void listBox_pList_MouseMove(object sender, MouseEventArgs e)
+        {
+            PListToolStrip();
+        }
+
+        private void listBox_cList_MouseMove(object sender, MouseEventArgs e)
+        {
+            CListToolStrip();
         }
     }
 }

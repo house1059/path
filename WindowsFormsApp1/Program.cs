@@ -1,4 +1,4 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
 using System;
 using System.Collections.Generic;
@@ -37,10 +37,12 @@ namespace WindowsFormsApp1
     {
         private const String PATH_VERSION = "◎PathV4";
 
-        public static Dictionary<string, int> partsDic { get; } = new Dictionary<string, int>();   //パーソナルデータのインデックスを管理
+        public static Dictionary<string, PathData> partsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
+       
+
        
         //アクセサ
-        public static List<PathData> partsList { get; } = new List<PathData>();    //パーソナルデータ
+        public static List<PathData> partsList { get; set; } = new List<PathData>();    //パーソナルデータ
         public static List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
         public static List<PathData> andList { get; private set; } = new List<PathData>();
 
@@ -58,17 +60,12 @@ namespace WindowsFormsApp1
 
         //検索履歴用のﾃﾞｰﾀﾊﾞｲﾝﾄﾞ
         //public BindingSource bindingRecent { get; } = new BindingSource();　⇒　リファクタ時に使用
-
-
-
-
-
    
 
         //パーツ単品問い合わせ
         public static PathData getPathData( string s)
         {
-            return partsList[partsDic[s]];
+            return partsDic[ Strings.StrConv(s,VbStrConv.Wide).ToUpper()];
         }
 
         //Excelオープン
@@ -170,21 +167,14 @@ namespace WindowsFormsApp1
                 }
 
                 //パーソナルデータが存在しない場合は作成
-                if (partsDic.ContainsKey(p.value) == false)
+                if (partsDic.ContainsKey(p.wideValue) == false)
                 {
-                    partsList.Add(new PathData());   //パーソナルパターンを追加
-                    partsDic.Add(p.value, partsList.Count - 1);
-                    partsList[partsDic[p.value]].value = p.value;   //自分自身の登録
-                    partsList[partsDic[p.value]].wideValue = Strings.StrConv(p.value,VbStrConv.Wide);   //自分自身の登録
-
+                    partsList.Add(p);       //パーツリストの登録と辞書への登録を行う
+                    partsDic.Add(p.wideValue, p);
                 }
+                p = partsDic[p.wideValue];          //あらためて情報を引き出す
+                RegistChild(st1[4].Split(','), ref p);      //子どもを登録
 
-                RegistChild(st1[4].Split(','), p);      //子どもを登録
-
-                int i = partsDic[p.value];  //Listのインデックスを取得
-                partsList[i].parentList.AddRange(p.parentList); //親の情報を加算
-                p.parentList = partsList[i].parentList;
-                partsList[i] = p;                       //上書き（子は上書きでＯＫ）
 
                 if (strFilter.Count() > 0 && filterList.Contains(strFilter[0]))
                 {
@@ -196,7 +186,7 @@ namespace WindowsFormsApp1
         }
 
         //子どもの情報を追加
-        private void RegistChild(string[] pts, PathData p)
+        private void RegistChild(string[] pts, ref PathData p)
         {
 
             //pts～pteまでを登録
@@ -211,15 +201,17 @@ namespace WindowsFormsApp1
 
                     default:
                         //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
-                        if (partsDic.ContainsKey(s) == false)
+                        if (partsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide).ToUpper()) == false)
                         {
-                            partsList.Add(new PathData());     //空のﾃﾞｰﾀを作成
-                            partsDic.Add(s, partsList.Count - 1);   //インデックス番号を登録
-                            partsList[partsDic[s]].value = s;   //自分自身の登録
-                            partsList[partsDic[s]].wideValue =Strings.StrConv( s,VbStrConv.Wide);   //自分自身の登録
+                            PathData child = new PathData();
+                            child.value = s;
+                            child.wideValue = Strings.StrConv(s, VbStrConv.Wide).ToUpper();
+                            partsList.Add(child);                   //子のﾃﾞｰﾀを追加
+                            partsDic.Add(child.wideValue,child);    //子の情報を追加
                         }
-                        partsList[partsDic[s]].parentList.Add(p); //親を登録
-                        p.childList.Add(s);                               //子の情報を貯める
+                        PathData registP = partsDic[Strings.StrConv(s, VbStrConv.Wide).ToUpper()];  //子データを改めて取得
+                        registP.parentList.Add(p);                                                          //子データに親を登録
+                        p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
                         break;
                 }
             }
