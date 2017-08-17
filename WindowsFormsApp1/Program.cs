@@ -334,7 +334,7 @@ namespace WindowsFormsApp1
                 {
                     continue;
                 //数字の検索（完全一致）
-                }else if ( pList.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Wide)))
+                }else if ( pList.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Narrow)))
                 {
                     p.Add(pList);
                 }

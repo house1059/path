@@ -14,19 +14,22 @@ namespace WindowsFormsApp1
     {
         //別のフォームから値を受け取るよう
         public RichTextBox SearchRichTextBox { get; set; }
-        BindingSource parentSrc = null;
+        public Label titleLabel { get; set; } = new Label();
+        public Label parentChildLabel { get; set; } = new Label();
+        BindingSource dataSrc = null;
 
-        public CustomList(List<PathData> p,string s )
+        public CustomList(List<PathData> p )
         {
             InitializeComponent();
-            parentSrc = new BindingSource();
-            parentSrc.DataSource = p;
+            dataSrc = new BindingSource();
+            dataSrc.DataSource = p;
 
             listBox_parent.ValueMember = "value";
             listBox_parent.DisplayMember = "wideValue";
 
-            listBox_parent.DataSource = parentSrc;
-            label1.Text = s;
+            listBox_parent.DataSource = dataSrc;
+            label1 = titleLabel;
+            label2 = parentChildLabel;
 
             this.Show();
         }

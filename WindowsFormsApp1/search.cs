@@ -108,11 +108,11 @@ namespace WindowsFormsApp1
                 p.ReadPathFile(fd.FileName);
                 label4.Text = fd.SafeFileName;
 
+                TextFormSearch();   //検索
                 bindingSrc.DataSource = p.resultLayer;
                 bindingSrc.Insert(0,"");
                 comboBox1.DataSource = bindingSrc;
                 comboBox1.SelectedIndex = 0;
-                TextFormSearch();   //検索
 
             }
             
@@ -233,37 +233,20 @@ namespace WindowsFormsApp1
 
         }
 
-        /// <summary>
-        /// Excelで該当ファイルを開く
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            program.ExcelOpen(listBox1.SelectedValue.ToString());
-
-        }
-
-        private void 履歴RToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
+   
 
      
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         /// <summary>
         /// メイン検索リストのツールStripメニュー変化
         /// </summary>
         private void MainToolStrip()
         {
-            contextMenuStrip1.Items[0].Enabled = false;      //開くNG
-            contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
-            contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
+            //メインメニュー（パーソナル）時のStrip
+            contextMainMenuStrip.Items[0].Enabled = false;        //開くNG
+            contextMainMenuStrip.Items[2].Enabled = false;        //MyListへNG
+            contextMainMenuStrip.Items[3].Enabled = false;        //List切り離しNG
+            contextMainMenuStrip.Items[5].Enabled = true;         //MyListの表示OK
 
 
             if (listBox1.SelectedIndex == -1)
@@ -274,15 +257,14 @@ namespace WindowsFormsApp1
 
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
             if (src.wbOK)
-                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
+                contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
 
+
+            contextMainMenuStrip.Items[2].Enabled = false;     //MyListOK
             if (src.parentList.Count > 0)
             {
-                contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
-                contextMenuStrip2.Items[3].Enabled = true;  //親リストでの右クリック親リスト切り離しOK
+                contextMainMenuStrip.Items[3].Enabled = true;  //List切り離しOK
             }
-
-
         }
 
         /// <summary>
@@ -290,8 +272,9 @@ namespace WindowsFormsApp1
         /// </summary>
         private void CListToolStrip()
         {
-            contextMenuStrip2.Items[0].Enabled = false;     //開くNG
-            contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
+            contextChildMenuStrip.Items[0].Enabled = false;     //開くNG
+            contextChildMenuStrip.Items[2].Enabled = false;     //MyListNG
+            contextChildMenuStrip.Items[3].Enabled = false;     //List切り離しNG
 
             if (listBox_cList.SelectedIndex == -1)
                 return;
@@ -299,10 +282,10 @@ namespace WindowsFormsApp1
 
             //open可能
             if (program.getPathData(listBox_cList.SelectedValue.ToString()).wbOK)
-                contextMenuStrip2.Items[0].Enabled = true;     //開くNG
+                contextChildMenuStrip.Items[0].Enabled = true;     //開くOK
 
             //MyListOK
-            contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
+            contextChildMenuStrip.Items[2].Enabled = true;     //MyListOK
         }
 
 
@@ -311,8 +294,9 @@ namespace WindowsFormsApp1
         /// </summary>
         private void PListToolStrip()
         {
-            contextMenuStrip2.Items[0].Enabled = false;     //開くNG
-            contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
+            contextParentMenuStrip.Items[0].Enabled = false;     //開くNG
+            contextParentMenuStrip.Items[2].Enabled = false;     //MyListNG
+            contextParentMenuStrip.Items[3].Enabled = false;     //List切り離しNG
 
             if (listBox_pList.SelectedIndex == -1)
                 return;
@@ -320,10 +304,10 @@ namespace WindowsFormsApp1
 
             //open可能
             if (program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
-                contextMenuStrip2.Items[0].Enabled = true;     //開くNG
+                contextParentMenuStrip.Items[0].Enabled = true;     //開くOK
 
             //MyListOK
-            contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
+            contextParentMenuStrip.Items[2].Enabled = true;     //MyListOK
         }
 
 
@@ -348,71 +332,6 @@ namespace WindowsFormsApp1
             CListToolStrip();
         }
 
-
-
-        //子リスト切り離し
-        private void list切り離しCToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            if (radioButton1.Checked == true)
-            {
-                CustomList pForm = new CustomList(program.orList, richTextBox1.Text);
-                pForm.SearchRichTextBox = this.richTextBox1;
-            }
-            else
-            {
-                CustomList pForm = new CustomList(program.andList, richTextBox1.Text);
-                pForm.SearchRichTextBox = this.richTextBox1;
-            }
-
-        }
-
-        //MyListへDBクリックと同じ処理
-        private void myListへMToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            re.Visible = true;
-        }
-
-        private void myListの表示ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
-
-
-
-        private void myListの表示ToolStripMenuItem_Click_2(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
-
-
-
-        /// <summary>
-        /// 親プレビュー側のコンテキスト
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 開くOToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            program.ExcelOpen(listBox_pList.SelectedValue.ToString());
-        }
-
-        private void myListの表示ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
-        //親リストを切り離す
-        private void list切り離しCToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            CustomList pForm = new CustomList(path.parentList,path.value);
-            pForm.SearchRichTextBox = this.richTextBox1;
-        }
-
-        private void myListへMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            re.recentDataInsert(program.getPathData(listBox_pList.SelectedValue.ToString()));
-        }
 
         private void listBox_pList_DoubleClick(object sender, EventArgs e)
         {
@@ -453,5 +372,94 @@ namespace WindowsFormsApp1
         {
             MainToolStrip();
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TextFormSearch();
+        }
+
+
+
+        private void MainToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox1.SelectedValue.ToString());
+        }
+
+        private void MainToolStripToMyList_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
+            re.Visible = true;
+        }
+
+        private void MainToolStripSplit_Click(object sender, EventArgs e)
+        {
+            CustomList pForm;
+            if (radioButton1.Checked == true)
+            {
+                pForm = new CustomList(program.orList);
+            }
+            else
+            {
+                pForm = new CustomList(program.andList);
+            }
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.titleLabel.Text = this.listBox1.Text;
+            pForm.parentChildLabel.Text = "本";
+        }
+
+        private void MainToolStripMyListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+        private void ChildStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_cList.SelectedValue.ToString());
+        }
+
+        private void ChildToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox_cList.SelectedValue.ToString()));
+            re.Visible = true;
+        }
+
+        private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
+            CustomList pForm = new CustomList( path.childList );
+            pForm.titleLabel.Text = this.listBox1.SelectedItem.ToString();
+            pForm.parentChildLabel.Text = "子";
+        }
+
+        private void ChildToolStripMenuListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+        private void ParentToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_pList.SelectedValue.ToString());
+        }
+
+        private void ParentToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox_pList.SelectedValue.ToString()));
+            re.Visible = true;
+        }
+
+        private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox_pList.SelectedValue.ToString());
+            CustomList pForm = new CustomList(path.parentList);
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.titleLabel.Text = this.listBox1.Text;
+            pForm.parentChildLabel.Text = "親";
+        }
+
+        private void ParentToolStripMenuListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
     }
 }
