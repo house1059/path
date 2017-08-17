@@ -4,8 +4,8 @@ namespace WindowsFormsApp1
 {
     public class PathData
     {
+
         public string filePath { get; set; }
-        public string fileName { get; set; }
         public string sheetName { get; set; }
         public string address { get; set; }
         public string value { get; set; }       //実名称
@@ -17,27 +17,15 @@ namespace WindowsFormsApp1
         public List<PathData> parentList;    //親リスト
         public List<PathData> childList;     //子リスト
 
+        public string bindingData;
+
         //ｺﾝｽﾄﾗｸﾀ
         public PathData()
         {
             parentList = new List<PathData>();
             childList = new List<PathData>();
-
         }
-
-
-
     }
-
-
-
-   
-
-
-
-
-
-
-
+    
 
 }

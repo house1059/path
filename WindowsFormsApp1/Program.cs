@@ -172,8 +172,15 @@ namespace WindowsFormsApp1
                     partsList.Add(p);       //パーツリストの登録と辞書への登録を行う
                     partsDic.Add(p.wideValue, p);
                 }
-                p = partsDic[p.wideValue];          //あらためて情報を引き出す
-                RegistChild(st1[4].Split(','), ref p);      //子どもを登録
+                PathData registPathData = partsDic[p.wideValue];          //あらためて情報を引き出す
+
+                registPathData.filePath = p.filePath;
+                registPathData.sheetName = p.sheetName;
+                registPathData.address = p.address;
+                registPathData.value = p.value;
+                registPathData.wideValue = p.wideValue;
+
+                RegistChild(st1[4].Split(','), ref registPathData);      //子どもを登録
 
 
                 if (strFilter.Count() > 0 && filterList.Contains(strFilter[0]))
@@ -207,7 +214,7 @@ namespace WindowsFormsApp1
                             child.value = s;
                             child.wideValue = Strings.StrConv(s, VbStrConv.Wide).ToUpper();
                             partsList.Add(child);                   //子のﾃﾞｰﾀを追加
-                            partsDic.Add(child.wideValue,child);    //子の情報を追加
+                            partsDic.Add(child.wideValue, child);    //子の情報を追加
                         }
                         PathData registP = partsDic[Strings.StrConv(s, VbStrConv.Wide).ToUpper()];  //子データを改めて取得
                         registP.parentList.Add(p);                                                          //子データに親を登録
@@ -297,12 +304,12 @@ namespace WindowsFormsApp1
         private List<PathData> PathDataSearch(string s, List<PathData> list )
         {
             List<PathData> p = new List<PathData>();
-            foreach (PathData ps in list)  //ローカル優先
+            foreach (PathData pList in list)  //ローカル優先
             {
                 //全角+大文字で検索するように
-                if (ps.wideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
+                if (pList.wideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
                 {
-                    p.Add(ps);
+                    p.Add(pList);
                 }
             }
             return p;
@@ -320,16 +327,16 @@ namespace WindowsFormsApp1
             if (s == "") return ptlist;
 
             List<PathData> p = new List<PathData>();
-            foreach (PathData ps in ptlist)  //指定リストから
+            foreach (PathData pList in ptlist)  //指定リストから
             {
                 //layer nullがあるので事前にチェック
-                if(ps.layer == null)
+                if(pList.layer == null)
                 {
                     continue;
                 //数字の検索（完全一致）
-                }else if ( ps.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Wide)))
+                }else if ( pList.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Wide)))
                 {
-                    p.Add(ps);
+                    p.Add(pList);
                 }
             }
             return p;
@@ -342,12 +349,12 @@ namespace WindowsFormsApp1
             List<int> intList = new List<int>();
 
 
-            foreach (PathData ps in pList)  //ローカル優先
+            foreach (PathData psList in pList)  //ローカル優先
             {
-                if ( ps.layer != null &&  dic.ContainsKey(ps.layer) == false)
+                if ( psList.layer != null &&  dic.ContainsKey(psList.layer) == false)
                 {
-                    dic.Add( ps.layer , null);
-                    intList.Add(int.Parse(ps.layer));
+                    dic.Add( psList.layer, null);
+                    intList.Add(int.Parse(psList.layer));
                 }
             }
             intList.Sort();
@@ -358,9 +365,9 @@ namespace WindowsFormsApp1
         private List<string> PathDataSearchValueList(List<PathData> pList)
         {
             List<string> list = new List<string>();
-            foreach (PathData ps in pList)  //ローカル優先
+            foreach (PathData psList in pList)  //ローカル優先
             {
-                    list.Add(ps.value);
+                    list.Add(psList.value);
             }
             return list;
         }

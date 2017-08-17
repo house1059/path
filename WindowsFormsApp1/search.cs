@@ -21,7 +21,8 @@ namespace WindowsFormsApp1
 
         Recent re;
         program p;
-        List<string> resultList  = new List<string>();   //listBox1の結果
+        //List<string> resultList  = new List<string>();   //listBox1の結果
+        BindingSource parsonalSrc { get; } = new BindingSource();   //メイン画面用のバインディングデータ
         BindingSource bindingSrc { get; } = new BindingSource();  //layer用 cmdboxなので
         BindingSource pListParentSrc { get; } = new BindingSource();      //親の一時リスト
         BindingSource pListChildSrc { get; } = new BindingSource();       //子の一時リスト
@@ -151,7 +152,6 @@ namespace WindowsFormsApp1
             listBox1.ValueMember = "value";
             listBox1.DisplayMember = "wideValue";
 
-
             if (radioButton1.Checked == true)
             {
                 listBox1.DataSource = program.orList;
@@ -160,8 +160,7 @@ namespace WindowsFormsApp1
             {
                 listBox1.DataSource = program.andList;
             }
-
-
+           
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
         }
@@ -179,7 +178,6 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            MainToolStrip();
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
 
             textBox2.Text = src.filePath;
@@ -266,6 +264,13 @@ namespace WindowsFormsApp1
             contextMenuStrip1.Items[0].Enabled = false;      //開くNG
             contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
             contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
+
+
+            if (listBox1.SelectedIndex == -1)
+            {
+                return;
+            }
+
 
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
             if (src.wbOK)
@@ -442,6 +447,11 @@ namespace WindowsFormsApp1
         private void listBox_cList_MouseMove(object sender, MouseEventArgs e)
         {
             CListToolStrip();
+        }
+
+        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            MainToolStrip();
         }
     }
 }
