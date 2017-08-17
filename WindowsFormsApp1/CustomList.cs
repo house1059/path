@@ -39,7 +39,35 @@ namespace WindowsFormsApp1
 
 
 
-        private void listBox_parent_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            if ((Label)sender != null)
+            {
+                //MyListのラベルをダブルクリックした場合、メイン画面のtext入力を書き換えたい
+                Label label = (Label)sender;
+
+                this.SearchRichTextBox.Text = label.Text;
+            }
+        }
+
+        private void listBox_parent_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_Custom.SelectedValue.ToString());
+        }
+
+        private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            re.recentDataInsert(program.getPathData(listBox_Custom.SelectedValue.ToString()));
+            re.Visible = true;
+        }
+
+        private void listBox_Custom_SelectedIndexChanged(object sender, EventArgs e)
         {
             PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
             contextCustomMenuStrip.Items[0].Enabled = false;  //開くNG
@@ -55,18 +83,7 @@ namespace WindowsFormsApp1
             contextCustomMenuStrip.Items[2].Enabled = true;  //MyListOK
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-            if ((Label)sender != null)
-            {
-                //MyListのラベルをダブルクリックした場合、メイン画面のtext入力を書き換えたい
-                Label label = (Label)sender;
-
-                this.SearchRichTextBox.Text = label.Text;
-            }
-        }
-
-        private void listBox_parent_DoubleClick(object sender, EventArgs e)
+        private void listBox_Custom_DoubleClick(object sender, EventArgs e)
         {
             //ListBoxのオブジェクトが飛んできます。
             if ((ListBox)sender != null)
@@ -75,17 +92,6 @@ namespace WindowsFormsApp1
                 ListBox list = (ListBox)sender;
                 this.SearchRichTextBox.Text = list.Text;
             }
-        }
-
-        private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
-        {
-            program.ExcelOpen(listBox_Custom.SelectedValue.ToString());
-        }
-
-        private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
-        {
-            re.recentDataInsert(program.getPathData(listBox_Custom.SelectedValue.ToString()));
-            re.Visible = true;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
         BindingSource pListParentSrc { get; } = new BindingSource();      //親の一時リスト
         BindingSource pListChildSrc { get; } = new BindingSource();       //子の一時リスト
 
-
+        CustomList pForm;
 
         public Search()
         {
@@ -182,7 +182,7 @@ namespace WindowsFormsApp1
             listBox_cList.ValueMember = "value";
             listBox_cList.DataSource = pListChildSrc;
 
-
+            MainToolStrip();
 
         }
 
@@ -234,26 +234,22 @@ namespace WindowsFormsApp1
             //メインメニュー（パーソナル）時のStrip
             contextMainMenuStrip.Items[0].Enabled = false;        //開くNG
             contextMainMenuStrip.Items[2].Enabled = false;        //MyListへNG
-            contextMainMenuStrip.Items[3].Enabled = false;        //List切り離しNG
+            contextMainMenuStrip.Items[3].Enabled = true;        //List切り離しOK
             contextMainMenuStrip.Items[5].Enabled = true;         //MyListの表示OK
+
 
 
             if (listBox1.SelectedIndex == -1)
             {
                 return;
             }
-
-
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+
             if (src.wbOK)
                 contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
+            
+            contextMainMenuStrip.Items[2].Enabled = true;     //MyListへOK
 
-
-            contextMainMenuStrip.Items[2].Enabled = false;     //MyListOK
-            if (src.parentList.Count > 0)
-            {
-                contextMainMenuStrip.Items[3].Enabled = true;  //List切り離しOK
-            }
         }
 
         /// <summary>
@@ -384,18 +380,20 @@ namespace WindowsFormsApp1
 
         private void MainToolStripSplit_Click(object sender, EventArgs e)
         {
-            CustomList pForm;
+
             if (radioButton1.Checked == true)
             {
-                pForm = new CustomList(program.orList, listBox1.SelectedValue.ToString());
+                pForm = new CustomList(program.orList, richTextBox1.Text);
             }
             else
             {
-                pForm = new CustomList(program.andList, listBox1.SelectedValue.ToString());
+                pForm = new CustomList(program.andList, richTextBox1.Text);
             }
-            pForm.SearchRichTextBox = this.richTextBox1;
             pForm.titleLabel.Text = this.listBox1.Text;
             pForm.parentChildLabel.Text = "本";
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.re = re;
+            pForm.Show();
         }
 
         private void MainToolStripMyListView_Click(object sender, EventArgs e)
@@ -417,9 +415,10 @@ namespace WindowsFormsApp1
         private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            CustomList pForm = new CustomList( path.childList , listBox1.SelectedValue.ToString());
+            pForm = new CustomList( path.childList , listBox1.SelectedValue.ToString());
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "子";
+            pForm.SearchRichTextBox = this.richTextBox1;
             pForm.re = re;
             pForm.Show();
         }
@@ -443,9 +442,10 @@ namespace WindowsFormsApp1
         private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            CustomList pForm = new CustomList(path.childList, listBox1.SelectedValue.ToString());
+            pForm = new CustomList(path.parentList, listBox1.SelectedValue.ToString());
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "親";
+            pForm.SearchRichTextBox = this.richTextBox1;
             pForm.re = re;
             pForm.Show();
         }

@@ -51,8 +51,8 @@
             this.listBox_Custom.Name = "listBox_Custom";
             this.listBox_Custom.Size = new System.Drawing.Size(391, 268);
             this.listBox_Custom.TabIndex = 0;
-            this.listBox_Custom.SelectedIndexChanged += new System.EventHandler(this.listBox_parent_SelectedIndexChanged);
-            this.listBox_Custom.DoubleClick += new System.EventHandler(this.listBox_parent_DoubleClick);
+            this.listBox_Custom.SelectedIndexChanged += new System.EventHandler(this.listBox_Custom_SelectedIndexChanged);
+            this.listBox_Custom.DoubleClick += new System.EventHandler(this.listBox_Custom_DoubleClick);
             // 
             // contextCustomMenuStrip
             // 
@@ -61,7 +61,7 @@
             this.toolStripMenuItem1,
             this.CustomToolStripMenuToMyList});
             this.contextCustomMenuStrip.Name = "contextMenuStrip1";
-            this.contextCustomMenuStrip.Size = new System.Drawing.Size(153, 76);
+            this.contextCustomMenuStrip.Size = new System.Drawing.Size(147, 54);
             // 
             // CustomToolStripMenuOpen
             // 
@@ -80,7 +80,7 @@
             // 
             this.CustomToolStripMenuToMyList.Enabled = false;
             this.CustomToolStripMenuToMyList.Name = "CustomToolStripMenuToMyList";
-            this.CustomToolStripMenuToMyList.Size = new System.Drawing.Size(152, 22);
+            this.CustomToolStripMenuToMyList.Size = new System.Drawing.Size(146, 22);
             this.CustomToolStripMenuToMyList.Text = "MyListへ(&M)";
             this.CustomToolStripMenuToMyList.Click += new System.EventHandler(this.CustomToolStripMenuToMyList_Click);
             // 
