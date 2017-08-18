@@ -21,11 +21,13 @@ namespace WindowsFormsApp1
 
         Recent re;
         program p;
-        List<string> resultList  = new List<string>();   //listBox1の結果
+        //List<string> resultList  = new List<string>();   //listBox1の結果
+        BindingSource parsonalSrc { get; } = new BindingSource();   //メイン画面用のバインディングデータ
         BindingSource bindingSrc { get; } = new BindingSource();  //layer用 cmdboxなので
-        BindingSource pListSrc { get; } = new BindingSource();      //親の一時リスト
+        BindingSource pListParentSrc { get; } = new BindingSource();      //親の一時リスト
+        BindingSource pListChildSrc { get; } = new BindingSource();       //子の一時リスト
 
-
+        CustomList pForm;
 
         public Search()
         {
@@ -38,36 +40,20 @@ namespace WindowsFormsApp1
             
         }
 
-  
-        private void search_DragOver(object sender, DragEventArgs e)
-        {
-            
-        }
-
-
-        //即時検索のイベント
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
 
         //検索の実態
         private void TextFormSearch( )
         {
-
-
             p.TextSearch(richTextBox1.Text, comboBox1.Text);
-            if (richTextBox1.Text == "" && comboBox1.Text == "")
-            {
-                listBox1.DataSource = null;
-                return;
-            }
+            //if (richTextBox1.Text == "" && comboBox1.Text == "")
+            //{
+            //    listBox1.DataSource = null;
+            //    return;
+            //}
 
             //検索開始
             // Shutdown the painting of the ListBox as items are added.
             ViewUpdate();   //再描画
-
         }
 
 
@@ -85,6 +71,7 @@ namespace WindowsFormsApp1
             textBox2.Text = ""; //ファイルパス
             textBox3.Text = ""; //シート名
             textBox4.Text = ""; //ｱﾄﾞﾚｽ
+
 
 
         }
@@ -106,16 +93,14 @@ namespace WindowsFormsApp1
                 p.ReadPathFile(fd.FileName);
                 label4.Text = fd.SafeFileName;
 
+                TextFormSearch();   //検索
                 bindingSrc.DataSource = p.resultLayer;
                 bindingSrc.Insert(0,"");
                 comboBox1.DataSource = bindingSrc;
                 comboBox1.SelectedIndex = 0;
-                TextFormSearch();   //検索
 
             }
-            
             ViewUpdate();   //再描画
-
         }
 
 
@@ -150,7 +135,6 @@ namespace WindowsFormsApp1
             listBox1.ValueMember = "value";
             listBox1.DisplayMember = "wideValue";
 
-
             if (radioButton1.Checked == true)
             {
                 listBox1.DataSource = program.orList;
@@ -159,7 +143,8 @@ namespace WindowsFormsApp1
             {
                 listBox1.DataSource = program.andList;
             }
-
+            listBox_cList.DataSource = null;
+            listBox_pList.DataSource = null;
 
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
@@ -170,44 +155,47 @@ namespace WindowsFormsApp1
         ////データを選択した時
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            contextMenuStrip1.Items[0].Enabled = false;      //開くNG
-            contextMenuStrip1.Items[3].Enabled = false;  //親リストNG
-            contextMenuStrip2.Items[3].Enabled = false;  //親リストで右クリック親リスト切り離しNG
-
             if (listBox1.SelectedIndex == -1)
             {
                 return;
             }
 
-            PathData src = program.getPathData(listBox1.SelectedValue.ToString());
-            if (src.wbOK)
-                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
 
-            if (src.parentList.Count > 0)
+            //マルチ選択の場合はMyListへ保存のみ許可する
+            if( listBox1.SelectedItems.Count > 1)
             {
-                contextMenuStrip1.Items[3].Enabled = true;  //親リストOK
-                contextMenuStrip2.Items[3].Enabled = true;  //親リストでの右クリック親リスト切り離しOK
+                textBox2.Text = "non";
+                textBox3.Text = "non";
+                textBox4.Text = "non";
+                textBox1.Text = "non";
+                listBox_cList.DataSource = null;
+                listBox_pList.DataSource = null;
+                MainToolStrip(true);
+            }else {
+                PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+
+                textBox2.Text = src.filePath;
+                textBox3.Text = src.sheetName;
+                textBox4.Text = src.address;
+                textBox1.Text = src.layer;
+
+
+                //親リストにバインディング
+                pListParentSrc.DataSource = src.parentList;
+                listBox_pList.DisplayMember = "wideValue";
+                listBox_pList.ValueMember = "value";
+                listBox_pList.DataSource = pListParentSrc;
+
+
+                //子リストにバインディング
+                pListChildSrc.DataSource = src.childList;
+                listBox_cList.DisplayMember = "wideValue";
+                listBox_cList.ValueMember = "value";
+                listBox_cList.DataSource = pListChildSrc;
+
+                MainToolStrip(false);
             }
 
-            textBox2.Text = src.filePath;
-            textBox3.Text = src.sheetName;
-            textBox4.Text = src.address;
-            textBox1.Text = src.layer;
-
-
-            //親リストにバインディング
-            pListSrc.DataSource = src.parentList;
-            listBox_pList.DisplayMember = "wideValue";
-            listBox_pList.ValueMember = "value";
-            listBox_pList.DataSource = pListSrc;
-
-
-        }
-
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
-        {
-            //TextFormSearch();   //検索
         }
 
 
@@ -218,133 +206,135 @@ namespace WindowsFormsApp1
 
 
         /// <summary>
-        /// 検索結果をDBCした場合、現在の表示を検索履歴をAddして窓に検索結果を反映
+        /// 検索結果をDBCした場合、ExcelOpen
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            //現在の表示しているテキストを検索履歴へ送る
-            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            re.Visible = true;  //MyListを開く   
+            if(listBox1.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            //メイン画面はダブルクリックで開く仕様に変更
+            PathData p = program.partsDic[Strings.StrConv(listBox1.SelectedValue.ToString(),VbStrConv.Wide)];
+            if(p.wbOK)
+                program.ExcelOpen(p.value);
 
         }
 
-        private void search_Load(object sender, EventArgs e)
+   
+
+     
+
+        /// <summary>
+        /// メイン検索リストのツールStripメニュー変化　
+        /// 引数：マルチ選択時 true
+        /// </summary>
+        private void MainToolStrip(bool multi)
         {
+            //メインメニュー（パーソナル）時のStrip
+            contextMainMenuStrip.Items[0].Enabled = false;        //開くNG
+            contextMainMenuStrip.Items[2].Enabled = false;        //MyListへNG
+            contextMainMenuStrip.Items[3].Enabled = true;        //List切り離しOK
+            contextMainMenuStrip.Items[5].Enabled = true;         //MyListの表示OK
+
+
+
+            if (listBox1.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            if( !multi)
+            {
+                PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+                if (src.wbOK)
+                    contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
+            }
+            contextMainMenuStrip.Items[2].Enabled = true;     //MyListへOK
 
         }
 
         /// <summary>
-        /// Excelで該当ファイルを開く
+        /// 子リストのツールStripメニュー変化
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 開くOToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CListToolStrip()
         {
-            program.ExcelOpen(listBox1.SelectedValue.ToString());
+            contextChildMenuStrip.Items[0].Enabled = false;     //開くNG
+            contextChildMenuStrip.Items[2].Enabled = false;     //MyListNG
+            contextChildMenuStrip.Items[3].Enabled = false;     //List切り離しNG
 
-        }
-
-        private void 履歴RToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-     
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            contextMenuStrip2.Items[0].Enabled = false;     //開くNG
-            contextMenuStrip2.Items[2].Enabled = false;     //MyListNG
-      
-            if (listBox_pList.SelectedIndex == -1 )
+            if (listBox_cList.SelectedIndex == -1)
                 return;
 
 
             //open可能
-            if( program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
-                contextMenuStrip2.Items[0].Enabled = true;     //開くNG
+            if (program.getPathData(listBox_cList.SelectedValue.ToString()).wbOK)
+                contextChildMenuStrip.Items[0].Enabled = true;     //開くOK
 
+
+
+
+            //MyListOK
+            contextChildMenuStrip.Items[2].Enabled = true;     //MyListOK
+            contextChildMenuStrip.Items[3].Enabled = true;     //List切り離しOK
+        }
+
+
+        /// <summary>
+        /// 親リストのツールStripメニュー変化
+        /// </summary>
+        private void PListToolStrip(bool multi)
+        {
+            contextParentMenuStrip.Items[0].Enabled = false;     //開くNG
+            contextParentMenuStrip.Items[2].Enabled = false;     //MyListNG
+            contextParentMenuStrip.Items[3].Enabled = false;     //List切り離しNG
+
+            if (listBox_pList.SelectedIndex == -1)
+                return;
+
+            if (!multi)
+            {
+                //open可能
+                if (program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+                    contextParentMenuStrip.Items[0].Enabled = true;     //開くOK
+            }
             //MyListOK
-            contextMenuStrip2.Items[2].Enabled = true;     //MyListOK
-
-
-      
-
-
+            contextParentMenuStrip.Items[2].Enabled = true;     //MyListOK
+            contextParentMenuStrip.Items[3].Enabled = true;     //List切り離しOK
         }
 
-
-        //子リスト切り離し
-        private void list切り離しCToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            if (radioButton1.Checked == true)
-            {
-                CustomList pForm = new CustomList(program.orList, richTextBox1.Text);
-                pForm.SearchRichTextBox = this.richTextBox1;
-            }
-            else
-            {
-                CustomList pForm = new CustomList(program.andList, richTextBox1.Text);
-                pForm.SearchRichTextBox = this.richTextBox1;
-            }
-
-        }
-
-        //MyListへDBクリックと同じ処理
-        private void myListへMToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            re.Visible = true;
-        }
-
-        private void myListの表示ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
-
-
-
-        private void myListの表示ToolStripMenuItem_Click_2(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
 
 
 
         /// <summary>
-        /// 親プレビュー側のコンテキスト
+        /// 親リストの選択を変えた場合
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 開くOToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            program.ExcelOpen(listBox_pList.SelectedValue.ToString());
+            if (listBox_pList.SelectedItems.Count > 1)
+            {
+                PListToolStrip(true);
+            }
+            else
+            {
+                PListToolStrip(false);
+            }
+        }
+        /// <summary>
+        /// 子リストの選択を変えた場合
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBox_cList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CListToolStrip();
         }
 
-        private void myListの表示ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            re.Visible = true;
-        }
-        //親リストを切り離す
-        private void list切り離しCToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            CustomList pForm = new CustomList(path.parentList,path.value);
-            pForm.SearchRichTextBox = this.richTextBox1;
-        }
-
-        private void myListへMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            re.recentDataInsert(program.getPathData(listBox_pList.SelectedValue.ToString()));
-        }
 
         private void listBox_pList_DoubleClick(object sender, EventArgs e)
         {
@@ -352,9 +342,174 @@ namespace WindowsFormsApp1
             if ((ListBox)sender != null)
             {
                 ListBox list = (ListBox)sender;
-                this.richTextBox1.Text = list.Text;
+
+                //open可能か判定
+                PathData p = program.partsDic[list.Text];
+                if (p.wbOK)
+                    program.ExcelOpen(p.value);
             }
 
+        }
+
+
+        private void listBox_cList_DoubleClick(object sender, EventArgs e)
+        {
+
+            //子リストをダブルクリックした場合、検索対象とする
+            if ((ListBox)sender != null)
+            {
+                ListBox list = (ListBox)sender;
+
+                //open可能か判定
+                PathData p = program.partsDic[list.Text];
+                if (p.wbOK)
+                    program.ExcelOpen(p.value);
+            }
+
+
+        }
+
+        private void listBox_pList_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (listBox_pList.SelectedItems.Count > 1)
+            {
+                PListToolStrip(true);
+            }
+            else
+            {
+                PListToolStrip(false);
+            }
+        }
+
+        private void listBox_cList_MouseMove(object sender, MouseEventArgs e)
+        {
+            CListToolStrip();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TextFormSearch();
+        }
+
+
+
+        private void MainToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox1.SelectedValue.ToString());
+        }
+
+        private void MainToolStripToMyList_Click(object sender, EventArgs e)
+        {
+                for( int i = 0; i < listBox1.SelectedItems.Count; i++)
+                {
+                PathData p = (PathData)listBox1.SelectedItems[i];
+                    re.recentDataInsert(program.getPathData(p.value));
+                }
+                re.Visible = true;
+        }
+
+        private void MainToolStripSplit_Click(object sender, EventArgs e)
+        {
+
+            if (radioButton1.Checked == true)
+            {
+                pForm = new CustomList(program.orList);
+            }
+            else
+            {
+                pForm = new CustomList(program.andList);
+            }
+            pForm.titleLabel.Text = this.richTextBox1.Text;
+            pForm.parentChildLabel.Text = "本";
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.re = re;
+            pForm.Show();
+        }
+
+        private void MainToolStripMyListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+        private void ChildStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_cList.SelectedValue.ToString());
+        }
+
+        private void ChildToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < listBox_cList.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_cList.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
+            re.Visible = true;
+        }
+
+        private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
+            pForm = new CustomList( path.childList );
+            pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
+            pForm.parentChildLabel.Text = "子";
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.re = re;
+            pForm.Show();
+        }
+
+        private void ChildToolStripMenuListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+        private void ParentToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_pList.SelectedValue.ToString());
+        }
+
+        private void ParentToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < listBox_pList.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_pList.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
+            re.Visible = true;
+        }
+
+        private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
+        {
+            PathData path = program.getPathData(listBox1.SelectedValue.ToString());
+            pForm = new CustomList(path.parentList);
+            pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
+            pForm.parentChildLabel.Text = "親";
+            pForm.SearchRichTextBox = this.richTextBox1;
+            pForm.re = re;
+            pForm.Show();
+        }
+
+        private void ParentToolStripMenuListView_Click(object sender, EventArgs e)
+        {
+            re.Visible = true;
+        }
+
+        private void Search_Resize(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (listBox1.SelectedItems.Count > 1)
+            {
+       
+                MainToolStrip(true);
+            }
+            else
+            {
+       
+                MainToolStrip(false);
+            }
         }
     }
 }

@@ -4,8 +4,8 @@ namespace WindowsFormsApp1
 {
     public class PathData
     {
+
         public string filePath { get; set; }
-        public string fileName { get; set; }
         public string sheetName { get; set; }
         public string address { get; set; }
         public string value { get; set; }       //実名称
@@ -15,26 +15,17 @@ namespace WindowsFormsApp1
         public bool wbOK { get; set; }               //開くことが可能か否か　ファイルパス、シート名、ｱﾄﾞﾚｽがない場合はNG
 
         public List<PathData> parentList;    //親リスト
-        public List<string> childList;     //子リスト
+        public List<PathData> childList;     //子リスト
+
+        public string bindingData;
 
         //ｺﾝｽﾄﾗｸﾀ
         public PathData()
         {
             parentList = new List<PathData>();
-            childList = new List<string>();
-
+            childList = new List<PathData>();
         }
     }
-
-
-
-   
-
-
-
-
-
-
-
+    
 
 }

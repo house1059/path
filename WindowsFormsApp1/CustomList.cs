@@ -13,52 +13,31 @@ namespace WindowsFormsApp1
     public partial class CustomList : Form
     {
         //別のフォームから値を受け取るよう
-        public RichTextBox SearchRichTextBox { get; set; }
-        BindingSource parentSrc = null;
+        public RichTextBox SearchRichTextBox { get; set; } = new RichTextBox();
+        public Label titleLabel { get; set; } = new Label();
+        public Label parentChildLabel { get; set; } = new Label();
+        public Recent re { get; set; }
+        BindingSource dataSrc = null;
 
-        public CustomList(List<PathData> p,string s )
+
+        public CustomList(List<PathData> p  )
         {
             InitializeComponent();
-            parentSrc = new BindingSource();
-            parentSrc.DataSource = p;
+            dataSrc = new BindingSource();
+            dataSrc.DataSource = p;
 
-            listBox_parent.ValueMember = "value";
-            listBox_parent.DisplayMember = "wideValue";
+            listBox_Custom.ValueMember = "value";
+            listBox_Custom.DisplayMember = "wideValue";
 
-            listBox_parent.DataSource = parentSrc;
-            label1.Text = s;
-
-            this.Show();
-        }
-
-        private void ParentList_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox_parent_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-
-            PathData path = program.getPathData(listBox_parent.SelectedValue.ToString());
-            contextMenuStrip1.Items[0].Enabled = false;  //開くNG
-            contextMenuStrip1.Items[2].Enabled = false;  //MyListNG
-            contextMenuStrip1.Items[3].Enabled = false;  //List切り離しNG
-
-            //何も選択していない場合は終了
-            if (listBox_parent.SelectedIndex == -1)
-                return;
-
-            if (path.wbOK)
-                contextMenuStrip1.Items[0].Enabled = true;  //開くOK
-
-            contextMenuStrip1.Items[2].Enabled = true;  //MyListOK
-            contextMenuStrip1.Items[3].Enabled = true;  //List切り離しOK
-
+            listBox_Custom.DataSource = dataSrc;
+            titleLabel = this.label1;
+            parentChildLabel = this.label2;
 
 
 
         }
+
+        
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -66,11 +45,46 @@ namespace WindowsFormsApp1
             {
                 //MyListのラベルをダブルクリックした場合、メイン画面のtext入力を書き換えたい
                 Label label = (Label)sender;
+
                 this.SearchRichTextBox.Text = label.Text;
             }
         }
 
-        private void listBox_parent_DoubleClick(object sender, EventArgs e)
+
+        private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
+        {
+            program.ExcelOpen(listBox_Custom.SelectedValue.ToString());
+        }
+
+        private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < listBox_Custom.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_Custom.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
+            re.Visible = true;
+        }
+
+        private void listBox_Custom_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            contextCustomMenuStrip.Items[0].Enabled = false;  //開くNG
+            contextCustomMenuStrip.Items[2].Enabled = false;  //MyListNG
+
+            //何も選択していない場合は終了
+            if (listBox_Custom.SelectedIndex == -1)
+                return;
+
+            if (listBox_Custom.SelectedItems.Count == 1)
+            {
+                PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
+                if (path.wbOK)
+                    contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
+            }
+            contextCustomMenuStrip.Items[2].Enabled = true;  //MyListOK
+        }
+
+        private void listBox_Custom_DoubleClick(object sender, EventArgs e)
         {
             //ListBoxのオブジェクトが飛んできます。
             if ((ListBox)sender != null)
@@ -78,6 +92,32 @@ namespace WindowsFormsApp1
                 //MyListをダブルクリックした場合、メイン画面のtext入力を書き換えたい
                 ListBox list = (ListBox)sender;
                 this.SearchRichTextBox.Text = list.Text;
+            }
+        }
+
+        private void listBox_Custom_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Deleteで選択中の項目削除
+            if (e.KeyCode == Keys.Delete)
+            {
+                int count = listBox_Custom.SelectedItems.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    PathData p = (PathData)listBox_Custom.SelectedItem;
+                    dataSrc.Remove(p);
+                }
+
+
+                //DisposeするとpListのindexに影響がでる？
+                //if (listBox_Custom.Items.Count == 0)
+                //{
+                //   if( MessageBox.Show("Itemが無くなりました。Formを閉じますか？", "閉じる？", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                //    {
+                //        me.Close();
+                //    }                
+                // }
+
+
             }
         }
     }
