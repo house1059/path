@@ -274,6 +274,9 @@ namespace WindowsFormsApp1
             if (program.getPathData(listBox_cList.SelectedValue.ToString()).wbOK)
                 contextChildMenuStrip.Items[0].Enabled = true;     //開くOK
 
+
+
+
             //MyListOK
             contextChildMenuStrip.Items[2].Enabled = true;     //MyListOK
             contextChildMenuStrip.Items[3].Enabled = true;     //List切り離しOK

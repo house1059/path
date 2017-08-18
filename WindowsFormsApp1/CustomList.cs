@@ -18,7 +18,7 @@ namespace WindowsFormsApp1
         public Label parentChildLabel { get; set; } = new Label();
         public Recent re { get; set; }
         BindingSource dataSrc = null;
-      
+
 
         public CustomList(List<PathData> p  )
         {
@@ -32,12 +32,12 @@ namespace WindowsFormsApp1
             listBox_Custom.DataSource = dataSrc;
             titleLabel = this.label1;
             parentChildLabel = this.label2;
+
+
+
         }
 
-
-
-
-
+        
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -50,10 +50,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void listBox_parent_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
 
         private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
         {
@@ -62,13 +58,16 @@ namespace WindowsFormsApp1
 
         private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
         {
-            re.recentDataInsert(program.getPathData(listBox_Custom.SelectedValue.ToString()));
+            for (int i = 0; i < listBox_Custom.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_Custom.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
             re.Visible = true;
         }
 
         private void listBox_Custom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
             contextCustomMenuStrip.Items[0].Enabled = false;  //開くNG
             contextCustomMenuStrip.Items[2].Enabled = false;  //MyListNG
 
@@ -76,9 +75,12 @@ namespace WindowsFormsApp1
             if (listBox_Custom.SelectedIndex == -1)
                 return;
 
-            if (path.wbOK)
-                contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
-
+            if (listBox_Custom.SelectedItems.Count == 1)
+            {
+                PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
+                if (path.wbOK)
+                    contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
+            }
             contextCustomMenuStrip.Items[2].Enabled = true;  //MyListOK
         }
 
@@ -90,6 +92,32 @@ namespace WindowsFormsApp1
                 //MyListをダブルクリックした場合、メイン画面のtext入力を書き換えたい
                 ListBox list = (ListBox)sender;
                 this.SearchRichTextBox.Text = list.Text;
+            }
+        }
+
+        private void listBox_Custom_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Deleteで選択中の項目削除
+            if (e.KeyCode == Keys.Delete)
+            {
+                int count = listBox_Custom.SelectedItems.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    PathData p = (PathData)listBox_Custom.SelectedItem;
+                    dataSrc.Remove(p);
+                }
+
+
+                //DisposeするとpListのindexに影響がでる？
+                //if (listBox_Custom.Items.Count == 0)
+                //{
+                //   if( MessageBox.Show("Itemが無くなりました。Formを閉じますか？", "閉じる？", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                //    {
+                //        me.Close();
+                //    }                
+                // }
+
+
             }
         }
     }

@@ -49,10 +49,12 @@
             this.listBox_Custom.ItemHeight = 12;
             this.listBox_Custom.Location = new System.Drawing.Point(-3, 29);
             this.listBox_Custom.Name = "listBox_Custom";
+            this.listBox_Custom.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_Custom.Size = new System.Drawing.Size(391, 268);
             this.listBox_Custom.TabIndex = 0;
             this.listBox_Custom.SelectedIndexChanged += new System.EventHandler(this.listBox_Custom_SelectedIndexChanged);
             this.listBox_Custom.DoubleClick += new System.EventHandler(this.listBox_Custom_DoubleClick);
+            this.listBox_Custom.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_Custom_KeyDown);
             // 
             // contextCustomMenuStrip
             // 

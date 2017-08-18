@@ -53,13 +53,12 @@ namespace WindowsFormsApp1
 
         private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            contextMyListMenuStrip.Items[0].Enabled = false;  //開くNG
             if (listBox_recent.SelectedIndex == -1)
                 return;
-
-
+            
             PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
-            contextMyListMenuStrip.Items[0].Enabled = false;  //開くNG
-      
             if (path.wbOK)
                 contextMyListMenuStrip.Items[0].Enabled = true;  //開くOK
 
