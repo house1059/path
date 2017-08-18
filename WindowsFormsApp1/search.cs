@@ -383,11 +383,11 @@ namespace WindowsFormsApp1
 
             if (radioButton1.Checked == true)
             {
-                pForm = new CustomList(program.orList, richTextBox1.Text);
+                pForm = new CustomList(program.orList);
             }
             else
             {
-                pForm = new CustomList(program.andList, richTextBox1.Text);
+                pForm = new CustomList(program.andList);
             }
             pForm.titleLabel.Text = this.listBox1.Text;
             pForm.parentChildLabel.Text = "本";
@@ -415,7 +415,7 @@ namespace WindowsFormsApp1
         private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            pForm = new CustomList( path.childList , listBox1.SelectedValue.ToString());
+            pForm = new CustomList( path.childList );
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "子";
             pForm.SearchRichTextBox = this.richTextBox1;
@@ -442,7 +442,7 @@ namespace WindowsFormsApp1
         private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = program.getPathData(listBox1.SelectedValue.ToString());
-            pForm = new CustomList(path.parentList, listBox1.SelectedValue.ToString());
+            pForm = new CustomList(path.parentList);
             pForm.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             pForm.parentChildLabel.Text = "親";
             pForm.SearchRichTextBox = this.richTextBox1;

@@ -20,7 +20,7 @@ namespace WindowsFormsApp1
         BindingSource dataSrc = null;
       
 
-        public CustomList(List<PathData> p , string s )
+        public CustomList(List<PathData> p  )
         {
             InitializeComponent();
             dataSrc = new BindingSource();
@@ -30,9 +30,8 @@ namespace WindowsFormsApp1
             listBox_Custom.DisplayMember = "wideValue";
 
             listBox_Custom.DataSource = dataSrc;
-            this.label1.Text = s;
-
-            
+            titleLabel = this.label1;
+            parentChildLabel = this.label2;
         }
 
 
