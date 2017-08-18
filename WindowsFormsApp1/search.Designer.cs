@@ -508,8 +508,6 @@
             this.Controls.Add(this.bt_read);
             this.Name = "Search";
             this.Text = "NSS　部品検索";
-            this.Load += new System.EventHandler(this.search_Load);
-            this.DragOver += new System.Windows.Forms.DragEventHandler(this.search_DragOver);
             this.contextMainMenuStrip.ResumeLayout(false);
             this.contextChildMenuStrip.ResumeLayout(false);
             this.contextParentMenuStrip.ResumeLayout(false);

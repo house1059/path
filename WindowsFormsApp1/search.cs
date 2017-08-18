@@ -40,25 +40,20 @@ namespace WindowsFormsApp1
             
         }
 
-  
-        private void search_DragOver(object sender, DragEventArgs e)
-        {
-            
-        }
-
 
         //検索の実態
         private void TextFormSearch( )
         {
             p.TextSearch(richTextBox1.Text, comboBox1.Text);
-            if (richTextBox1.Text == "" && comboBox1.Text == "")
-            {
-                listBox1.DataSource = null;
-                return;
-            }
+            //if (richTextBox1.Text == "" && comboBox1.Text == "")
+            //{
+            //    listBox1.DataSource = null;
+            //    return;
+            //}
 
             //検索開始
             // Shutdown the painting of the ListBox as items are added.
+            ViewClear();
             ViewUpdate();   //再描画
         }
 
@@ -77,6 +72,10 @@ namespace WindowsFormsApp1
             textBox2.Text = ""; //ファイルパス
             textBox3.Text = ""; //シート名
             textBox4.Text = ""; //ｱﾄﾞﾚｽ
+            listBox_cList.DataSource = null;
+            listBox_pList.DataSource = null;
+
+
         }
 
 
@@ -146,6 +145,7 @@ namespace WindowsFormsApp1
             {
                 listBox1.DataSource = program.andList;
             }
+
            
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
@@ -160,6 +160,11 @@ namespace WindowsFormsApp1
             {
                 return;
             }
+
+
+            //マルチ選択の場合はMyListへ保存のみ許可する
+
+
 
             PathData src = program.getPathData(listBox1.SelectedValue.ToString());
 
@@ -194,13 +199,12 @@ namespace WindowsFormsApp1
 
 
         /// <summary>
-        /// 検索結果をDBCした場合、現在の表示を検索履歴をAddして窓に検索結果を反映
+        /// 検索結果をDBCした場合、ExcelOpen
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            //現在の表示しているテキストをMyListへ送る
             if(listBox1.SelectedIndex == -1)
             {
                 return;
@@ -210,15 +214,6 @@ namespace WindowsFormsApp1
             PathData p = program.partsDic[listBox1.SelectedValue.ToString()];
             if(p.wbOK)
                 program.ExcelOpen(p.value);
-
-            /*
-            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            re.Visible = true;  //MyListを開く   
-            */
-        }
-
-        private void search_Load(object sender, EventArgs e)
-        {
 
         }
 
@@ -326,7 +321,11 @@ namespace WindowsFormsApp1
             if ((ListBox)sender != null)
             {
                 ListBox list = (ListBox)sender;
-                this.richTextBox1.Text = list.Text;
+
+                //open可能か判定
+                PathData p = program.partsDic[list.Text];
+                if (p.wbOK)
+                    program.ExcelOpen(p.value);
             }
 
         }
@@ -339,7 +338,11 @@ namespace WindowsFormsApp1
             if ((ListBox)sender != null)
             {
                 ListBox list = (ListBox)sender;
-                this.richTextBox1.Text = list.Text;
+
+                //open可能か判定
+                PathData p = program.partsDic[list.Text];
+                if (p.wbOK)
+                    program.ExcelOpen(p.value);
             }
 
 
