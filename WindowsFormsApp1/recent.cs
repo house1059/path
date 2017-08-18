@@ -53,6 +53,10 @@ namespace WindowsFormsApp1
 
         private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (listBox_recent.SelectedIndex == -1)
+                return;
+
+
             PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
             contextMyListMenuStrip.Items[0].Enabled = false;  //開くNG
       
@@ -82,6 +86,20 @@ namespace WindowsFormsApp1
         private void MyListToolStripMenuOpen_Click(object sender, EventArgs e)
         {
             program.ExcelOpen(listBox_recent.SelectedValue.ToString());
+        }
+
+        private void listBox_recent_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Deleteで選択中の項目削除
+            if(e.KeyCode == Keys.Delete)
+            {
+                int count = listBox_recent.SelectedItems.Count;
+                for(int i = 0; i < count; i++)
+                {
+                    PathData p = (PathData)listBox_recent.SelectedItem;
+                    recentSrc.Remove(p);
+                }
+            }
         }
     }
 }

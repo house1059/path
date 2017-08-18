@@ -55,6 +55,13 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.listBox_pList = new System.Windows.Forms.ListBox();
+            this.contextParentMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ParentToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ParentToolStripMenuToMyList = new System.Windows.Forms.ToolStripMenuItem();
+            this.ParentToolStripMenuSplit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.ParentToolStripMenuListView = new System.Windows.Forms.ToolStripMenuItem();
             this.contextChildMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ChildToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -65,17 +72,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.listBox_cList = new System.Windows.Forms.ListBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.contextParentMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ParentToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.ParentToolStripMenuToMyList = new System.Windows.Forms.ToolStripMenuItem();
-            this.ParentToolStripMenuSplit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-            this.ParentToolStripMenuListView = new System.Windows.Forms.ToolStripMenuItem();
             MainToolStripMyListView = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMainMenuStrip.SuspendLayout();
-            this.contextChildMenuStrip.SuspendLayout();
             this.contextParentMenuStrip.SuspendLayout();
+            this.contextChildMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainToolStripMyListView
@@ -105,6 +105,7 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(12, 72);
             this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox1.Size = new System.Drawing.Size(641, 124);
             this.listBox1.TabIndex = 2;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
@@ -333,11 +334,62 @@
             this.listBox_pList.ItemHeight = 12;
             this.listBox_pList.Location = new System.Drawing.Point(12, 363);
             this.listBox_pList.Name = "listBox_pList";
+            this.listBox_pList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_pList.Size = new System.Drawing.Size(335, 148);
             this.listBox_pList.TabIndex = 11;
             this.listBox_pList.SelectedIndexChanged += new System.EventHandler(this.listBox_pList_SelectedIndexChanged);
             this.listBox_pList.DoubleClick += new System.EventHandler(this.listBox_pList_DoubleClick);
             this.listBox_pList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_pList_MouseMove);
+            // 
+            // contextParentMenuStrip
+            // 
+            this.contextParentMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ParentToolStripMenuOpen,
+            this.toolStripMenuItem5,
+            this.ParentToolStripMenuToMyList,
+            this.ParentToolStripMenuSplit,
+            this.toolStripMenuItem6,
+            this.ParentToolStripMenuListView});
+            this.contextParentMenuStrip.Name = "contextParentMenuStrip";
+            this.contextParentMenuStrip.Size = new System.Drawing.Size(164, 104);
+            // 
+            // ParentToolStripMenuOpen
+            // 
+            this.ParentToolStripMenuOpen.Name = "ParentToolStripMenuOpen";
+            this.ParentToolStripMenuOpen.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuOpen.Text = "開く(&O)";
+            this.ParentToolStripMenuOpen.Click += new System.EventHandler(this.ParentToolStripMenuOpen_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(160, 6);
+            // 
+            // ParentToolStripMenuToMyList
+            // 
+            this.ParentToolStripMenuToMyList.Name = "ParentToolStripMenuToMyList";
+            this.ParentToolStripMenuToMyList.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuToMyList.Text = "MyListへ(&M)";
+            this.ParentToolStripMenuToMyList.Click += new System.EventHandler(this.ParentToolStripMenuToMyList_Click);
+            // 
+            // ParentToolStripMenuSplit
+            // 
+            this.ParentToolStripMenuSplit.Name = "ParentToolStripMenuSplit";
+            this.ParentToolStripMenuSplit.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuSplit.Text = "List切り離し(&C)";
+            this.ParentToolStripMenuSplit.Click += new System.EventHandler(this.ParentToolStripMenuSplit_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(160, 6);
+            // 
+            // ParentToolStripMenuListView
+            // 
+            this.ParentToolStripMenuListView.Name = "ParentToolStripMenuListView";
+            this.ParentToolStripMenuListView.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuListView.Text = "MyListの表示";
+            this.ParentToolStripMenuListView.Click += new System.EventHandler(this.ParentToolStripMenuListView_Click);
             // 
             // contextChildMenuStrip
             // 
@@ -410,6 +462,7 @@
             this.listBox_cList.ItemHeight = 12;
             this.listBox_cList.Location = new System.Drawing.Point(351, 363);
             this.listBox_cList.Name = "listBox_cList";
+            this.listBox_cList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_cList.Size = new System.Drawing.Size(307, 148);
             this.listBox_cList.TabIndex = 13;
             this.listBox_cList.SelectedIndexChanged += new System.EventHandler(this.listBox_cList_SelectedIndexChanged);
@@ -425,56 +478,6 @@
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 14;
             this.label8.Text = "子リスト";
-            // 
-            // contextParentMenuStrip
-            // 
-            this.contextParentMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ParentToolStripMenuOpen,
-            this.toolStripMenuItem5,
-            this.ParentToolStripMenuToMyList,
-            this.ParentToolStripMenuSplit,
-            this.toolStripMenuItem6,
-            this.ParentToolStripMenuListView});
-            this.contextParentMenuStrip.Name = "contextParentMenuStrip";
-            this.contextParentMenuStrip.Size = new System.Drawing.Size(164, 104);
-            // 
-            // ParentToolStripMenuOpen
-            // 
-            this.ParentToolStripMenuOpen.Name = "ParentToolStripMenuOpen";
-            this.ParentToolStripMenuOpen.Size = new System.Drawing.Size(163, 22);
-            this.ParentToolStripMenuOpen.Text = "開く(&O)";
-            this.ParentToolStripMenuOpen.Click += new System.EventHandler(this.ParentToolStripMenuOpen_Click);
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(160, 6);
-            // 
-            // ParentToolStripMenuToMyList
-            // 
-            this.ParentToolStripMenuToMyList.Name = "ParentToolStripMenuToMyList";
-            this.ParentToolStripMenuToMyList.Size = new System.Drawing.Size(163, 22);
-            this.ParentToolStripMenuToMyList.Text = "MyListへ(&M)";
-            this.ParentToolStripMenuToMyList.Click += new System.EventHandler(this.ParentToolStripMenuToMyList_Click);
-            // 
-            // ParentToolStripMenuSplit
-            // 
-            this.ParentToolStripMenuSplit.Name = "ParentToolStripMenuSplit";
-            this.ParentToolStripMenuSplit.Size = new System.Drawing.Size(163, 22);
-            this.ParentToolStripMenuSplit.Text = "List切り離し(&C)";
-            this.ParentToolStripMenuSplit.Click += new System.EventHandler(this.ParentToolStripMenuSplit_Click);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(160, 6);
-            // 
-            // ParentToolStripMenuListView
-            // 
-            this.ParentToolStripMenuListView.Name = "ParentToolStripMenuListView";
-            this.ParentToolStripMenuListView.Size = new System.Drawing.Size(163, 22);
-            this.ParentToolStripMenuListView.Text = "MyListの表示";
-            this.ParentToolStripMenuListView.Click += new System.EventHandler(this.ParentToolStripMenuListView_Click);
             // 
             // Search
             // 
@@ -509,8 +512,8 @@
             this.Name = "Search";
             this.Text = "NSS　部品検索";
             this.contextMainMenuStrip.ResumeLayout(false);
-            this.contextChildMenuStrip.ResumeLayout(false);
             this.contextParentMenuStrip.ResumeLayout(false);
+            this.contextChildMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -53,7 +53,6 @@ namespace WindowsFormsApp1
 
             //検索開始
             // Shutdown the painting of the ListBox as items are added.
-            ViewClear();
             ViewUpdate();   //再描画
         }
 
@@ -72,8 +71,7 @@ namespace WindowsFormsApp1
             textBox2.Text = ""; //ファイルパス
             textBox3.Text = ""; //シート名
             textBox4.Text = ""; //ｱﾄﾞﾚｽ
-            listBox_cList.DataSource = null;
-            listBox_pList.DataSource = null;
+
 
 
         }
@@ -145,8 +143,9 @@ namespace WindowsFormsApp1
             {
                 listBox1.DataSource = program.andList;
             }
+            listBox_cList.DataSource = null;
+            listBox_pList.DataSource = null;
 
-           
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
         }
@@ -163,31 +162,39 @@ namespace WindowsFormsApp1
 
 
             //マルチ選択の場合はMyListへ保存のみ許可する
+            if( listBox1.SelectedItems.Count > 1)
+            {
+                textBox2.Text = "non";
+                textBox3.Text = "non";
+                textBox4.Text = "non";
+                textBox1.Text = "non";
+                listBox_cList.DataSource = null;
+                listBox_pList.DataSource = null;
+                MainToolStrip(true);
+            }else {
+                PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+
+                textBox2.Text = src.filePath;
+                textBox3.Text = src.sheetName;
+                textBox4.Text = src.address;
+                textBox1.Text = src.layer;
 
 
-
-            PathData src = program.getPathData(listBox1.SelectedValue.ToString());
-
-            textBox2.Text = src.filePath;
-            textBox3.Text = src.sheetName;
-            textBox4.Text = src.address;
-            textBox1.Text = src.layer;
+                //親リストにバインディング
+                pListParentSrc.DataSource = src.parentList;
+                listBox_pList.DisplayMember = "wideValue";
+                listBox_pList.ValueMember = "value";
+                listBox_pList.DataSource = pListParentSrc;
 
 
-            //親リストにバインディング
-            pListParentSrc.DataSource = src.parentList;
-            listBox_pList.DisplayMember = "wideValue";
-            listBox_pList.ValueMember = "value";
-            listBox_pList.DataSource = pListParentSrc;
+                //子リストにバインディング
+                pListChildSrc.DataSource = src.childList;
+                listBox_cList.DisplayMember = "wideValue";
+                listBox_cList.ValueMember = "value";
+                listBox_cList.DataSource = pListChildSrc;
 
-
-            //子リストにバインディング
-            pListChildSrc.DataSource = src.childList;
-            listBox_cList.DisplayMember = "wideValue";
-            listBox_cList.ValueMember = "value";
-            listBox_cList.DataSource = pListChildSrc;
-
-            MainToolStrip();
+                MainToolStrip(false);
+            }
 
         }
 
@@ -222,9 +229,10 @@ namespace WindowsFormsApp1
      
 
         /// <summary>
-        /// メイン検索リストのツールStripメニュー変化
+        /// メイン検索リストのツールStripメニュー変化　
+        /// 引数：マルチ選択時 true
         /// </summary>
-        private void MainToolStrip()
+        private void MainToolStrip(bool multi)
         {
             //メインメニュー（パーソナル）時のStrip
             contextMainMenuStrip.Items[0].Enabled = false;        //開くNG
@@ -238,11 +246,13 @@ namespace WindowsFormsApp1
             {
                 return;
             }
-            PathData src = program.getPathData(listBox1.SelectedValue.ToString());
 
-            if (src.wbOK)
-                contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
-            
+            if( !multi)
+            {
+                PathData src = program.getPathData(listBox1.SelectedValue.ToString());
+                if (src.wbOK)
+                    contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
+            }
             contextMainMenuStrip.Items[2].Enabled = true;     //MyListへOK
 
         }
@@ -273,7 +283,7 @@ namespace WindowsFormsApp1
         /// <summary>
         /// 親リストのツールStripメニュー変化
         /// </summary>
-        private void PListToolStrip()
+        private void PListToolStrip(bool multi)
         {
             contextParentMenuStrip.Items[0].Enabled = false;     //開くNG
             contextParentMenuStrip.Items[2].Enabled = false;     //MyListNG
@@ -282,11 +292,12 @@ namespace WindowsFormsApp1
             if (listBox_pList.SelectedIndex == -1)
                 return;
 
-
-            //open可能
-            if (program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
-                contextParentMenuStrip.Items[0].Enabled = true;     //開くOK
-
+            if (!multi)
+            {
+                //open可能
+                if (program.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+                    contextParentMenuStrip.Items[0].Enabled = true;     //開くOK
+            }
             //MyListOK
             contextParentMenuStrip.Items[2].Enabled = true;     //MyListOK
             contextParentMenuStrip.Items[3].Enabled = true;     //List切り離しOK
@@ -302,7 +313,14 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PListToolStrip();
+            if (listBox_pList.SelectedItems.Count > 1)
+            {
+                PListToolStrip(true);
+            }
+            else
+            {
+                PListToolStrip(false);
+            }
         }
         /// <summary>
         /// 子リストの選択を変えた場合
@@ -350,7 +368,14 @@ namespace WindowsFormsApp1
 
         private void listBox_pList_MouseMove(object sender, MouseEventArgs e)
         {
-            PListToolStrip();
+            if (listBox_pList.SelectedItems.Count > 1)
+            {
+                PListToolStrip(true);
+            }
+            else
+            {
+                PListToolStrip(false);
+            }
         }
 
         private void listBox_cList_MouseMove(object sender, MouseEventArgs e)
@@ -360,7 +385,15 @@ namespace WindowsFormsApp1
 
         private void listBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            MainToolStrip();
+            if (listBox1.SelectedItems.Count > 1)
+            {
+                MainToolStrip(true);
+            }
+            else
+            {
+                MainToolStrip(false);
+
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -377,8 +410,12 @@ namespace WindowsFormsApp1
 
         private void MainToolStripToMyList_Click(object sender, EventArgs e)
         {
-            re.recentDataInsert(program.getPathData(listBox1.SelectedValue.ToString()));
-            re.Visible = true;
+                for( int i = 0; i < listBox1.SelectedItems.Count; i++)
+                {
+                PathData p = (PathData)listBox1.SelectedItems[i];
+                    re.recentDataInsert(program.getPathData(p.value));
+                }
+                re.Visible = true;
         }
 
         private void MainToolStripSplit_Click(object sender, EventArgs e)
@@ -392,7 +429,7 @@ namespace WindowsFormsApp1
             {
                 pForm = new CustomList(program.andList);
             }
-            pForm.titleLabel.Text = this.listBox1.Text;
+            pForm.titleLabel.Text = this.richTextBox1.Text;
             pForm.parentChildLabel.Text = "本";
             pForm.SearchRichTextBox = this.richTextBox1;
             pForm.re = re;
@@ -411,7 +448,11 @@ namespace WindowsFormsApp1
 
         private void ChildToolStripMenuToMyList_Click(object sender, EventArgs e)
         {
-            re.recentDataInsert(program.getPathData(listBox_cList.SelectedValue.ToString()));
+            for (int i = 0; i < listBox_cList.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_cList.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
             re.Visible = true;
         }
 
@@ -438,7 +479,11 @@ namespace WindowsFormsApp1
 
         private void ParentToolStripMenuToMyList_Click(object sender, EventArgs e)
         {
-            re.recentDataInsert(program.getPathData(listBox_pList.SelectedValue.ToString()));
+            for (int i = 0; i < listBox_pList.SelectedItems.Count; i++)
+            {
+                PathData p = (PathData)listBox_pList.SelectedItems[i];
+                re.recentDataInsert(program.getPathData(p.value));
+            }
             re.Visible = true;
         }
 

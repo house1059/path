@@ -45,10 +45,12 @@
             this.listBox_recent.ItemHeight = 12;
             this.listBox_recent.Location = new System.Drawing.Point(-2, 25);
             this.listBox_recent.Name = "listBox_recent";
+            this.listBox_recent.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_recent.Size = new System.Drawing.Size(288, 244);
             this.listBox_recent.TabIndex = 0;
             this.listBox_recent.SelectedIndexChanged += new System.EventHandler(this.listBox_recent_SelectedIndexChanged);
             this.listBox_recent.DoubleClick += new System.EventHandler(this.listBox_recent_DoubleClick);
+            this.listBox_recent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_recent_KeyDown);
             // 
             // contextMyListMenuStrip
             // 
@@ -56,20 +58,20 @@
             this.MyListToolStripMenuOpen,
             this.toolStripMenuItem1});
             this.contextMyListMenuStrip.Name = "contextMenuStrip1";
-            this.contextMyListMenuStrip.Size = new System.Drawing.Size(153, 54);
+            this.contextMyListMenuStrip.Size = new System.Drawing.Size(120, 32);
             // 
             // MyListToolStripMenuOpen
             // 
             this.MyListToolStripMenuOpen.Enabled = false;
             this.MyListToolStripMenuOpen.Name = "MyListToolStripMenuOpen";
-            this.MyListToolStripMenuOpen.Size = new System.Drawing.Size(152, 22);
+            this.MyListToolStripMenuOpen.Size = new System.Drawing.Size(119, 22);
             this.MyListToolStripMenuOpen.Text = "開く(&O)";
             this.MyListToolStripMenuOpen.Click += new System.EventHandler(this.MyListToolStripMenuOpen_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(116, 6);
             // 
             // label1
             // 
