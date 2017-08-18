@@ -179,6 +179,7 @@ namespace WindowsFormsApp1
                 registPathData.address = p.address;
                 registPathData.value = p.value;
                 registPathData.wideValue = p.wideValue;
+                registPathData.wbOK = p.wbOK;
 
                 RegistChild(st1[4].Split(','), ref registPathData);      //子どもを登録
 

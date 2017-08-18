@@ -218,7 +218,7 @@ namespace WindowsFormsApp1
             }
 
             //メイン画面はダブルクリックで開く仕様に変更
-            PathData p = program.partsDic[listBox1.SelectedValue.ToString()];
+            PathData p = program.partsDic[Strings.StrConv(listBox1.SelectedValue.ToString(),VbStrConv.Wide)];
             if(p.wbOK)
                 program.ExcelOpen(p.value);
 
@@ -386,19 +386,6 @@ namespace WindowsFormsApp1
             CListToolStrip();
         }
 
-        private void listBox1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (listBox1.SelectedItems.Count > 1)
-            {
-                MainToolStrip(true);
-            }
-            else
-            {
-                MainToolStrip(false);
-
-            }
-        }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             TextFormSearch();
@@ -506,5 +493,23 @@ namespace WindowsFormsApp1
             re.Visible = true;
         }
 
+        private void Search_Resize(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (listBox1.SelectedItems.Count > 1)
+            {
+       
+                MainToolStrip(true);
+            }
+            else
+            {
+       
+                MainToolStrip(false);
+            }
+        }
     }
 }

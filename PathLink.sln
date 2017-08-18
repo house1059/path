@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{48B4A262-150C-4BCF-9346-9D499757A517}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathLink", "WindowsFormsApp1\PathLink.csproj", "{48B4A262-150C-4BCF-9346-9D499757A517}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
