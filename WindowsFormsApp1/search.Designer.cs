@@ -458,7 +458,6 @@
             // listBox_cList
             // 
             this.listBox_cList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.listBox_cList.ContextMenuStrip = this.contextChildMenuStrip;
             this.listBox_cList.FormattingEnabled = true;
             this.listBox_cList.ItemHeight = 12;
             this.listBox_cList.Location = new System.Drawing.Point(351, 432);
