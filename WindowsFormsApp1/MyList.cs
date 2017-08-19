@@ -11,55 +11,54 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Recent : Form
+    public partial class MyList : Form
     {
         //別のフォームから値を受け取るよう
         public RichTextBox SearchRichTextBox { get; set; }
+        public Proc proc { get; set; }
 
+        BindingSource myListSrc;  //検索履歴用Listデータｾｯﾄ
 
-        BindingSource recentSrc;  //検索履歴用Listデータｾｯﾄ
-
-        public Recent()
+        public MyList()
         {
             InitializeComponent();
 
-            recentSrc = new BindingSource();
-            //recentSrc.DataMember = "value";
-            listBox_recent.ValueMember = "value";
-            listBox_recent.DisplayMember = "wideValue";
+            myListSrc = new BindingSource();
+            //myListSrc.DataSource = new { value = "" };
+            listBox_myList.DataSource = myListSrc;          //データソースを先に設定しないとValueMem
+            listBox_myList.ValueMember = "value";
+            listBox_myList.DisplayMember = "wideValue";
 
         }
 
-        public void recentDataInsert( PathData p)
+        public void DataInsert( PathData p)
         {
-            listBox_recent.BeginUpdate();
-            recentSrc.Insert(0, p);
-            listBox_recent.ValueMember = "value";
-            listBox_recent.DisplayMember = "wideValue";
-            listBox_recent.DataSource = recentSrc;
-            listBox_recent.SelectedIndex = 0;
+            listBox_myList.BeginUpdate();
+            myListSrc.Insert(0, p);
 
+            //listBox_myList.ValueMember = "value";
+            //listBox_myList.DisplayMember = "wideValue";
+            //listBox_myList.DataSource = myListSrc;
+            listBox_myList.SelectedIndex = 0;
 
-            listBox_recent.EndUpdate();
-
-
+            listBox_myList.EndUpdate();
         }
 
-        private void programBindingSource_CurrentChanged(object sender, EventArgs e)
+    
+        private void listBox_myList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+            //インスタンス作成時の動作はリターン
+            if(proc == null)
+                return;
 
-        }
-
-        private void listBox_recent_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
             contextMyListMenuStrip.Items[0].Enabled = false;  //開くNG
-            if (listBox_recent.SelectedIndex == -1)
+            if (listBox_myList.SelectedIndex == -1)
                 return;
             
-            PathData path = program.getPathData(listBox_recent.SelectedValue.ToString());
-            if (path.wbOK)
+            PathData p = proc.getPathData(listBox_myList.SelectedValue.ToString());
+            if (p.wbOK)
                 contextMyListMenuStrip.Items[0].Enabled = true;  //開くOK
 
         }
@@ -84,7 +83,7 @@ namespace WindowsFormsApp1
 
         private void MyListToolStripMenuOpen_Click(object sender, EventArgs e)
         {
-            program.ExcelOpen(listBox_recent.SelectedValue.ToString());
+            proc.ExcelOpen(listBox_myList.SelectedValue.ToString());
         }
 
         private void listBox_recent_KeyDown(object sender, KeyEventArgs e)
@@ -92,11 +91,11 @@ namespace WindowsFormsApp1
             //Deleteで選択中の項目削除
             if(e.KeyCode == Keys.Delete)
             {
-                int count = listBox_recent.SelectedItems.Count;
+                int count = listBox_myList.SelectedItems.Count;
                 for(int i = 0; i < count; i++)
                 {
-                    PathData p = (PathData)listBox_recent.SelectedItem;
-                    recentSrc.Remove(p);
+                    PathData p = (PathData)listBox_myList.SelectedItem;
+                    myListSrc.Remove(p);
                 }
             }
         }

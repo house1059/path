@@ -16,7 +16,8 @@ namespace WindowsFormsApp1
         public RichTextBox SearchRichTextBox { get; set; } = new RichTextBox();
         public Label titleLabel { get; set; } = new Label();
         public Label parentChildLabel { get; set; } = new Label();
-        public Recent re { get; set; }
+        public MyList re { get; set; }
+        public Proc proc { get; set; }
         BindingSource dataSrc = null;
 
 
@@ -53,7 +54,7 @@ namespace WindowsFormsApp1
 
         private void CustomToolStripMenuOpen_Click(object sender, EventArgs e)
         {
-            program.ExcelOpen(listBox_Custom.SelectedValue.ToString());
+            proc.ExcelOpen(listBox_Custom.SelectedValue.ToString());
         }
 
         private void CustomToolStripMenuToMyList_Click(object sender, EventArgs e)
@@ -61,13 +62,18 @@ namespace WindowsFormsApp1
             for (int i = 0; i < listBox_Custom.SelectedItems.Count; i++)
             {
                 PathData p = (PathData)listBox_Custom.SelectedItems[i];
-                re.recentDataInsert(program.getPathData(p.value));
+                re.DataInsert(proc.getPathData(p.value));
             }
             re.Visible = true;
         }
 
         private void listBox_Custom_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //インスタンス作成時の自動実行は避ける
+            if (proc == null)
+                return;
+
+
             contextCustomMenuStrip.Items[0].Enabled = false;  //開くNG
             contextCustomMenuStrip.Items[2].Enabled = false;  //MyListNG
 
@@ -77,7 +83,7 @@ namespace WindowsFormsApp1
 
             if (listBox_Custom.SelectedItems.Count == 1)
             {
-                PathData path = program.getPathData(listBox_Custom.SelectedValue.ToString());
+                PathData path = proc.getPathData(listBox_Custom.SelectedValue.ToString());
                 if (path.wbOK)
                     contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
             }

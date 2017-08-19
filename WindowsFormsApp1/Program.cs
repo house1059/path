@@ -1,4 +1,4 @@
-﻿#define EXCEL_ON
+﻿//#define EXCEL_ON
 
 using System;
 using System.Collections.Generic;
@@ -16,8 +16,6 @@ using System.Runtime.InteropServices;
 
 namespace WindowsFormsApp1
 {
-    
-
     static class Program
     {
 
@@ -33,48 +31,44 @@ namespace WindowsFormsApp1
         }
     }
 
-    public class program
+    public class Proc
     {
         private const String PATH_VERSION = "◎PathV4";
-
-        public static Dictionary<string, PathData> partsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
-       
-
-       
+        public  Dictionary<string, PathData> partsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
+            
         //アクセサ
-        public static List<PathData> partsList { get; set; } = new List<PathData>();    //パーソナルデータ
-        public static List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        public static List<PathData> andList { get; private set; } = new List<PathData>();
+        public List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        public List<PathData> andList { get; private set; } = new List<PathData>();
 
 
-        
+        //レイヤーリストに関しては後程リファクタ
         //オブジェクトで管理するように変更します。
-        public static List<string> filterList { get; } = new List<string>();       //filterのコレクション
         public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
         public List<string> resultLayer { get; private set; } = new List<string>();    //
        
-        /*    
-        public List<string> resultList1 { get; private set; } = new List<string>();    //
-        public List<string> resultList2 { get; private set; } = new List<string>();    //
-        */
 
-        //検索履歴用のﾃﾞｰﾀﾊﾞｲﾝﾄﾞ
-        //public BindingSource bindingRecent { get; } = new BindingSource();　⇒　リファクタ時に使用
-   
+        List<PathData> partsList { get; set; } = new List<PathData>();    //パーソナルデータ
+       
+
 
         //パーツ単品問い合わせ
-        public static PathData getPathData( string s)
+        public PathData getPathData( string s)
         {
-            return partsDic[ Strings.StrConv(s,VbStrConv.Wide).ToUpper()];
+            s = Strings.StrConv(s, VbStrConv.Wide);
+            if(partsDic.ContainsKey(s))
+            {
+                return partsDic[s];
+            }
+            return new PathData();  //辞書にない場合は空データを返す
         }
 
         //Excelオープン
-        public static void ExcelOpen(PathData path)
+        public void ExcelOpen(PathData path)
         {
             _ExcelOpen(path);
         }
 
-        public static void ExcelOpen(string s)
+        public void ExcelOpen(string s)
         {
             _ExcelOpen( getPathData(s));
         }
@@ -114,9 +108,6 @@ namespace WindowsFormsApp1
 #else
             MessageBox.Show("Excelを機能を切っているので起動はしませんがここを通ります");
 #endif
-
-
-
         }
 
 
@@ -138,14 +129,13 @@ namespace WindowsFormsApp1
             }
             str = stream.ReadLine();     //'//制御タグ
 
-            string[] st1, st2, strFilter;
+            string[] st1, st2;
 
             //コレクション作成の処理
             while (!stream.EndOfStream)
             {
                 st1 = stream.ReadLine().Split('\t');   //タブでカット
                 st2 = st1[0].Split('\\');              //配列の０番目を\でファイル名を取り出す
-                strFilter = st1[3].Split('：');        //全角デリミット　部品名の取り出し
 
                 PathData p = new PathData();
                 p.filePath = st1[0];
@@ -182,14 +172,6 @@ namespace WindowsFormsApp1
                 registPathData.wbOK = p.wbOK;
 
                 RegistChild(st1[4].Split(','), ref registPathData);      //子どもを登録
-
-
-                if (strFilter.Count() > 0 && filterList.Contains(strFilter[0]))
-                {
-                    filterList.Add(strFilter[0]);   //フィルターを登録
-                }
-
-
             }
         }
 
@@ -217,7 +199,8 @@ namespace WindowsFormsApp1
                             partsList.Add(child);                   //子のﾃﾞｰﾀを追加
                             partsDic.Add(child.wideValue, child);    //子の情報を追加
                         }
-                        PathData registP = partsDic[Strings.StrConv(s, VbStrConv.Wide).ToUpper()];  //子データを改めて取得
+
+                        PathData registP = this.getPathData(s);  //子データを改めて取得
                         registP.parentList.Add(p);                                                          //子データに親を登録
                         p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
                         break;
@@ -236,16 +219,14 @@ namespace WindowsFormsApp1
         {
 
             //全体から検索した情報
-
             orList = TextSearchPathData(txt1);
             andList = TextSearchPathData(txt1 , partsList);
 
             //layerも加味した検索
             orList = PathDataSearchLayer(txt2, orList);
             andList = PathDataSearchLayer(txt2, andList);
-            layerList = PathDataSearchLayer("", partsList);
 
-            resultLayer = PathDataSearchLayerList(layerList);   //⇒データバインディングするのであればList<string>よりList<dataPath>が向いている
+            resultLayer = PathDataSearchLayerList(partsList);
 
         }
 
@@ -259,7 +240,6 @@ namespace WindowsFormsApp1
         /// 
         private List<PathData> TextSearchPathData(string txt1, List<PathData> p)
         {
-
             //デフォルトでは全て返却
             if (txt1 == "") return partsList;
 
@@ -360,17 +340,6 @@ namespace WindowsFormsApp1
             }
             intList.Sort();
             return intList.ConvertAll(s => s.ToString());
-        }
-
-        //与えられたpathDataリストからvalueを返す
-        private List<string> PathDataSearchValueList(List<PathData> pList)
-        {
-            List<string> list = new List<string>();
-            foreach (PathData psList in pList)  //ローカル優先
-            {
-                    list.Add(psList.value);
-            }
-            return list;
         }
 
 
