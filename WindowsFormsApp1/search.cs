@@ -431,7 +431,7 @@ namespace WindowsFormsApp1
         private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = proc.getPathData(listBox1.SelectedValue.ToString());
-            customList = new CustomList( path.childList );
+            customList = new CustomList(new List<PathData>( path.childList) );  //→新しいオブジェクトを渡さないとデータソース上から消えてしまう
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             customList.parentChildLabel.Text = "子";
             customList.SearchRichTextBox = this.richTextBox1;
@@ -463,7 +463,8 @@ namespace WindowsFormsApp1
         private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = proc.getPathData(listBox1.SelectedValue.ToString());
-            customList = new CustomList(path.parentList);
+            customList = new CustomList(new List<PathData>( path.parentList));//→新しいオブジェクトを渡さないとデータソース上から消えてしまう
+
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             customList.parentChildLabel.Text = "親";
             customList.SearchRichTextBox = this.richTextBox1;
@@ -504,6 +505,30 @@ namespace WindowsFormsApp1
                 for (int i = 0; i < listBox_cList.Items.Count; i++)
                 {
                     listBox_cList.SetSelected(i, true);
+                }
+            }
+        }
+
+        private void listBox_pList_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Ctrl+Aで全選択
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                for (int i = 0; i < listBox_pList.Items.Count; i++)
+                {
+                    listBox_pList.SetSelected(i, true);
+                }
+            }
+        }
+
+        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Ctrl+Aで全選択
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                for (int i = 0; i < listBox1.Items.Count; i++)
+                {
+                    listBox1.SetSelected(i, true);
                 }
             }
         }

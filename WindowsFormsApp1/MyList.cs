@@ -102,6 +102,19 @@ namespace WindowsFormsApp1
                     myListSrc.Remove(p);
                 }
             }
+
+            //Ctrl+Aで全選択
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                for (int i = 0; i < listBox_myList.Items.Count; i++)
+                {
+                    listBox_myList.SetSelected(i, true);
+                }
+            }
+
+
+
+
         }
     }
 }

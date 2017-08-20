@@ -72,14 +72,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.listBox_cList = new System.Windows.Forms.ListBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.searchBindingSource = new System.Windows.Forms.BindingSource(this.components);
             MainToolStripMyListView = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMainMenuStrip.SuspendLayout();
             this.contextParentMenuStrip.SuspendLayout();
             this.contextChildMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.searchBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // MainToolStripMyListView
@@ -114,6 +110,7 @@
             this.listBox1.TabIndex = 2;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            this.listBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox1_KeyDown);
             this.listBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseMove);
             // 
             // contextMainMenuStrip
@@ -344,6 +341,7 @@
             this.listBox_pList.TabIndex = 11;
             this.listBox_pList.SelectedIndexChanged += new System.EventHandler(this.listBox_pList_SelectedIndexChanged);
             this.listBox_pList.DoubleClick += new System.EventHandler(this.listBox_pList_DoubleClick);
+            this.listBox_pList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_pList_KeyDown);
             this.listBox_pList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_pList_MouseMove);
             // 
             // contextParentMenuStrip
@@ -485,14 +483,6 @@
             this.label8.TabIndex = 14;
             this.label8.Text = "子リスト";
             // 
-            // programBindingSource
-            // 
-            this.programBindingSource.DataSource = typeof(WindowsFormsApp1.Program);
-            // 
-            // searchBindingSource
-            // 
-            this.searchBindingSource.DataSource = typeof(WindowsFormsApp1.Search);
-            // 
             // Search
             // 
             this.AllowDrop = true;
@@ -529,8 +519,6 @@
             this.contextMainMenuStrip.ResumeLayout(false);
             this.contextParentMenuStrip.ResumeLayout(false);
             this.contextChildMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.searchBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -580,8 +568,6 @@
         private System.Windows.Forms.ToolStripMenuItem ParentToolStripMenuSplit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem ParentToolStripMenuListView;
-        private System.Windows.Forms.BindingSource programBindingSource;
-        private System.Windows.Forms.BindingSource searchBindingSource;
     }
 }
 

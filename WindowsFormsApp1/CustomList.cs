@@ -27,15 +27,12 @@ namespace WindowsFormsApp1
             dataSrc = new BindingSource();
             dataSrc.DataSource = p;
 
+            listBox_Custom.DataSource = dataSrc;
             listBox_Custom.ValueMember = "value";
             listBox_Custom.DisplayMember = "wideValue";
 
-            listBox_Custom.DataSource = dataSrc;
             titleLabel = this.label1;
             parentChildLabel = this.label2;
-
-
-
         }
 
         
@@ -115,16 +112,25 @@ namespace WindowsFormsApp1
 
 
                 //DisposeするとpListのindexに影響がでる？
-                //if (listBox_Custom.Items.Count == 0)
-                //{
-                //   if( MessageBox.Show("Itemが無くなりました。Formを閉じますか？", "閉じる？", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                //    {
-                //        me.Close();
-                //    }                
-                // }
-
-
+                if (listBox_Custom.Items.Count == 0)
+                {
+                    if (MessageBox.Show("Itemが無くなりました。Formを閉じますか？", "閉じる？", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        this.Close();
+                    }
+                }
             }
+
+            //Ctrl+Aで全選択
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                for (int i = 0; i < listBox_Custom.Items.Count; i++)
+                {
+                    listBox_Custom.SetSelected(i, true);
+                }
+            }
+
+
         }
     }
 }
