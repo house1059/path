@@ -24,10 +24,18 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             myListSrc = new BindingSource();
-            //myListSrc.DataSource = new { value = "" };
+
+            //ダミーデータをいったん入れて削除しておく
+            PathData dummy = new PathData();
+            dummy.value = "";
+            dummy.wideValue = "";
+            myListSrc.DataSource = dummy;
+
             listBox_myList.DataSource = myListSrc;          //データソースを先に設定しないとValueMem
             listBox_myList.ValueMember = "value";
             listBox_myList.DisplayMember = "wideValue";
+            myListSrc.Remove(dummy);
+
 
         }
 
@@ -35,12 +43,8 @@ namespace WindowsFormsApp1
         {
             listBox_myList.BeginUpdate();
             myListSrc.Insert(0, p);
-
-            //listBox_myList.ValueMember = "value";
-            //listBox_myList.DisplayMember = "wideValue";
-            //listBox_myList.DataSource = myListSrc;
+            listBox_myList.ClearSelected();
             listBox_myList.SelectedIndex = 0;
-
             listBox_myList.EndUpdate();
         }
 
