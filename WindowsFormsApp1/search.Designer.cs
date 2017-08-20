@@ -72,10 +72,14 @@
             this.label7 = new System.Windows.Forms.Label();
             this.listBox_cList = new System.Windows.Forms.ListBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.searchBindingSource = new System.Windows.Forms.BindingSource(this.components);
             MainToolStripMyListView = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMainMenuStrip.SuspendLayout();
             this.contextParentMenuStrip.SuspendLayout();
             this.contextChildMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.searchBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // MainToolStripMyListView
@@ -468,6 +472,7 @@
             this.listBox_cList.TabIndex = 13;
             this.listBox_cList.SelectedIndexChanged += new System.EventHandler(this.listBox_cList_SelectedIndexChanged);
             this.listBox_cList.DoubleClick += new System.EventHandler(this.listBox_cList_DoubleClick);
+            this.listBox_cList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_cList_KeyDown);
             this.listBox_cList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_cList_MouseMove);
             // 
             // label8
@@ -479,6 +484,14 @@
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 14;
             this.label8.Text = "子リスト";
+            // 
+            // programBindingSource
+            // 
+            this.programBindingSource.DataSource = typeof(WindowsFormsApp1.Program);
+            // 
+            // searchBindingSource
+            // 
+            this.searchBindingSource.DataSource = typeof(WindowsFormsApp1.Search);
             // 
             // Search
             // 
@@ -516,6 +529,8 @@
             this.contextMainMenuStrip.ResumeLayout(false);
             this.contextParentMenuStrip.ResumeLayout(false);
             this.contextChildMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.searchBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -565,6 +580,8 @@
         private System.Windows.Forms.ToolStripMenuItem ParentToolStripMenuSplit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem ParentToolStripMenuListView;
+        private System.Windows.Forms.BindingSource programBindingSource;
+        private System.Windows.Forms.BindingSource searchBindingSource;
     }
 }
 

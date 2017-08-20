@@ -39,6 +39,7 @@ namespace WindowsFormsApp1
 
             myList.SearchRichTextBox = this.richTextBox1;    //子フォームに親のインスタンスを通知
             myList.Visible = false;
+
             
         }
         
@@ -177,6 +178,7 @@ namespace WindowsFormsApp1
                 listBox_cList.DisplayMember = "wideValue";
                 listBox_cList.ValueMember = "value";
                 listBox_cList.DataSource = pListChildSrc;
+
 
                 MainToolStrip(false);
             }
@@ -491,6 +493,18 @@ namespace WindowsFormsApp1
             {
        
                 MainToolStrip(false);
+            }
+        }
+
+        private void listBox_cList_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Ctrl+Aで全選択
+            if(e.KeyCode == Keys.A && e.Control)
+            {
+                for (int i = 0; i < listBox_cList.Items.Count; i++)
+                {
+                    listBox_cList.SetSelected(i, true);
+                }
             }
         }
     }
