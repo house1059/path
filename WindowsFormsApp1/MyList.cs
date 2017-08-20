@@ -17,6 +17,7 @@ namespace WindowsFormsApp1
         public RichTextBox SearchRichTextBox { get; set; }
         public Proc proc { get; set; }
 
+        CustomList customList;
         BindingSource myListSrc;  //検索履歴用Listデータｾｯﾄ
 
         public MyList()
@@ -115,6 +116,23 @@ namespace WindowsFormsApp1
 
 
 
+        }
+
+        private void MyListToolStripMenuSplit_Click(object sender, EventArgs e)
+        {
+            List<PathData> pList = new List<PathData>();
+            foreach( PathData p in listBox_myList.Items)
+            {
+                pList.Add(p);
+            }
+            customList = new CustomList(pList);//→新しいオブジェクトを渡さないとデータソース上から消えてしまう
+
+            customList.titleLabel.Text = "MyListから";
+            customList.parentChildLabel.Text = "My";
+            customList.SearchRichTextBox = this.SearchRichTextBox;  //メインの検索画面
+            customList.re = this;
+            customList.proc = this.proc;
+            customList.Show();
         }
     }
 }

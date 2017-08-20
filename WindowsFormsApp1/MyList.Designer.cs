@@ -34,6 +34,7 @@
             this.MyListToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.label1 = new System.Windows.Forms.Label();
+            this.MyListToolStripMenuSplit = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMyListMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,22 +57,23 @@
             // 
             this.contextMyListMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MyListToolStripMenuOpen,
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.MyListToolStripMenuSplit});
             this.contextMyListMenuStrip.Name = "contextMenuStrip1";
-            this.contextMyListMenuStrip.Size = new System.Drawing.Size(111, 32);
+            this.contextMyListMenuStrip.Size = new System.Drawing.Size(153, 76);
             // 
             // MyListToolStripMenuOpen
             // 
             this.MyListToolStripMenuOpen.Enabled = false;
             this.MyListToolStripMenuOpen.Name = "MyListToolStripMenuOpen";
-            this.MyListToolStripMenuOpen.Size = new System.Drawing.Size(110, 22);
+            this.MyListToolStripMenuOpen.Size = new System.Drawing.Size(152, 22);
             this.MyListToolStripMenuOpen.Text = "開く(&O)";
             this.MyListToolStripMenuOpen.Click += new System.EventHandler(this.MyListToolStripMenuOpen_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // label1
             // 
@@ -82,6 +84,13 @@
             this.label1.Size = new System.Drawing.Size(39, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "MyList";
+            // 
+            // MyListToolStripMenuSplit
+            // 
+            this.MyListToolStripMenuSplit.Name = "MyListToolStripMenuSplit";
+            this.MyListToolStripMenuSplit.Size = new System.Drawing.Size(152, 22);
+            this.MyListToolStripMenuSplit.Text = "List切り離し(&C)";
+            this.MyListToolStripMenuSplit.Click += new System.EventHandler(this.MyListToolStripMenuSplit_Click);
             // 
             // MyList
             // 
@@ -109,5 +118,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMyListMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem MyListToolStripMenuOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem MyListToolStripMenuSplit;
     }
 }

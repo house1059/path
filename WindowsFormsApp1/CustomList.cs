@@ -35,7 +35,21 @@ namespace WindowsFormsApp1
             parentChildLabel = this.label2;
         }
 
-        
+        public CustomList(BindingSource b)
+        {
+            InitializeComponent();
+            dataSrc = b;
+
+            listBox_Custom.DataSource = dataSrc;
+            listBox_Custom.ValueMember = "value";
+            listBox_Custom.DisplayMember = "wideValue";
+
+            titleLabel = this.label1;
+            parentChildLabel = this.label2;
+        }
+
+
+
 
         private void label1_Click(object sender, EventArgs e)
         {
