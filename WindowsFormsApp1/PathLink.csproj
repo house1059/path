@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="xlsPath.cs" />
     <EmbeddedResource Include="CustomList.resx">
       <DependentUpon>CustomList.cs</DependentUpon>
     </EmbeddedResource>
