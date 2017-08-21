@@ -118,22 +118,71 @@ namespace WindowsFormsApp1
         {
             listBox1.BeginUpdate();
 
-            listBox1.ValueMember = "value";
-            listBox1.DisplayMember = "wideValue";
-
-            if (radioButton1.Checked == true)
-            {
-                listBox1.DataSource = proc.orList;
-            }
-            else
-            {
-                listBox1.DataSource = proc.andList;
-            }
             listBox_cList.DataSource = null;
             listBox_pList.DataSource = null;
 
+            listBox1.DataSource = radioButton1.Checked ? proc.orList : proc.andList;
+            listBox1.ValueMember = "value";
+            listBox1.DisplayMember = "wideValue";
+
+            MainToolStrip(false);    //まずここでクリア
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+            textBox1.Text = "";
+            listBox_cList.DataSource = null;
+            listBox_pList.DataSource = null;
+
+
+            //マルチ選択の場合はMyListへ保存のみ許可する
+            if (listBox1.SelectedItems.Count > 1)
+            {
+                textBox2.Text = "non";
+                textBox3.Text = "non";
+                textBox4.Text = "non";
+                textBox1.Text = "non";
+                MainToolStrip(true);
+            }
+            else
+            {
+                try
+                {
+
+                    PathData p = proc.getPathData(listBox1.SelectedValue.ToString());
+
+                    textBox2.Text = p.filePath;
+                    textBox3.Text = p.sheetName;
+                    textBox4.Text = p.address;
+                    textBox1.Text = p.layer;
+
+
+                    //親リストにバインディング
+                    pListParentSrc.DataSource = p.parentList;
+                    listBox_pList.DataSource = pListParentSrc;
+                    listBox_pList.DisplayMember = "wideValue";
+                    listBox_pList.ValueMember = "value";
+
+
+                    //子リストにバインディング
+                    pListChildSrc.DataSource = p.childList;
+                    listBox_cList.DataSource = pListChildSrc;
+                    listBox_cList.DisplayMember = "wideValue";
+                    listBox_cList.ValueMember = "value";
+
+                }
+                catch (NullReferenceException)
+                {
+                    //getPathDataでnullが返ってきた場合
+                }
+                finally
+                {
+                    MainToolStrip(false);
+                }
+            }
             // Allow the ListBox to repaint and display the new items.
             listBox1.EndUpdate();
+
+
         }
 
 
@@ -141,48 +190,8 @@ namespace WindowsFormsApp1
         ////データを選択した時
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == -1)
-            {
-                return;
-            }
-
-
-            //マルチ選択の場合はMyListへ保存のみ許可する
-            if( listBox1.SelectedItems.Count > 1)
-            {
-                textBox2.Text = "non";
-                textBox3.Text = "non";
-                textBox4.Text = "non";
-                textBox1.Text = "non";
-                listBox_cList.DataSource = null;
-                listBox_pList.DataSource = null;
-                MainToolStrip(true);
-            }else {
-                PathData p = proc.getPathData(listBox1.SelectedValue.ToString());
-
-                textBox2.Text = p.filePath;
-                textBox3.Text = p.sheetName;
-                textBox4.Text = p.address;
-                textBox1.Text = p.layer;
-
-
-                //親リストにバインディング
-                pListParentSrc.DataSource = p.parentList;
-                listBox_pList.DisplayMember = "wideValue";
-                listBox_pList.ValueMember = "value";
-                listBox_pList.DataSource = pListParentSrc;
-
-
-                //子リストにバインディング
-                pListChildSrc.DataSource = p.childList;
-                listBox_cList.DisplayMember = "wideValue";
-                listBox_cList.ValueMember = "value";
-                listBox_cList.DataSource = pListChildSrc;
-
-
-                MainToolStrip(false);
-            }
-
+            ViewUpdate();
+            MainToolStrip(false);
         }
 
 
@@ -531,6 +540,11 @@ namespace WindowsFormsApp1
                     listBox1.SetSelected(i, true);
                 }
             }
+        }
+
+        private void richTextBox1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionStart = this.richTextBox1.Text.Length;
         }
     }
 }
