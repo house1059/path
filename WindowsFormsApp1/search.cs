@@ -11,7 +11,7 @@ using System.IO;
 using Microsoft.VisualBasic;
 
 
-namespace WindowsFormsApp1
+namespace PathLink
 {
     public partial class Search : Form
     {

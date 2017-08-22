@@ -14,7 +14,7 @@ using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOM�
 using System.Runtime.InteropServices;
 #endif
 
-namespace WindowsFormsApp1
+namespace PathLink
 {
     static class Program
     {
