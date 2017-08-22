@@ -97,11 +97,14 @@ namespace WindowsFormsApp1
             if(e.KeyCode == Keys.Delete)
             {
                 int count = listBox_myList.SelectedItems.Count;
+                listBox_myList.BeginUpdate();
                 for(int i = 0; i < count; i++)
                 {
                     PathData p = (PathData)listBox_myList.SelectedItem;
                     myListSrc.Remove(p);
                 }
+                listBox_myList.EndUpdate();
+
             }
 
             //Ctrl+Aで全選択

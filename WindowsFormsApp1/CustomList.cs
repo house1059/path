@@ -118,12 +118,14 @@ namespace WindowsFormsApp1
             if (e.KeyCode == Keys.Delete)
             {
                 int count = listBox_Custom.SelectedItems.Count;
+
+                listBox_Custom.BeginUpdate();
                 for (int i = 0; i < count; i++)
                 {
                     PathData p = (PathData)listBox_Custom.SelectedItem;
                     dataSrc.Remove(p);
                 }
-
+                listBox_Custom.EndUpdate();
 
                 //DisposeするとpListのindexに影響がでる？
                 if (listBox_Custom.Items.Count == 0)
