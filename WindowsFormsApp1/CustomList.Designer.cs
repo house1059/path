@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp1
+﻿namespace PathLink
 {
     partial class CustomList
     {
@@ -41,8 +41,8 @@
             // 
             // listBox_Custom
             // 
-            this.listBox_Custom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.listBox_Custom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox_Custom.ContextMenuStrip = this.contextCustomMenuStrip;
             this.listBox_Custom.FormattingEnabled = true;

@@ -16,7 +16,7 @@ namespace PathLink
         //別のフォームから値を受け取るよう
         public RichTextBox SearchRichTextBox { get; set; }
         public Proc proc { get; set; }
-
+    
         CustomList customList;
         BindingSource myListSrc;  //検索履歴用Listデータｾｯﾄ
 

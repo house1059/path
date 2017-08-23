@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp1
+﻿namespace PathLink
 {
     partial class MyList
     {
