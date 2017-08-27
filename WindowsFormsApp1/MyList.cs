@@ -28,8 +28,8 @@ namespace PathLink
 
             //ダミーデータをいったん入れて削除しておく
             PathData dummy = new PathData();
-            dummy.value = "";
-            dummy.wideValue = "";
+            dummy.Value = "";
+            dummy.WideValue = "";
             myListSrc.DataSource = dummy;
 
             listBox_myList.DataSource = myListSrc;          //データソースを先に設定しないとValueMem
@@ -62,8 +62,8 @@ namespace PathLink
             if (listBox_myList.SelectedIndex == -1)
                 return;
             
-            PathData p = proc.getPathData(listBox_myList.SelectedValue.ToString());
-            if (p.wbOK)
+            PathData p = proc.GetPathData(listBox_myList.SelectedValue.ToString());
+            if (p.WbOK)
                 contextMyListMenuStrip.Items[0].Enabled = true;  //開くOK
 
         }

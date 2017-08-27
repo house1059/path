@@ -23,24 +23,22 @@ namespace PathLink
 
 
 
-        BindingSource searchSrc { get; } = new BindingSource();             //メイン画面用のバインディングデータ
-        BindingSource searchLayerSrc { get; } = new BindingSource();        //layer用 cmdboxなので
-        BindingSource pListParentSrc { get; } = new BindingSource();        //親の一時リスト
-        BindingSource pListChildSrc { get; } = new BindingSource();         //子の一時リスト
+        BindingSource SearchSrc { get; } = new BindingSource();             //メイン画面用のバインディングデータ
+        BindingSource SearchLayerSrc { get; } = new BindingSource();        //layer用 cmdboxなので
+        BindingSource ListParentSrc { get; } = new BindingSource();        //親の一時リスト
+        BindingSource ListChildSrc { get; } = new BindingSource();         //子の一時リスト
 
 
         public Search()
         {
             InitializeComponent();
             proc = new Proc();
-            myList = new MyList();
-            myList.proc = this.proc;
-
-
-            myList.SearchRichTextBox = this.richTextBox1;    //子フォームに親のインスタンスを通知
-            myList.Visible = false;
-
-            
+            myList = new MyList()
+            {
+                proc = this.proc,
+                SearchRichTextBox = this.richTextBox1,    //子フォームに親のインスタンスを通知
+                Visible = false
+            };
         }
         
 
@@ -67,22 +65,23 @@ namespace PathLink
 
         
         //pathﾌｧｲﾙの読込
-        private void bt_read_Click(object sender, EventArgs e)
+        private void Bt_read_Click(object sender, EventArgs e)
         {
             //ダイアログボックスの表示
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "◎PathFile(*.txt)|*.txt;|全てのﾌｧｲﾙ(*.*)|*.*";
-            fd.Title = "PathLinkﾃﾞｰﾀﾌｧｲﾙを選択してください";
-
+            OpenFileDialog fd = new OpenFileDialog()
+            {
+                Filter = "◎PathFile(*.txt)|*.txt;|全てのﾌｧｲﾙ(*.*)|*.*",
+                Title = "PathLinkﾃﾞｰﾀﾌｧｲﾙを選択してください"
+            };
             if (fd.ShowDialog() == DialogResult.OK)
             {
                 proc.ReadPathFile(fd.FileName);
                 label4.Text = fd.SafeFileName;
 
                 TextFormSearch();   //検索
-                searchLayerSrc.DataSource = proc.resultLayer;
-                searchLayerSrc.Insert(0,"");
-                comboBox1.DataSource = searchLayerSrc;
+                SearchLayerSrc.DataSource = proc.ResultLayer;
+                SearchLayerSrc.Insert(0,"");
+                comboBox1.DataSource = SearchLayerSrc;
                 comboBox1.SelectedIndex = 0;
 
             }
@@ -92,24 +91,24 @@ namespace PathLink
 
 
         //clearボタン
-        private void bt_clear_Click(object sender, EventArgs e)
+        private void Bt_clear_Click(object sender, EventArgs e)
         {
             ViewClear();
         }
 
-        private void bt_check_Click(object sender, EventArgs e)
+        private void Bt_check_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             ViewUpdate();   //再描画
         }
 
   
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void RichTextBox1_TextChanged(object sender, EventArgs e)
         {
             TextFormSearch();   //検索
         }
@@ -121,7 +120,7 @@ namespace PathLink
             listBox_cList.DataSource = null;
             listBox_pList.DataSource = null;
 
-            listBox1.DataSource = radioButton1.Checked ? proc.orList : proc.andList;
+            listBox1.DataSource = radioButton1.Checked ? proc.OrList : proc.AndList;
             listBox1.ValueMember = "value";
             listBox1.DisplayMember = "wideValue";
 
@@ -148,24 +147,24 @@ namespace PathLink
                 try
                 {
 
-                    PathData p = proc.getPathData(listBox1.SelectedValue.ToString());
+                    PathData p = proc.GetPathData(listBox1.SelectedValue.ToString());
 
-                    textBox2.Text = p.filePath;
-                    textBox3.Text = p.sheetName;
-                    textBox4.Text = p.address;
-                    textBox1.Text = p.layer;
+                    textBox2.Text = p.FilePath;
+                    textBox3.Text = p.SheetName;
+                    textBox4.Text = p.Address;
+                    textBox1.Text = p.Layer;
 
 
                     //親リストにバインディング
-                    pListParentSrc.DataSource = p.parentList;
-                    listBox_pList.DataSource = pListParentSrc;
+                    ListParentSrc.DataSource = p.parentList;
+                    listBox_pList.DataSource = ListParentSrc;
                     listBox_pList.DisplayMember = "wideValue";
                     listBox_pList.ValueMember = "value";
 
 
                     //子リストにバインディング
-                    pListChildSrc.DataSource = p.childList;
-                    listBox_cList.DataSource = pListChildSrc;
+                    ListChildSrc.DataSource = p.childList;
+                    listBox_cList.DataSource = ListChildSrc;
                     listBox_cList.DisplayMember = "wideValue";
                     listBox_cList.ValueMember = "value";
 
@@ -188,14 +187,14 @@ namespace PathLink
 
 
         ////データを選択した時
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ViewUpdate();
             MainToolStrip(false);
         }
 
 
-        private void comboBox1_TextChanged(object sender, EventArgs e)
+        private void ComboBox1_TextChanged(object sender, EventArgs e)
         {
             TextFormSearch();   //検索
         }
@@ -206,7 +205,7 @@ namespace PathLink
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBox1_DoubleClick(object sender, EventArgs e)
+        private void ListBox1_DoubleClick(object sender, EventArgs e)
         {
             if(listBox1.SelectedIndex == -1)
             {
@@ -214,9 +213,9 @@ namespace PathLink
             }
 
             //メイン画面はダブルクリックで開く仕様に変更
-            PathData p = proc.getPathData(listBox1.SelectedValue.ToString());
-            if(p.wbOK)
-                proc.ExcelOpen(p.value);
+            PathData p = proc.GetPathData(listBox1.SelectedValue.ToString());
+            if(p.WbOK)
+                proc.ExcelOpen(p.Value);
 
         }
 
@@ -242,8 +241,8 @@ namespace PathLink
 
             if( !multi)
             {
-                PathData src = proc.getPathData(listBox1.SelectedValue.ToString());
-                if (src.wbOK)
+                PathData src = proc.GetPathData(listBox1.SelectedValue.ToString());
+                if (src.WbOK)
                     contextMainMenuStrip.Items[0].Enabled = true;  //開くOK
             }
             contextMainMenuStrip.Items[2].Enabled = true;     //MyListへOK
@@ -264,7 +263,7 @@ namespace PathLink
 
 
             //open可能
-            if (proc.getPathData(listBox_cList.SelectedValue.ToString()).wbOK)
+            if (proc.GetPathData(listBox_cList.SelectedValue.ToString()).WbOK)
                 contextChildMenuStrip.Items[0].Enabled = true;     //開くOK
 
 
@@ -291,7 +290,7 @@ namespace PathLink
             if (!multi)
             {
                 //open可能
-                if (proc.getPathData(listBox_pList.SelectedValue.ToString()).wbOK)
+                if (proc.GetPathData(listBox_pList.SelectedValue.ToString()).WbOK)
                     contextParentMenuStrip.Items[0].Enabled = true;     //開くOK
             }
             //MyListOK
@@ -307,7 +306,7 @@ namespace PathLink
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBox_pList_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox_pList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox_pList.SelectedItems.Count > 1)
             {
@@ -323,13 +322,13 @@ namespace PathLink
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBox_cList_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBox_cList_SelectedIndexChanged(object sender, EventArgs e)
         {
             CListToolStrip();
         }
 
 
-        private void listBox_pList_DoubleClick(object sender, EventArgs e)
+        private void ListBox_pList_DoubleClick(object sender, EventArgs e)
         {
             //親リストをダブルクリックした場合のみ、検索対象とする
             if ((ListBox)sender != null)
@@ -337,15 +336,15 @@ namespace PathLink
                 ListBox list = (ListBox)sender;
 
                 //open可能か判定
-                PathData p = proc.getPathData(list.Text);
-                if (p.wbOK)
+                PathData p = proc.GetPathData(list.Text);
+                if (p.WbOK)
                     proc.ExcelOpen(p);
             }
 
         }
 
 
-        private void listBox_cList_DoubleClick(object sender, EventArgs e)
+        private void ListBox_cList_DoubleClick(object sender, EventArgs e)
         {
             //子リストをダブルクリックした場合、検索対象とする
             if ((ListBox)sender != null)
@@ -353,13 +352,13 @@ namespace PathLink
                 ListBox list = (ListBox)sender;
 
                 //open可能か判定
-                PathData p = proc.getPathData(list.Text);
-                if (p.wbOK)
+                PathData p = proc.GetPathData(list.Text);
+                if (p.WbOK)
                     proc.ExcelOpen(p);
             }
         }
 
-        private void listBox_pList_MouseMove(object sender, MouseEventArgs e)
+        private void ListBox_pList_MouseMove(object sender, MouseEventArgs e)
         {
             if (listBox_pList.SelectedItems.Count > 1)
             {
@@ -371,12 +370,12 @@ namespace PathLink
             }
         }
 
-        private void listBox_cList_MouseMove(object sender, MouseEventArgs e)
+        private void ListBox_cList_MouseMove(object sender, MouseEventArgs e)
         {
             CListToolStrip();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             TextFormSearch();
         }
@@ -393,7 +392,7 @@ namespace PathLink
                 for( int i = 0; i < listBox1.SelectedItems.Count; i++)
                 {
                     PathData p = (PathData)listBox1.SelectedItems[i];
-                    myList.DataInsert(proc.getPathData(p.value));
+                    myList.DataInsert(proc.GetPathData(p.Value));
                 }
                 myList.Visible = true;
         }
@@ -403,11 +402,11 @@ namespace PathLink
 
             if (radioButton1.Checked == true)
             {
-                customList = new CustomList(proc.orList);
+                customList = new CustomList(proc.OrList);
             }
             else
             {
-                customList = new CustomList(proc.andList);
+                customList = new CustomList(proc.AndList);
             }
             customList.titleLabel.Text = this.richTextBox1.Text;
             customList.parentChildLabel.Text = "本";
@@ -432,14 +431,14 @@ namespace PathLink
             for (int i = 0; i < listBox_cList.SelectedItems.Count; i++)
             {
                 PathData p = (PathData)listBox_cList.SelectedItems[i];
-                myList.DataInsert(proc.getPathData(p.value));
+                myList.DataInsert(proc.GetPathData(p.Value));
             }
             myList.Visible = true;
         }
 
         private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
         {
-            PathData path = proc.getPathData(listBox1.SelectedValue.ToString());
+            PathData path = proc.GetPathData(listBox1.SelectedValue.ToString());
             customList = new CustomList(new List<PathData>( path.childList) );  //→新しいオブジェクトを渡さないとデータソース上から消えてしまう
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             customList.parentChildLabel.Text = "子";
@@ -464,14 +463,14 @@ namespace PathLink
             for (int i = 0; i < listBox_pList.SelectedItems.Count; i++)
             {
                 PathData p = (PathData)listBox_pList.SelectedItems[i];
-                myList.DataInsert(proc.getPathData(p.value));
+                myList.DataInsert(proc.GetPathData(p.Value));
             }
             myList.Visible = true;
         }
 
         private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
         {
-            PathData path = proc.getPathData(listBox1.SelectedValue.ToString());
+            PathData path = proc.GetPathData(listBox1.SelectedValue.ToString());
             customList = new CustomList(new List<PathData>( path.parentList));//→新しいオブジェクトを渡さないとデータソース上から消えてしまう
 
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
@@ -492,7 +491,7 @@ namespace PathLink
            
         }
 
-        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        private void ListBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (listBox1.SelectedItems.Count > 1)
             {
@@ -506,7 +505,7 @@ namespace PathLink
             }
         }
 
-        private void listBox_cList_KeyDown(object sender, KeyEventArgs e)
+        private void ListBox_cList_KeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl+Aで全選択
             if(e.KeyCode == Keys.A && e.Control)
@@ -518,7 +517,7 @@ namespace PathLink
             }
         }
 
-        private void listBox_pList_KeyDown(object sender, KeyEventArgs e)
+        private void ListBox_pList_KeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl+Aで全選択
             if (e.KeyCode == Keys.A && e.Control)
@@ -530,7 +529,7 @@ namespace PathLink
             }
         }
 
-        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        private void ListBox1_KeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl+Aで全選択
             if (e.KeyCode == Keys.A && e.Control)
@@ -542,7 +541,7 @@ namespace PathLink
             }
         }
 
-        private void richTextBox1_Click(object sender, EventArgs e)
+        private void RichTextBox1_Click(object sender, EventArgs e)
         {
             richTextBox1.SelectionStart = this.richTextBox1.Text.Length;
         }

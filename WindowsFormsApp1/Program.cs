@@ -34,30 +34,30 @@ namespace PathLink
     public class Proc
     {
         private const String PATH_VERSION = "◎PathV4";
-        public  Dictionary<string, PathData> partsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
+        public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
             
         //アクセサ
-        public List<PathData> orList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        public List<PathData> andList { get; private set; } = new List<PathData>();
+        public List<PathData> OrList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        public List<PathData> AndList { get; private set; } = new List<PathData>();
 
 
         //レイヤーリストに関しては後程リファクタ
         //オブジェクトで管理するように変更します。
-        public List<PathData> layerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
-        public List<string> resultLayer { get; private set; } = new List<string>();    //
+        public List<PathData> LayerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
+        public List<string> ResultLayer { get; private set; } = new List<string>();    //
        
 
-        List<PathData> partsList { get; set; } = new List<PathData>();    //パーソナルデータ
+        List<PathData> PartsList { get; set; } = new List<PathData>();    //パーソナルデータ
        
 
 
         //パーツ単品問い合わせ
-        public PathData getPathData( string s)
+        public PathData GetPathData( string s)
         {
             s = Strings.StrConv(s, VbStrConv.Wide);
-            if(partsDic.ContainsKey(s))
+            if(PartsDic.ContainsKey(s))
             {
-                return partsDic[s];
+                return PartsDic[s];
             }
             return new PathData();  //辞書にない場合は空データを返す
         }
@@ -70,7 +70,7 @@ namespace PathLink
 
         public void ExcelOpen(string s)
         {
-            _ExcelOpen( getPathData(s));
+            _ExcelOpen( GetPathData(s));
         }
 
 
@@ -137,39 +137,41 @@ namespace PathLink
                 st1 = stream.ReadLine().Split('\t');   //タブでカット
                 st2 = st1[0].Split('\\');              //配列の０番目を\でファイル名を取り出す
 
-                PathData p = new PathData();
-                p.filePath = st1[0];
-                p.sheetName = st1[1];
-                p.address = st1[2];
-                p.value = st1[3];
-                p.wideValue = Strings.StrConv( st1[3].ToUpper(),VbStrConv.Wide);
-                //ココで開くOK,NGの判定を行う
-                if( p.filePath != "" && p.sheetName != "" && p.address != "")
+                PathData p = new PathData()
                 {
-                    p.wbOK = true;
+                    FilePath = st1[0],
+                    SheetName = st1[1],
+                    Address = st1[2],
+                    Value = st1[3],
+                    WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide)
+                };
+                //ココで開くOK,NGの判定を行う
+                if ( p.FilePath != "" && p.SheetName != "" && p.Address != "")
+                {
+                    p.WbOK = true;
                 }
 
 
                 //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
-                int layer;
-                if( int.TryParse(st1[st1.Length - 1],out layer)){
-                    p.layer = Strings.StrConv( st1[st1.Length - 1].ToUpper(),VbStrConv.Narrow); //数値に変換したいので小文字
+                if (int.TryParse(st1[st1.Length - 1], out int layer))
+                {
+                    p.Layer = Strings.StrConv(st1[st1.Length - 1].ToUpper(), VbStrConv.Narrow); //数値に変換したいので小文字
                 }
 
                 //パーソナルデータが存在しない場合は作成
-                if (partsDic.ContainsKey(p.wideValue) == false)
+                if (PartsDic.ContainsKey(p.WideValue) == false)
                 {
-                    partsList.Add(p);       //パーツリストの登録と辞書への登録を行う
-                    partsDic.Add(p.wideValue, p);
+                    PartsList.Add(p);       //パーツリストの登録と辞書への登録を行う
+                    PartsDic.Add(p.WideValue, p);
                 }
-                PathData registPathData = partsDic[p.wideValue];          //あらためて情報を引き出す
+                PathData registPathData = PartsDic[p.WideValue];          //あらためて情報を引き出す
 
-                registPathData.filePath = p.filePath;
-                registPathData.sheetName = p.sheetName;
-                registPathData.address = p.address;
-                registPathData.value = p.value;
-                registPathData.wideValue = p.wideValue;
-                registPathData.wbOK = p.wbOK;
+                registPathData.FilePath = p.FilePath;
+                registPathData.SheetName = p.SheetName;
+                registPathData.Address = p.Address;
+                registPathData.Value = p.Value;
+                registPathData.WideValue = p.WideValue;
+                registPathData.WbOK = p.WbOK;
 
                 RegistChild(st1[4].Split(','), ref registPathData);      //子どもを登録
             }
@@ -191,16 +193,18 @@ namespace PathLink
 
                     default:
                         //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
-                        if (partsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide).ToUpper()) == false)
+                        if (PartsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide).ToUpper()) == false)
                         {
-                            PathData child = new PathData();
-                            child.value = s;
-                            child.wideValue = Strings.StrConv(s, VbStrConv.Wide).ToUpper();
-                            partsList.Add(child);                   //子のﾃﾞｰﾀを追加
-                            partsDic.Add(child.wideValue, child);    //子の情報を追加
+                            PathData child = new PathData()
+                            {
+                                Value = s,
+                                WideValue = Strings.StrConv(s, VbStrConv.Wide).ToUpper()
+                            };
+                            PartsList.Add(child);                   //子のﾃﾞｰﾀを追加
+                            PartsDic.Add(child.WideValue, child);    //子の情報を追加
                         }
 
-                        PathData registP = this.getPathData(s);  //子データを改めて取得
+                        PathData registP = this.GetPathData(s);  //子データを改めて取得
                         registP.parentList.Add(p);                                                          //子データに親を登録
                         p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
                         break;
@@ -219,14 +223,14 @@ namespace PathLink
         {
 
             //全体から検索した情報
-            orList = TextSearchPathData(txt1);
-            andList = TextSearchPathData(txt1 , partsList);
+            OrList = TextSearchPathData(txt1);
+            AndList = TextSearchPathData(txt1 , PartsList);
 
             //layerも加味した検索
-            orList = PathDataSearchLayer(txt2, orList);
-            andList = PathDataSearchLayer(txt2, andList);
+            OrList = PathDataSearchLayer(txt2, OrList);
+            AndList = PathDataSearchLayer(txt2, AndList);
 
-            resultLayer = PathDataSearchLayerList(partsList);
+            ResultLayer = PathDataSearchLayerList(PartsList);
 
         }
 
@@ -241,7 +245,7 @@ namespace PathLink
         private List<PathData> TextSearchPathData(string txt1, List<PathData> p)
         {
             //デフォルトでは全て返却
-            if (txt1 == "") return partsList;
+            if (txt1 == "") return PartsList;
 
             txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
             string[] s = txt1.Split(' ');   //２語検索可能
@@ -265,7 +269,7 @@ namespace PathLink
         private List<PathData> TextSearchPathData( string txt1)
         {
             //デフォルトでは全て返却
-            if ( txt1 == "") return partsList;
+            if ( txt1 == "") return PartsList;
 
             txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
             string[] s = txt1.Split(' ');   //２語検索可能
@@ -275,7 +279,7 @@ namespace PathLink
             for (int i = 0; i < s.Length; i++)
             {
             //or検索
-                p.AddRange(PathDataSearch(s[i], partsList));    //ローカルのパーツリストを引数とする                }
+                p.AddRange(PathDataSearch(s[i], PartsList));    //ローカルのパーツリストを引数とする                }
             }
             return p;
         }
@@ -288,7 +292,7 @@ namespace PathLink
             foreach (PathData pList in list)  //ローカル優先
             {
                 //全角+大文字で検索するように
-                if (pList.wideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
+                if (pList.WideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
                 {
                     p.Add(pList);
                 }
@@ -311,11 +315,11 @@ namespace PathLink
             foreach (PathData pList in ptlist)  //指定リストから
             {
                 //layer nullがあるので事前にチェック
-                if(pList.layer == null)
+                if(pList.Layer == null)
                 {
                     continue;
                 //数字の検索（完全一致）
-                }else if ( pList.layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Narrow)))
+                }else if ( pList.Layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Narrow)))
                 {
                     p.Add(pList);
                 }
@@ -332,10 +336,10 @@ namespace PathLink
 
             foreach (PathData psList in pList)  //ローカル優先
             {
-                if ( psList.layer != null &&  dic.ContainsKey(psList.layer) == false)
+                if ( psList.Layer != null &&  dic.ContainsKey(psList.Layer) == false)
                 {
-                    dic.Add( psList.layer, null);
-                    intList.Add(int.Parse(psList.layer));
+                    dic.Add( psList.Layer, null);
+                    intList.Add(int.Parse(psList.Layer));
                 }
             }
             intList.Sort();

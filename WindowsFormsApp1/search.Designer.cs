@@ -94,7 +94,7 @@
             this.bt_read.TabIndex = 0;
             this.bt_read.Text = "読込み";
             this.bt_read.UseVisualStyleBackColor = true;
-            this.bt_read.Click += new System.EventHandler(this.bt_read_Click);
+            this.bt_read.Click += new System.EventHandler(this.Bt_read_Click);
             // 
             // listBox1
             // 
@@ -109,10 +109,10 @@
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox1.Size = new System.Drawing.Size(641, 208);
             this.listBox1.TabIndex = 2;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
-            this.listBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox1_KeyDown);
-            this.listBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseMove);
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1_SelectedIndexChanged);
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
+            this.listBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox1_KeyDown);
+            this.listBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ListBox1_MouseMove);
             // 
             // contextMainMenuStrip
             // 
@@ -226,7 +226,7 @@
             this.bt_clear.TabIndex = 0;
             this.bt_clear.Text = "clear";
             this.bt_clear.UseVisualStyleBackColor = true;
-            this.bt_clear.Click += new System.EventHandler(this.bt_clear_Click);
+            this.bt_clear.Click += new System.EventHandler(this.Bt_clear_Click);
             // 
             // bt_check
             // 
@@ -238,7 +238,7 @@
             this.bt_check.TabIndex = 0;
             this.bt_check.Text = "check";
             this.bt_check.UseVisualStyleBackColor = true;
-            this.bt_check.Click += new System.EventHandler(this.bt_check_Click);
+            this.bt_check.Click += new System.EventHandler(this.Bt_check_Click);
             // 
             // radioButton1
             // 
@@ -251,7 +251,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "or";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -282,8 +282,8 @@
             this.richTextBox1.Size = new System.Drawing.Size(502, 19);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
-            this.richTextBox1.Click += new System.EventHandler(this.richTextBox1_Click);
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.richTextBox1.Click += new System.EventHandler(this.RichTextBox1_Click);
+            this.richTextBox1.TextChanged += new System.EventHandler(this.RichTextBox1_TextChanged);
             // 
             // label5
             // 
@@ -326,8 +326,8 @@
             this.comboBox1.Size = new System.Drawing.Size(52, 20);
             this.comboBox1.TabIndex = 10;
             this.comboBox1.ValueMember = "layer";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.comboBox1.TextChanged += new System.EventHandler(this.comboBox1_TextChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboBox1.TextChanged += new System.EventHandler(this.ComboBox1_TextChanged);
             // 
             // listBox_pList
             // 
@@ -341,10 +341,10 @@
             this.listBox_pList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_pList.Size = new System.Drawing.Size(335, 148);
             this.listBox_pList.TabIndex = 11;
-            this.listBox_pList.SelectedIndexChanged += new System.EventHandler(this.listBox_pList_SelectedIndexChanged);
-            this.listBox_pList.DoubleClick += new System.EventHandler(this.listBox_pList_DoubleClick);
-            this.listBox_pList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_pList_KeyDown);
-            this.listBox_pList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_pList_MouseMove);
+            this.listBox_pList.SelectedIndexChanged += new System.EventHandler(this.ListBox_pList_SelectedIndexChanged);
+            this.listBox_pList.DoubleClick += new System.EventHandler(this.ListBox_pList_DoubleClick);
+            this.listBox_pList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_pList_KeyDown);
+            this.listBox_pList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ListBox_pList_MouseMove);
             // 
             // contextParentMenuStrip
             // 
@@ -470,10 +470,10 @@
             this.listBox_cList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_cList.Size = new System.Drawing.Size(307, 148);
             this.listBox_cList.TabIndex = 13;
-            this.listBox_cList.SelectedIndexChanged += new System.EventHandler(this.listBox_cList_SelectedIndexChanged);
-            this.listBox_cList.DoubleClick += new System.EventHandler(this.listBox_cList_DoubleClick);
-            this.listBox_cList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBox_cList_KeyDown);
-            this.listBox_cList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listBox_cList_MouseMove);
+            this.listBox_cList.SelectedIndexChanged += new System.EventHandler(this.ListBox_cList_SelectedIndexChanged);
+            this.listBox_cList.DoubleClick += new System.EventHandler(this.ListBox_cList_DoubleClick);
+            this.listBox_cList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_cList_KeyDown);
+            this.listBox_cList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ListBox_cList_MouseMove);
             // 
             // label8
             // 

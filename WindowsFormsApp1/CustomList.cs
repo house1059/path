@@ -73,7 +73,7 @@ namespace PathLink
             for (int i = 0; i < listBox_Custom.SelectedItems.Count; i++)
             {
                 PathData p = (PathData)listBox_Custom.SelectedItems[i];
-                re.DataInsert(proc.getPathData(p.value));
+                re.DataInsert(proc.GetPathData(p.Value));
             }
             re.Visible = true;
         }
@@ -94,8 +94,8 @@ namespace PathLink
 
             if (listBox_Custom.SelectedItems.Count == 1)
             {
-                PathData path = proc.getPathData(listBox_Custom.SelectedValue.ToString());
-                if (path.wbOK)
+                PathData path = proc.GetPathData(listBox_Custom.SelectedValue.ToString());
+                if (path.WbOK)
                     contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
             }
             contextCustomMenuStrip.Items[2].Enabled = true;  //MyListOK

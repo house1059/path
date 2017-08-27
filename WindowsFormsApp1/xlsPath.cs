@@ -11,15 +11,15 @@ namespace PathLink
     /// <summary>
     /// xlsからPathLink.txtを作成する。ClosedXmlを使用
     /// </summary>
-    public class xlsPath
+    public class XlsPath
     {
 
-        public string filePath { get; set; }    //データ変換ツール
+        public string FilePath { get; set; }    //データ変換ツール
         XLWorkbook wb = null;
 
 
 
-        xlsPath()
+        XlsPath()
         {
             
 
@@ -38,14 +38,14 @@ namespace PathLink
 
 
             //ファイルが存在するかの確認を行う
-            if( !System.IO.File.Exists(filePath) ){
-                MessageBox.Show(filePath + "が見つかりません", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if( !System.IO.File.Exists(FilePath) ){
+                MessageBox.Show(FilePath + "が見つかりません", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
 
             //データ変換ツールを開いてまずはすべてのパスを確認し、xls形式が存在しないか確認する。
-            wb = new XLWorkbook(filePath);
+            wb = new XLWorkbook(FilePath);
             bool bl = false;
             foreach(IXLWorksheet sh in wb.Worksheets)
             {
