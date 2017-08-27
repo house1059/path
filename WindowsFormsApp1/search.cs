@@ -545,5 +545,24 @@ namespace PathLink
         {
             richTextBox1.SelectionStart = this.richTextBox1.Text.Length;
         }
+
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog()
+            {
+                Filter = "データ変換ツール(*.xlsm)|*.xlsm;|全てのﾌｧｲﾙ(*.*)|*.*",
+                Title = "データ変換ツールを選択してください"
+            };
+
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+
+                XlsPath x = new XlsPath();
+                x.DataConvert(fd.FileName);    //ここで引数を渡せばいいのでは？
+
+            }
+
+
+        }
     }
 }

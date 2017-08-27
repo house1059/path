@@ -19,7 +19,7 @@ namespace PathLink
 
 
 
-        XlsPath()
+        public XlsPath()
         {
             
 
@@ -30,7 +30,7 @@ namespace PathLink
         /// <summary>
         /// データ変換ツールからPathLink.txtを作成する。とりあえずそのまま移植してその後リファクタリング
         /// </summary>
-        void DataConvert()
+        public void DataConvert(string filePath)
         {
             //メンバ
             IXLRange range = null;
@@ -38,14 +38,14 @@ namespace PathLink
 
 
             //ファイルが存在するかの確認を行う
-            if( !System.IO.File.Exists(FilePath) ){
-                MessageBox.Show(FilePath + "が見つかりません", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if( !System.IO.File.Exists(filePath) ){
+                MessageBox.Show(filePath + "が見つかりません", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
 
             //データ変換ツールを開いてまずはすべてのパスを確認し、xls形式が存在しないか確認する。
-            wb = new XLWorkbook(FilePath);
+            wb = new XLWorkbook(filePath);
             bool bl = false;
             foreach(IXLWorksheet sh in wb.Worksheets)
             {
