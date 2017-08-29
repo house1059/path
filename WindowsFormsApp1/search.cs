@@ -558,7 +558,7 @@ namespace PathLink
             {
 
                 XlsPath x = new XlsPath();
-                x.DataConvert(fd.FileName);    //ここで引数を渡せばいいのでは？
+                //x.DataConvert(fd.FileName);    //ここで引数を渡せばいいのでは？
 
             }
 
