@@ -189,4 +189,13 @@
     <Content Include="icon\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set fname_new=$(TargetName)_merge$(TargetExt)
+"C:\Users\shimada.kouki\Documents\TOOL\IlMerge\ILMerge.exe" /wildcards /out:%25fname_new%25 $(TargetFileName) *.dll
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
