@@ -488,7 +488,10 @@ namespace PathLink
 
         private void Search_Resize(object sender, EventArgs e)
         {
-           
+            //textBoxが二つあるためアンカー設定だと上手く行かないので手動でリサイズする
+
+            //親側のリサイズ
+  //          listBox_cList.Size = new Size(331,112);
         }
 
         private void ListBox1_MouseMove(object sender, MouseEventArgs e)
@@ -563,6 +566,17 @@ namespace PathLink
             }
 
 
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void listBox_pList_Resize(object sender, EventArgs e)
+        {
+
+                
         }
     }
 }
