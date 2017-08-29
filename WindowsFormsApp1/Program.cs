@@ -1,4 +1,4 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace PathLink
         //パーツ単品問い合わせ
         public PathData GetPathData( string s)
         {
-            s = Strings.StrConv(s, VbStrConv.Wide);
+            s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
             if(PartsDic.ContainsKey(s))
             {
                 return PartsDic[s];
@@ -86,11 +86,11 @@ namespace PathLink
             try
             {
                 ex = new Excel.Application();
-                wb = ex.Workbooks.Open(path.filePath, true, true);
-                sh = ex.Sheets[path.sheetName];
+                wb = ex.Workbooks.Open(path.FilePath, true, true);
+                sh = ex.Sheets[path.SheetName];
                 sh.Select();
 
-                rn = ex.Range[path.address, path.address];
+                rn = ex.Range[path.Address, path.Address];
                 rn.Select();
 
                 ex.Visible = true;
@@ -143,7 +143,7 @@ namespace PathLink
                     SheetName = st1[1],
                     Address = st1[2],
                     Value = st1[3],
-                    WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide)
+                    WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)
                 };
                 //ココで開くOK,NGの判定を行う
                 if ( p.FilePath != "" && p.SheetName != "" && p.Address != "")
@@ -193,12 +193,12 @@ namespace PathLink
 
                     default:
                         //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
-                        if (PartsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide).ToUpper()) == false)
+                        if (PartsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide | VbStrConv.Uppercase).ToUpper()) == false)
                         {
                             PathData child = new PathData()
                             {
                                 Value = s,
-                                WideValue = Strings.StrConv(s, VbStrConv.Wide).ToUpper()
+                                WideValue = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase).ToUpper()
                             };
                             PartsList.Add(child);                   //子のﾃﾞｰﾀを追加
                             PartsDic.Add(child.WideValue, child);    //子の情報を追加
@@ -292,7 +292,7 @@ namespace PathLink
             foreach (PathData pList in list)  //ローカル優先
             {
                 //全角+大文字で検索するように
-                if (pList.WideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide)))
+                if (pList.WideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)))
                 {
                     p.Add(pList);
                 }

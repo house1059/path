@@ -258,7 +258,7 @@ namespace PathLink
             contextChildMenuStrip.Items[2].Enabled = false;     //MyListNG
             contextChildMenuStrip.Items[3].Enabled = false;     //List切り離しNG
 
-            if (listBox_cList.SelectedIndex == -1)
+            if (listBox_cList.SelectedIndex == -1 || listBox_cList.SelectedValue == null)
                 return;
 
 
@@ -488,7 +488,12 @@ namespace PathLink
 
         private void Search_Resize(object sender, EventArgs e)
         {
-           
+            //textBoxが二つあるためアンカー設定だと上手く行かないので手動でリサイズする
+
+            //親側のリサイズ
+            //          listBox_cList.Size = new Size(331,112);
+          //  listBox_pList.Size = new Size( this.Width / 2 , listBox_pList.Size.Height);
+          //  listBox_cList.Location = new Point(listBox_pList.Size.Width + 12, listBox_cList.Location.Y);
         }
 
         private void ListBox1_MouseMove(object sender, MouseEventArgs e)
@@ -563,6 +568,16 @@ namespace PathLink
             }
 
 
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void listBox_pList_Resize(object sender, EventArgs e)
+        {
+                
         }
     }
 }
