@@ -1,4 +1,4 @@
-﻿#define EXCEL_ON
+﻿//#define EXCEL_ON
 
 using System;
 using System.Collections.Generic;
@@ -34,6 +34,8 @@ namespace PathLink
     public class Proc
     {
         private const String PATH_VERSION = "◎PathV4";
+
+        //partsDicもいらないのでは？ Listかどちらかで賄えるのでは？　Dictionaryの方がkeyでhashを持てるのでデータ追加を考えるとDictionaryかな
         public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
             
         //アクセサ
@@ -138,13 +140,14 @@ namespace PathLink
                 st2 = st1[0].Split('\\');              //配列の０番目を\でファイル名を取り出す
 
                 PathData p = new PathData()
-                {
+                {   //初期化子
                     FilePath = st1[0],
                     SheetName = st1[1],
                     Address = st1[2],
                     Value = st1[3],
                     WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)
                 };
+
                 //ココで開くOK,NGの判定を行う
                 if ( p.FilePath != "" && p.SheetName != "" && p.Address != "")
                 {
@@ -158,27 +161,32 @@ namespace PathLink
                     p.Layer = Strings.StrConv(st1[st1.Length - 1].ToUpper(), VbStrConv.Narrow); //数値に変換したいので小文字
                 }
 
-                //パーソナルデータが存在しない場合は作成
+                //パーソナルデータが既に存在している場合はスロー
+                if(PartsList.Contains<PathData>(p))
+                {
+
+                }
+
                 if (PartsDic.ContainsKey(p.WideValue) == false)
                 {
                     PartsList.Add(p);       //パーツリストの登録と辞書への登録を行う
                     PartsDic.Add(p.WideValue, p);
                 }
-                PathData registPathData = PartsDic[p.WideValue];          //あらためて情報を引き出す
+                //PathData registPathData = PartsDic[p.WideValue];          //あらためて情報を引き出す
 
-                registPathData.FilePath = p.FilePath;
-                registPathData.SheetName = p.SheetName;
-                registPathData.Address = p.Address;
-                registPathData.Value = p.Value;
-                registPathData.WideValue = p.WideValue;
-                registPathData.WbOK = p.WbOK;
+                //registPathData.FilePath = p.FilePath;
+                //registPathData.SheetName = p.SheetName;
+                //registPathData.Address = p.Address;
+                //registPathData.Value = p.Value;
+                //registPathData.WideValue = p.WideValue;
+                //registPathData.WbOK = p.WbOK;
 
-                RegistChild(st1[4].Split(','), ref registPathData);      //子どもを登録
+                RegistChild(st1[4].Split(','),  p);      //子どもを登録
             }
         }
 
         //子どもの情報を追加
-        private void RegistChild(string[] pts, ref PathData p)
+        private void RegistChild(string[] pts,  PathData p)
         {
 
             //pts～pteまでを登録
@@ -205,7 +213,7 @@ namespace PathLink
                         }
 
                         PathData registP = this.GetPathData(s);  //子データを改めて取得
-                        registP.parentList.Add(p);                                                          //子データに親を登録
+                        registP.parentList.Add(p);      //親を２回以上登録する可能性があるので注意！Dictionaryに変える                                                    //子データに親を登録
                         p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
                         break;
                 }
