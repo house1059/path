@@ -17,6 +17,10 @@ namespace PathLink
         public List<PathData> parentList;    //親リスト
         public List<PathData> childList;     //子リスト
 
+        private Dictionary<string, PathData> parentDic;
+        private Dictionary<string, PathData> childDic;
+
+
         public string bindingData;
 
         //ｺﾝｽﾄﾗｸﾀ
@@ -24,7 +28,43 @@ namespace PathLink
         {
             parentList = new List<PathData>();
             childList = new List<PathData>();
+
+            parentDic = new Dictionary<string, PathData>();     //→リストをDicに変えてみる
+            childDic = new Dictionary<string, PathData>();
+
         }
+
+        /// <summary>
+        /// 子リストにデータを追加（２重登録しないようにチェック）
+        /// </summary>
+        /// <param name="s">子どもの名前</param>
+        /// <param name="p">子どものPathData</param>
+        public void AddChild( string s , PathData p)
+        {
+            if( childDic.ContainsKey(s) == false)
+            {
+                childDic.Add(s, p);
+            }
+        }
+
+        public void AddParent( string s, PathData p)
+        {
+            if (parentDic.ContainsKey(s) == false)
+            {
+                parentDic.Add(s, p);
+            }
+        }
+
+
+        public ICollection<PathData> GetChildData()
+        {
+            return childDic.Values;
+        }
+
+
+
+
+
     }
     
 

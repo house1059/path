@@ -37,7 +37,8 @@ namespace PathLink
 
         //partsDicもいらないのでは？ Listかどちらかで賄えるのでは？　Dictionaryの方がkeyでhashを持てるのでデータ追加を考えるとDictionaryかな
         public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
-            
+        
+
         //アクセサ
         public List<PathData> OrList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
         public List<PathData> AndList { get; private set; } = new List<PathData>();
@@ -78,6 +79,7 @@ namespace PathLink
 
         private static void _ExcelOpen(PathData path)
         {
+
 
 #if EXCEL_ON
             Excel._Application ex = null; ;
@@ -213,7 +215,13 @@ namespace PathLink
                         }
 
                         PathData registP = this.GetPathData(s);  //子データを改めて取得
+
+                        
+                        //ここ内部で子どもを引っ張り出して登録する仕組みにしたら？　getPathData(s)をどうにか取得しないといけないけどね
                         registP.parentList.Add(p);      //親を２回以上登録する可能性があるので注意！Dictionaryに変える                                                    //子データに親を登録
+                        registP.AddChild(p.Value, p);
+                        p.AddChild(p.Value, p);
+
                         p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
                         break;
                 }
