@@ -98,11 +98,11 @@ namespace PathLink
 
 
         public static Dictionary<string, PathData> PartsDic { get; set; } = new Dictionary<string, PathData>();
-        public static List<PathData> PartsList { get; set; } = new List<PathData>();
+//        public static List<PathData> PartsList { get; set; } = new List<PathData>();
 
 
         public static List<PathData> OrList { get; protected set; } = null;
-        public static List<PathData> AndList { get; } = null;
+        public static List<PathData> AndList { get; protected set; } = null;
 
 
 
@@ -122,27 +122,27 @@ namespace PathLink
 
 
         //パーツ単品問い合わせ
-        public static PathData GetPathData(string s)
-        {
-            s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
-            if(PartsList.Exists(p => p.WideValue == s)){
-                return PartsList.Find(p => p.WideValue == s);
-            }
-            return new PathData();  //一致しない場合はからデータを返す
-        }
-
-
-
-        ////パーツ単品問い合わせ
         //public static PathData GetPathData(string s)
         //{
         //    s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
-        //    if (PartsDic.ContainsKey(s))
-        //    {
-        //        return PartsDic[s];
+        //    if(PartsList.Exists(p => p.WideValue == s)){
+        //        return PartsList.Find(p => p.WideValue == s);
         //    }
-        //    return new PathData();  //辞書にない場合は空データを返す
+        //    return new PathData();  //一致しない場合はからデータを返す
         //}
+
+
+
+        //パーツ単品問い合わせ
+        public static PathData GetPathData(string s)
+        {
+            s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
+            if (PartsDic.ContainsKey(s))
+            {
+                return PartsDic[s];
+            }
+            return new PathData();  //辞書にない場合は空データを返す
+        }
 
 
 
@@ -155,9 +155,8 @@ namespace PathLink
         {
 
             //partsDicから全ての情報を取り出す
-            Dictionary<string,PathData>.ValueCollection parts = PartsDic.Values;
-            OrList = GetOrList(body, parts);
-
+            OrList = GetList(body);
+            AndList = GetList(body, PartsDic.Values.ToList());
             
 
         }
@@ -165,8 +164,8 @@ namespace PathLink
 
 
 
-
-        private static List<PathData> GetOrList( string body, Dictionary<string, PathData>.ValueCollection parts)
+        //範囲を拡大する
+        private static List<PathData> GetList( string body)
         {
             List<PathData> result = new List<PathData>();
             body = Strings.StrConv(body, VbStrConv.Uppercase | VbStrConv.Wide);     //全角＋大文字に変換
@@ -180,97 +179,19 @@ namespace PathLink
             return result;
         }
 
+        //範囲を縮小する
+        private static List<PathData> GetList(string body, List<PathData> list)
+        {
+            body = Strings.StrConv(body, VbStrConv.Uppercase | VbStrConv.Wide);     //全角＋大文字に変換
+            string[] split = body.Split('　');
 
+            foreach (string s in split)
+            {
+                list = list.FindAll(p => p.WideValue.Contains(s));
+            }
 
-
-
-
-        ///// <summary>
-        ///// 検索モジュール　ここで一括で受ける
-        ///// </summary>
-        ///// <param name="txt1">検索フィールド</param>
-        ///// <param name="txt2">レイヤーフィールド</param>
-        //public void TextSearch(string txt1, string txt2)
-        //{
-
-        //    //全体から検索した情報
-        //    OrList = TextSearchPathData(txt1);
-        //    AndList = TextSearchPathData(txt1, PartsList);
-
-        //    //layerも加味した検索
-        //    OrList = PathDataSearchLayer(txt2, OrList);
-        //    AndList = PathDataSearchLayer(txt2, AndList);
-
-        //    ResultLayer = PathDataSearchLayerList(PartsList);
-
-        //}
-
-        ///// <summary>
-        ///// 検索フィールドの情報を渡してpathDataを返す
-        ///// overLoad　pathがあればpathの範囲内で減らす検索を行う
-        ///// </summary>
-        ///// <param name="txt1">検索フィールドの情報</param>
-        ///// <param name="path"></param>
-        ///// <returns>pathDataのList</returns>
-        ///// 
-        //private List<PathData> TextSearchPathData(string txt1, List<PathData> p)
-        //{
-        //    //デフォルトでは全て返却
-        //    if (txt1 == "") return PartsList;
-
-        //    txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
-        //    string[] s = txt1.Split(' ');   //２語検索可能
-
-        //    //検索
-        //    for (int i = 0; i < s.Length; i++)
-        //    {
-        //        //and検索
-        //        p = PathDataSearch(s[i], p);     //自身を引数として範囲を狭める
-        //    }
-        //    return p;
-        //}
-
-
-        ///// <summary>
-        ///// 検索フィールドの情報を渡してpathDataを返す
-        ///// overLoad　pathがなければ追加していく検索を行う
-        ///// </summary>
-        ///// <param name="txt1">フィールド</param>
-        ///// <returns></returns>
-        //private List<PathData> TextSearchPathData(string txt1)
-        //{
-        //    //デフォルトでは全て返却
-        //    if (txt1 == "") return PartsList;
-
-        //    txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
-        //    string[] s = txt1.Split(' ');   //２語検索可能
-        //    List<PathData> p = new List<PathData>();    //or検索の場合は0から増やす
-
-        //    //検索
-        //    for (int i = 0; i < s.Length; i++)
-        //    {
-        //        //or検索
-        //        p.AddRange(PathDataSearch(s[i], PartsList));    //ローカルのパーツリストを引数とする                }
-        //    }
-        //    return p;
-        //}
-
-
-        ////pathDataの検索
-        //private List<PathData> PathDataSearch(string s, List<PathData> list)
-        //{
-        //    List<PathData> p = new List<PathData>();
-        //    foreach (PathData pList in list)  //ローカル優先
-        //    {
-        //        //全角+大文字で検索するように
-        //        if (pList.WideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)))
-        //        {
-        //            p.Add(pList);
-        //        }
-        //    }
-        //    return p;
-        //}
-
+            return list;
+        }
 
 
     }
