@@ -35,6 +35,21 @@ namespace PathLink
             parentChildLabel = this.label2;
         }
 
+        public CustomList(Dictionary<string,PathData> d)
+        {
+            InitializeComponent();
+            //dataSrc = new BindingSource();
+            //dataSrc.DataSource = d;
+
+            listBox_Custom.DataSource = d;
+            listBox_Custom.ValueMember = "value";
+            listBox_Custom.DisplayMember = "key";
+
+            titleLabel = this.label1;
+            parentChildLabel = this.label2;
+        }
+
+
         public CustomList(BindingSource b)
         {
             InitializeComponent();
@@ -73,7 +88,7 @@ namespace PathLink
             for (int i = 0; i < listBox_Custom.SelectedItems.Count; i++)
             {
                 PathData p = (PathData)listBox_Custom.SelectedItems[i];
-                re.DataInsert(proc.GetPathData(p.Value));
+                re.DataInsert(PathDB.GetPathData(p.Value));
             }
             re.Visible = true;
         }
@@ -94,7 +109,7 @@ namespace PathLink
 
             if (listBox_Custom.SelectedItems.Count == 1)
             {
-                PathData path = proc.GetPathData(listBox_Custom.SelectedValue.ToString());
+                PathData path = PathDB.GetPathData(listBox_Custom.SelectedValue.ToString());
                 if (path.WbOK)
                     contextCustomMenuStrip.Items[0].Enabled = true;  //開くOK
             }

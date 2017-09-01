@@ -62,7 +62,7 @@ namespace PathLink
             if (listBox_myList.SelectedIndex == -1)
                 return;
             
-            PathData p = proc.GetPathData(listBox_myList.SelectedValue.ToString());
+            PathData p = PathDB.GetPathData(listBox_myList.SelectedValue.ToString());
             if (p.WbOK)
                 contextMyListMenuStrip.Items[0].Enabled = true;  //開くOK
 

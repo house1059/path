@@ -36,12 +36,12 @@ namespace PathLink
         private const String PATH_VERSION = "◎PathV4";
 
         //partsDicもいらないのでは？ Listかどちらかで賄えるのでは？　Dictionaryの方がkeyでhashを持てるのでデータ追加を考えるとDictionaryかな
-        public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
+        //public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
         
 
         //アクセサ
-        public List<PathData> OrList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        public List<PathData> AndList { get; private set; } = new List<PathData>();
+        //public List<PathData> OrList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
+        //public List<PathData> AndList { get; private set; } = new List<PathData>();
 
 
         //レイヤーリストに関しては後程リファクタ
@@ -55,15 +55,15 @@ namespace PathLink
 
 
         //パーツ単品問い合わせ
-        public PathData GetPathData( string s)
-        {
-            s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
-            if(PartsDic.ContainsKey(s))
-            {
-                return PartsDic[s];
-            }
-            return new PathData();  //辞書にない場合は空データを返す
-        }
+        //public PathData GetPathData( string s)
+        //{
+        //    s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
+        //    if(PartsDic.ContainsKey(s))
+        //    {
+        //        return PartsDic[s];
+        //    }
+        //    return new PathData();  //辞書にない場合は空データを返す
+        //}
 
         //Excelオープン
         public void ExcelOpen(PathData path)
@@ -73,7 +73,15 @@ namespace PathLink
 
         public void ExcelOpen(string s)
         {
-            _ExcelOpen( GetPathData(s));
+            s = Strings.StrConv(s, VbStrConv.Uppercase | VbStrConv.Wide);
+            if (PathDB.PartsDic.ContainsKey(s))
+            {
+                _ExcelOpen(PathDB.PartsDic[s]);
+            }
+            else
+            {
+                //データベースに無いファイルを開こうとしている throw
+            }
         }
 
 
@@ -150,12 +158,6 @@ namespace PathLink
                     WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)
                 };
 
-                //ココで開くOK,NGの判定を行う
-                if ( p.FilePath != "" && p.SheetName != "" && p.Address != "")
-                {
-                    p.WbOK = true;
-                }
-
 
                 //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
                 if (int.TryParse(st1[st1.Length - 1], out int layer))
@@ -163,26 +165,18 @@ namespace PathLink
                     p.Layer = Strings.StrConv(st1[st1.Length - 1].ToUpper(), VbStrConv.Narrow); //数値に変換したいので小文字
                 }
 
-                //パーソナルデータが既に存在している場合はスロー
-                if(PartsList.Contains<PathData>(p))
+                //パーソナルデータが既に存在している場合は子が先に登録しているので情報のみ追加してあげる
+                if(PathDB.PartsDic.ContainsKey(p.WideValue))
                 {
-
+                    PathData pathdata = PathDB.PartsDic[p.WideValue];
+                    pathdata = (PathData)p.Clone();     
+                    pathdata.Value = p.Value;
+                    pathdata.WideValue = p.WideValue;
                 }
-
-                if (PartsDic.ContainsKey(p.WideValue) == false)
+                else
                 {
-                    PartsList.Add(p);       //パーツリストの登録と辞書への登録を行う
-                    PartsDic.Add(p.WideValue, p);
+                    PathDB.PartsDic.Add(p.WideValue, p);
                 }
-                //PathData registPathData = PartsDic[p.WideValue];          //あらためて情報を引き出す
-
-                //registPathData.FilePath = p.FilePath;
-                //registPathData.SheetName = p.SheetName;
-                //registPathData.Address = p.Address;
-                //registPathData.Value = p.Value;
-                //registPathData.WideValue = p.WideValue;
-                //registPathData.WbOK = p.WbOK;
-
                 RegistChild(st1[4].Split(','),  p);      //子どもを登録
             }
         }
@@ -202,27 +196,22 @@ namespace PathLink
                         break;
 
                     default:
+
+                        string key = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase).ToUpper();
+                        
                         //子のパーソナルﾃﾞｰﾀが無い場合、作成して親の登録を行う
-                        if (PartsDic.ContainsKey(Strings.StrConv(s,VbStrConv.Wide | VbStrConv.Uppercase).ToUpper()) == false)
+                        if (PathDB.PartsDic.ContainsKey(key) == false)
                         {
                             PathData child = new PathData()
                             {
                                 Value = s,
-                                WideValue = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase).ToUpper()
+                                WideValue = key
                             };
-                            PartsList.Add(child);                   //子のﾃﾞｰﾀを追加
-                            PartsDic.Add(child.WideValue, child);    //子の情報を追加
+                            PathDB.PartsDic.Add(key,child) ;           //子のﾃﾞｰﾀを追加
                         }
-
-                        PathData registP = this.GetPathData(s);  //子データを改めて取得
-
-                        
-                        //ここ内部で子どもを引っ張り出して登録する仕組みにしたら？　getPathData(s)をどうにか取得しないといけないけどね
-                        registP.parentList.Add(p);      //親を２回以上登録する可能性があるので注意！Dictionaryに変える                                                    //子データに親を登録
-                        registP.AddChild(p.Value, p);
-                        p.AddChild(p.Value, p);
-
-                        p.childList.Add(registP);                                                   //パーソナルデータに子どもを追加
+                        PathData registP = PathDB.PartsDic[key];  //子データを取得
+                        registP.AddParent(p);                   //子どもに親（自分）を登録
+                        p.AddChild(registP);                    //自分に子供を追加
                         break;
                 }
             }
@@ -235,20 +224,20 @@ namespace PathLink
         /// </summary>
         /// <param name="txt1">検索フィールド</param>
         /// <param name="txt2">レイヤーフィールド</param>
-        public void TextSearch(string txt1, string txt2 )
-        {
+        //public void TextSearch(string txt1, string txt2 )
+        //{
 
-            //全体から検索した情報
-            OrList = TextSearchPathData(txt1);
-            AndList = TextSearchPathData(txt1 , PartsList);
+        //    //全体から検索した情報
+        //    OrList = TextSearchPathData(txt1);
+        //    AndList = TextSearchPathData(txt1 , PartsList);
 
-            //layerも加味した検索
-            OrList = PathDataSearchLayer(txt2, OrList);
-            AndList = PathDataSearchLayer(txt2, AndList);
+        //    //layerも加味した検索
+        //    OrList = PathDataSearchLayer(txt2, OrList);
+        //    AndList = PathDataSearchLayer(txt2, AndList);
 
-            ResultLayer = PathDataSearchLayerList(PartsList);
+        //    ResultLayer = PathDataSearchLayerList(PartsList);
 
-        }
+        //}
 
         /// <summary>
         /// 検索フィールドの情報を渡してpathDataを返す
