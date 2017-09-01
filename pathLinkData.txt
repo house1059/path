@@ -47,5 +47,5 @@ C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$60	光部：その１	pt
 C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$61	光部：その２	pts,PTE			47
 C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$62	光部：その３	pts,PTE			47
 C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$63	光部：その４	pts,PTE			47
-C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$64	光部：その５	pts,PTE			47
+C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$64	光部：その５	pts,PTE		
 C:\Users\house\OneDrive\ドキュメント\GitHub\path6	Program6	$F$65	光部：その６	pts,PTE			47

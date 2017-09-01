@@ -103,11 +103,11 @@ namespace PathLink
 
         public static List<PathData> OrList { get; protected set; } = null;
         public static List<PathData> AndList { get; protected set; } = null;
+        public static List<string> LayerList { get; protected set; } = null;
 
 
-
-        public static List<PathData> parentList { get; protected set; } = null;
-        public static List<PathData> childList { get; protected set; } = null;    //LINQでExists使えるならば早そう
+        //public static List<PathData> parentList { get; protected set; } = null;
+        //public static List<PathData> childList { get; protected set; } = null;    //LINQでExists使えるならば早そう
 
 
 
@@ -157,7 +157,8 @@ namespace PathLink
             //partsDicから全ての情報を取り出す
             OrList = GetList(body);
             AndList = GetList(body, PartsDic.Values.ToList());
-            
+
+            LayerList = GetLayerList();
 
         }
 
@@ -167,6 +168,8 @@ namespace PathLink
         //範囲を拡大する
         private static List<PathData> GetList( string body)
         {
+            if (body == "") return PartsDic.Values.ToList();
+
             List<PathData> result = new List<PathData>();
             body = Strings.StrConv(body, VbStrConv.Uppercase | VbStrConv.Wide);     //全角＋大文字に変換
             string[] split = body.Split('　');   
@@ -182,6 +185,8 @@ namespace PathLink
         //範囲を縮小する
         private static List<PathData> GetList(string body, List<PathData> list)
         {
+            if (body == "") return PartsDic.Values.ToList();
+
             body = Strings.StrConv(body, VbStrConv.Uppercase | VbStrConv.Wide);     //全角＋大文字に変換
             string[] split = body.Split('　');
 
@@ -192,6 +197,30 @@ namespace PathLink
 
             return list;
         }
+
+
+        /// <summary>
+        /// ユニークなレイヤー番号を返す
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        private static List<string> GetLayerList( )
+        {
+            //nullが大量にあるので nullを除外
+            //ユニークなテーブルを作成するためhashsetを使用
+            //Listに変換
+            List<PathData> result = PartsDic.Values.ToList().FindAll(p => p.Layer != null).ToList();
+
+            HashSet<string> hash = new HashSet<string>();
+            foreach( PathData p in result)
+            {
+                hash.Add(p.Layer);
+            }
+
+            return hash.ToList<string>();
+        }
+
+
 
 
     }

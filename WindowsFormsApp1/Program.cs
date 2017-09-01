@@ -169,7 +169,10 @@ namespace PathLink
                 if(PathDB.PartsDic.ContainsKey(p.WideValue))
                 {
                     PathData pathdata = PathDB.PartsDic[p.WideValue];
-                    pathdata = (PathData)p.Clone();     
+                    pathdata.FilePath = p.FilePath;
+                    pathdata.SheetName = p.SheetName;
+                    pathdata.Address = p.Address;
+                    pathdata.Layer = p.Layer;
                     pathdata.Value = p.Value;
                     pathdata.WideValue = p.WideValue;
                 }
