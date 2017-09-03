@@ -98,38 +98,10 @@ namespace PathLink
 
 
         public static Dictionary<string, PathData> PartsDic { get; set; } = new Dictionary<string, PathData>();
-//        public static List<PathData> PartsList { get; set; } = new List<PathData>();
-
 
         public static List<PathData> OrList { get; protected set; } = null;
         public static List<PathData> AndList { get; protected set; } = null;
-        public static List<string> LayerList { get; protected set; } = null;
-
-
-        //public static List<PathData> parentList { get; protected set; } = null;
-        //public static List<PathData> childList { get; protected set; } = null;    //LINQでExists使えるならば早そう
-
-
-
-
-
-        ////ｱｸｾｻ
-        //public ICollection<PathData> GetOrList()
-        //{
-
-        //    return PathLinkDB.Values;
-        //}
-
-
-        //パーツ単品問い合わせ
-        //public static PathData GetPathData(string s)
-        //{
-        //    s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
-        //    if(PartsList.Exists(p => p.WideValue == s)){
-        //        return PartsList.Find(p => p.WideValue == s);
-        //    }
-        //    return new PathData();  //一致しない場合はからデータを返す
-        //}
+        public static List<string> LayerList { get;  set; } = null;
 
 
 
@@ -154,12 +126,29 @@ namespace PathLink
         public static void TextSearch(string body, string layer)
         {
 
-            //partsDicから全ての情報を取り出す
+
+
+
+
+
+        }
+
+
+
+
+        //OrListとAndListを同時に作成していたが、基本AndListしか使わないので使う時だけ検索するように処理を分けました。
+        private static void CreateOrList(string body, string layer)
+        {
             OrList = GetList(body);
+            if (layer == "") return;
+            OrList = GetList(OrList, layer);
+        }
+
+        private static void CreateAndList(string body, string layer)
+        {
             AndList = GetList(body, PartsDic.Values.ToList());
-
-            LayerList = GetLayerList();
-
+            if (layer == "") return;
+            AndList = GetList(AndList, layer);
         }
 
 
@@ -199,36 +188,11 @@ namespace PathLink
         }
 
 
-        /// <summary>
-        /// ユニークなレイヤー番号を返す
-        /// </summary>
-        /// <param name="layer"></param>
-        /// <returns></returns>
-        private static List<string> GetLayerList( )
+        //範囲を縮小する（ListとList）
+        private static List<PathData> GetList( List<PathData>list, string layer)
         {
-            //nullが大量にあるので nullを除外
-            //ユニークなテーブルを作成するためhashsetを使用
-            //Listに変換
-            List<PathData> result = PartsDic.Values.ToList().FindAll(p => p.Layer != null).ToList();
-
-            HashSet<string> hash = new HashSet<string>();
-            foreach( PathData p in result)
-            {
-                hash.Add(p.Layer);
-            }
-
-            return hash.ToList<string>();
+            if (layer == "") return list;
+            return list = list.FindAll(p => p.Layer == layer);
         }
-
-
-
-
     }
-
-
-
-
-
-
-
 }

@@ -35,16 +35,6 @@ namespace PathLink
     {
         private const String PATH_VERSION = "◎PathV4";
 
-        //partsDicもいらないのでは？ Listかどちらかで賄えるのでは？　Dictionaryの方がkeyでhashを持てるのでデータ追加を考えるとDictionaryかな
-        //public  Dictionary<string, PathData> PartsDic { get; } = new Dictionary<string, PathData>();   //パーソナルデータのインデックスを管理
-        
-
-        //アクセサ
-        //public List<PathData> OrList { get; private set; } = new List<PathData>();       //ﾃｷｽﾄChangeの時にしか検索しないようにする
-        //public List<PathData> AndList { get; private set; } = new List<PathData>();
-
-
-        //レイヤーリストに関しては後程リファクタ
         //オブジェクトで管理するように変更します。
         public List<PathData> LayerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
         public List<string> ResultLayer { get; private set; } = new List<string>();    //
@@ -52,19 +42,7 @@ namespace PathLink
 
         List<PathData> PartsList { get; set; } = new List<PathData>();    //パーソナルデータ
        
-
-
-        //パーツ単品問い合わせ
-        //public PathData GetPathData( string s)
-        //{
-        //    s = Strings.StrConv(s, VbStrConv.Wide | VbStrConv.Uppercase);
-        //    if(PartsDic.ContainsKey(s))
-        //    {
-        //        return PartsDic[s];
-        //    }
-        //    return new PathData();  //辞書にない場合は空データを返す
-        //}
-
+        
         //Excelオープン
         public void ExcelOpen(PathData path)
         {
@@ -182,6 +160,19 @@ namespace PathLink
                 }
                 RegistChild(st1[4].Split(','),  p);      //子どもを登録
             }
+
+
+            //データを読み込んだあとはLayerListも作成しておく
+            //ユニークなテーブルを作成するためhashsetを使用
+            //Listに変換　並び替えは必要？
+
+            HashSet<string> hash = new HashSet<string>();
+            foreach (PathData p in PathDB.PartsDic.Values)
+            {
+                hash.Add(p.Layer);
+            }
+            PathDB.LayerList =  hash.ToList<string>();
+
         }
 
         //子どもの情報を追加
@@ -219,153 +210,5 @@ namespace PathLink
                 }
             }
         }
-
-
-
-        /// <summary>
-        /// 検索モジュール　ここで一括で受ける
-        /// </summary>
-        /// <param name="txt1">検索フィールド</param>
-        /// <param name="txt2">レイヤーフィールド</param>
-        //public void TextSearch(string txt1, string txt2 )
-        //{
-
-        //    //全体から検索した情報
-        //    OrList = TextSearchPathData(txt1);
-        //    AndList = TextSearchPathData(txt1 , PartsList);
-
-        //    //layerも加味した検索
-        //    OrList = PathDataSearchLayer(txt2, OrList);
-        //    AndList = PathDataSearchLayer(txt2, AndList);
-
-        //    ResultLayer = PathDataSearchLayerList(PartsList);
-
-        //}
-
-        /// <summary>
-        /// 検索フィールドの情報を渡してpathDataを返す
-        /// overLoad　pathがあればpathの範囲内で減らす検索を行う
-        /// </summary>
-        /// <param name="txt1">検索フィールドの情報</param>
-        /// <param name="path"></param>
-        /// <returns>pathDataのList</returns>
-        /// 
-        private List<PathData> TextSearchPathData(string txt1, List<PathData> p)
-        {
-            //デフォルトでは全て返却
-            if (txt1 == "") return PartsList;
-
-            txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
-            string[] s = txt1.Split(' ');   //２語検索可能
-
-            //検索
-            for (int i = 0; i < s.Length; i++)
-            {
-                //and検索
-                p = PathDataSearch(s[i], p);     //自身を引数として範囲を狭める
-            }
-            return p;
-        }
-
-
-        /// <summary>
-        /// 検索フィールドの情報を渡してpathDataを返す
-        /// overLoad　pathがなければ追加していく検索を行う
-        /// </summary>
-        /// <param name="txt1">フィールド</param>
-        /// <returns></returns>
-        private List<PathData> TextSearchPathData( string txt1)
-        {
-            //デフォルトでは全て返却
-            if ( txt1 == "") return PartsList;
-
-            txt1 = txt1.Replace('　', ' ');  //全角スペースを一旦半角スペースに置換
-            string[] s = txt1.Split(' ');   //２語検索可能
-            List<PathData> p = new List<PathData>();    //or検索の場合は0から増やす
-
-            //検索
-            for (int i = 0; i < s.Length; i++)
-            {
-            //or検索
-                p.AddRange(PathDataSearch(s[i], PartsList));    //ローカルのパーツリストを引数とする                }
-            }
-            return p;
-        }
-
-
-        //pathDataの検索
-        private List<PathData> PathDataSearch(string s, List<PathData> list )
-        {
-            List<PathData> p = new List<PathData>();
-            foreach (PathData pList in list)  //ローカル優先
-            {
-                //全角+大文字で検索するように
-                if (pList.WideValue.Contains(Strings.StrConv(s.ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)))
-                {
-                    p.Add(pList);
-                }
-            }
-            return p;
-        }
-
-        //pathDataのlayer番号を含むpathDataを返す
-        /// <summary>
-        /// レイヤー番号を含むpathDataを返す
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns>List</returns>
-        private List<PathData> PathDataSearchLayer(string s ,List<PathData> ptlist)
-        {
-
-            if (s == "") return ptlist;
-
-            List<PathData> p = new List<PathData>();
-            foreach (PathData pList in ptlist)  //指定リストから
-            {
-                //layer nullがあるので事前にチェック
-                if(pList.Layer == null)
-                {
-                    continue;
-                //数字の検索（完全一致）
-                }else if ( pList.Layer.Equals(Strings.StrConv(s.ToUpper(),VbStrConv.Narrow)))
-                {
-                    p.Add(pList);
-                }
-            }
-            return p;
-        }
-
-        //与えられたpathDataリストからユニークなlayer番号を抽出　一旦数値変換⇒ソートしてstringで返す
-        private List<string> PathDataSearchLayerList(List<PathData> pList)
-        {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            List<int> intList = new List<int>();
-
-
-            foreach (PathData psList in pList)  //ローカル優先
-            {
-                if ( psList.Layer != null &&  dic.ContainsKey(psList.Layer) == false)
-                {
-                    dic.Add( psList.Layer, null);
-                    intList.Add(int.Parse(psList.Layer));
-                }
-            }
-            intList.Sort();
-            return intList.ConvertAll(s => s.ToString());
-        }
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 }

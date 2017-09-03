@@ -120,7 +120,7 @@ namespace PathLink
             listBox_cList.DataSource = null;
             listBox_pList.DataSource = null;
 
-           // listBox1.DataSource = radioButton1.Checked ? proc.OrList : proc.AndList;
+            listBox1.DataSource = radioButton1.Checked ? PathDB.OrList : PathDB.AndList;
             listBox1.ValueMember = "value";
             listBox1.DisplayMember = "wideValue";
 
@@ -156,14 +156,14 @@ namespace PathLink
 
 
                     //親リストにバインディング
-       //             ListParentSrc.DataSource = p.parentList;
+                    ListParentSrc.DataSource = p.GetParentList();
                     listBox_pList.DataSource = ListParentSrc;
                     listBox_pList.DisplayMember = "wideValue";
                     listBox_pList.ValueMember = "value";
 
 
                     //子リストにバインディング
-        //            ListChildSrc.DataSource = p.childList;
+                    ListChildSrc.DataSource = p.GetChildList(); ;
                     listBox_cList.DataSource = ListChildSrc;
                     listBox_cList.DisplayMember = "wideValue";
                     listBox_cList.ValueMember = "value";
