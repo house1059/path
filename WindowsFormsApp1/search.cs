@@ -22,13 +22,6 @@ namespace PathLink
         CustomList customList;
 
 
-
-        BindingSource SearchSrc { get; } = new BindingSource();             //メイン画面用のバインディングデータ
-        BindingSource SearchLayerSrc { get; } = new BindingSource();        //layer用 cmdboxなので
-        BindingSource ListParentSrc { get; } = new BindingSource();        //親の一時リスト
-        BindingSource ListChildSrc { get; } = new BindingSource();         //子の一時リスト
-
-
         public Search()
         {
             InitializeComponent();
@@ -40,16 +33,16 @@ namespace PathLink
                 Visible = false
             };
         }
-        
 
 
         //検索の実態
         private void TextFormSearch( )
         {
-            PathDB.TextSearch(richTextBox1.Text, comboBox1.Text);
+            PathDB.TextSearch(richTextBox1.Text, comboBox1.Text);       //Listの作成を依頼
             ViewUpdate();   //再描画
+
         }
-        
+
 
         //画面クリア
         private void ViewClear()
@@ -75,15 +68,12 @@ namespace PathLink
             };
             if (fd.ShowDialog() == DialogResult.OK)
             {
+                label4.Text = "ﾃﾞｰﾀ作成中";
                 proc.ReadPathFile(fd.FileName);
-                label4.Text = fd.SafeFileName;
 
                 TextFormSearch();   //検索
-                SearchLayerSrc.DataSource = proc.ResultLayer;
-                SearchLayerSrc.Insert(0,"");
-                comboBox1.DataSource = SearchLayerSrc;
-                comboBox1.SelectedIndex = 0;
-
+                comboBox1.DataSource = PathDB.LayerList;
+                label4.Text = fd.SafeFileName;
             }
             ViewUpdate();   //再描画
         }
@@ -113,8 +103,15 @@ namespace PathLink
             TextFormSearch();   //検索
         }
 
+
+
+
         private void ViewUpdate()   //再描画の処理
         {
+
+            if (label4.Text == "ﾃﾞｰﾀ作成中") return;
+
+
             listBox1.BeginUpdate();
 
             listBox_cList.DataSource = null;
@@ -146,7 +143,6 @@ namespace PathLink
             {
                 try
                 {
-
                     PathData p = PathDB.GetPathData(listBox1.SelectedValue.ToString());
 
                     textBox2.Text = p.FilePath;
@@ -156,15 +152,13 @@ namespace PathLink
 
 
                     //親リストにバインディング
-                    ListParentSrc.DataSource = p.GetParentList();
-                    listBox_pList.DataSource = ListParentSrc;
+                    listBox_pList.DataSource = p.GetParentList();
                     listBox_pList.DisplayMember = "wideValue";
                     listBox_pList.ValueMember = "value";
 
 
                     //子リストにバインディング
-                    ListChildSrc.DataSource = p.GetChildList(); ;
-                    listBox_cList.DataSource = ListChildSrc;
+                    listBox_cList.DataSource = p.GetChildList();
                     listBox_cList.DisplayMember = "wideValue";
                     listBox_cList.ValueMember = "value";
 
@@ -257,6 +251,7 @@ namespace PathLink
             contextChildMenuStrip.Items[0].Enabled = false;     //開くNG
             contextChildMenuStrip.Items[2].Enabled = false;     //MyListNG
             contextChildMenuStrip.Items[3].Enabled = false;     //List切り離しNG
+            contextChildMenuStrip.Items[4].Enabled = false;     //検索Windowへ
 
             if (listBox_cList.SelectedIndex == -1 || listBox_cList.SelectedValue == null)
                 return;
@@ -267,11 +262,13 @@ namespace PathLink
                 contextChildMenuStrip.Items[0].Enabled = true;     //開くOK
 
 
-
-
             //MyListOK
             contextChildMenuStrip.Items[2].Enabled = true;     //MyListOK
             contextChildMenuStrip.Items[3].Enabled = true;     //List切り離しOK
+
+            //検索WindowOK
+            contextChildMenuStrip.Items[4].Enabled = true;      //検索Window許可
+
         }
 
 
@@ -283,6 +280,7 @@ namespace PathLink
             contextParentMenuStrip.Items[0].Enabled = false;     //開くNG
             contextParentMenuStrip.Items[2].Enabled = false;     //MyListNG
             contextParentMenuStrip.Items[3].Enabled = false;     //List切り離しNG
+            contextParentMenuStrip.Items[4].Enabled = false;     //検索Windowへ
 
             if (listBox_pList.SelectedIndex == -1)
                 return;
@@ -296,6 +294,9 @@ namespace PathLink
             //MyListOK
             contextParentMenuStrip.Items[2].Enabled = true;     //MyListOK
             contextParentMenuStrip.Items[3].Enabled = true;     //List切り離しOK
+
+            //検索WindowOK
+            contextParentMenuStrip.Items[4].Enabled = true;      //検索Window許可
         }
 
 
@@ -402,11 +403,11 @@ namespace PathLink
 
             if (radioButton1.Checked == true)
             {
-         //       customList = new CustomList(proc.OrList);
+                customList = new CustomList(PathDB.OrList);
             }
             else
             {
-         //       customList = new CustomList(proc.AndList);
+                customList = new CustomList(PathDB.AndList);
             }
             customList.titleLabel.Text = this.richTextBox1.Text;
             customList.parentChildLabel.Text = "本";
@@ -439,7 +440,7 @@ namespace PathLink
         private void ChildToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = PathDB.GetPathData(listBox1.SelectedValue.ToString());
-         //   customList = new CustomList(new List<PathData>( path.childList) );  //→新しいオブジェクトを渡さないとデータソース上から消えてしまう
+            customList = new CustomList( path.GetChildList() );  //→新しいオブジェクトを渡さないとデータソース上から消えてしまう
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             customList.parentChildLabel.Text = "子";
             customList.SearchRichTextBox = this.richTextBox1;
@@ -471,7 +472,7 @@ namespace PathLink
         private void ParentToolStripMenuSplit_Click(object sender, EventArgs e)
         {
             PathData path = PathDB.GetPathData(listBox1.SelectedValue.ToString());
-        //    customList = new CustomList(new List<PathData>( path.parentList));//→新しいオブジェクトを渡さないとデータソース上から消えてしまう
+            customList = new CustomList( path.GetParentList() );//→新しいオブジェクトを渡さないとデータソース上から消えてしまう
 
             customList.titleLabel.Text = this.listBox1.SelectedValue.ToString();
             customList.parentChildLabel.Text = "親";
@@ -563,7 +564,7 @@ namespace PathLink
             {
 
                 XlsPath x = new XlsPath();
-                //x.DataConvert(fd.FileName);    //ここで引数を渡せばいいのでは？
+                x.DataConvert(fd.FileName);    //ここで引数を渡せばいいのでは？
 
             }
 
@@ -578,6 +579,16 @@ namespace PathLink
         private void listBox_pList_Resize(object sender, EventArgs e)
         {
                 
+        }
+
+        private void ChildToolStripMenuSearchWindow_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = listBox_cList.SelectedValue.ToString();
+        }
+
+        private void ParentToolStripMenuSearchWindow_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = listBox_pList.SelectedValue.ToString();
         }
     }
 }

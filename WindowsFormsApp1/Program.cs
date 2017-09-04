@@ -1,13 +1,12 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
 using System.Text;
-using Microsoft.VisualBasic;
+using System.Windows.Forms;
+
 
 #if EXCEL_ON
 using Excel = Microsoft.Office.Interop.Excel;           //とりあえずのCOMオブジェクト  ClosedXMLに移行できればそのうち
@@ -35,13 +34,7 @@ namespace PathLink
     {
         private const String PATH_VERSION = "◎PathV4";
 
-        //オブジェクトで管理するように変更します。
-        public List<PathData> LayerList { get; private set; } = new List<PathData>();  //全体から読込んだlayer番号リスト
-        public List<string> ResultLayer { get; private set; } = new List<string>();    //
-       
-
-        List<PathData> PartsList { get; set; } = new List<PathData>();    //パーソナルデータ
-       
+     
         
         //Excelオープン
         public void ExcelOpen(PathData path)
@@ -52,6 +45,7 @@ namespace PathLink
         public void ExcelOpen(string s)
         {
             s = Strings.StrConv(s, VbStrConv.Uppercase | VbStrConv.Wide);
+
             if (PathDB.PartsDic.ContainsKey(s))
             {
                 _ExcelOpen(PathDB.PartsDic[s]);
@@ -75,6 +69,14 @@ namespace PathLink
 
             try
             {
+                if(!File.Exists(path.FilePath))
+                {
+                    MessageBox.Show("該当ファイルが見つかりません。\n" + path.FilePath, "wrong", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+
                 ex = new Excel.Application();
                 wb = ex.Workbooks.Open(path.FilePath, true, true);
                 sh = ex.Sheets[path.SheetName];
@@ -84,7 +86,7 @@ namespace PathLink
                 rn.Select();
 
                 ex.Visible = true;
-                System.Threading.Thread.Sleep(1000);
+                //System.Threading.Thread.Sleep(1000);
 
                 Marshal.ReleaseComObject(rn);
                 Marshal.ReleaseComObject(sh);
@@ -107,6 +109,10 @@ namespace PathLink
         //ﾌｧｲﾙﾊﾟｽを渡して読込む
         public void ReadPathFile(string filePath)
         {
+
+            PathDB.PartsDic.Clear();
+
+
             //◎pathﾃｷｽﾄを読込む　
             StreamReader stream = new StreamReader(filePath, Encoding.GetEncoding("shift_jis"));
             string str = stream.ReadLine();     //日付
@@ -161,17 +167,9 @@ namespace PathLink
                 RegistChild(st1[4].Split(','),  p);      //子どもを登録
             }
 
+            //読込み完了した後にLayerListの作成
+            PathDB.CreateLayerList();
 
-            //データを読み込んだあとはLayerListも作成しておく
-            //ユニークなテーブルを作成するためhashsetを使用
-            //Listに変換　並び替えは必要？
-
-            HashSet<string> hash = new HashSet<string>();
-            foreach (PathData p in PathDB.PartsDic.Values)
-            {
-                hash.Add(p.Layer);
-            }
-            PathDB.LayerList =  hash.ToList<string>();
 
         }
 

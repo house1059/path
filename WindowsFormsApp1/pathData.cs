@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PathLink
 {
-    public class PathData:ICloneable
+    public class PathData
     {
 
         public string FilePath { get; set; }
@@ -26,15 +26,6 @@ namespace PathLink
 
         private Dictionary<string, PathData> parentDic = new Dictionary<string, PathData>();
         private Dictionary<string, PathData> childDic = new Dictionary<string, PathData>();
-
-
-        private List<PathData> parentList = new List<PathData>();
-        private List<PathData> childList = new List<PathData>();    //LINQでExists使えるならば早そう
-
-        
-
-
-        public string bindingData;
 
 
         /// <summary>
@@ -58,36 +49,15 @@ namespace PathLink
         }
 
 
-        public ICollection<PathData> GetChildList()
+        public List<PathData> GetParentList()
         {
-            return childDic.Values;
+            return parentDic.Values.ToList<PathData>();
         }
 
-        public ICollection<PathData> GetParentList()
+        public List<PathData> GetChildList()
         {
-            return parentDic.Values;
+            return childDic.Values.ToList<PathData>();
         }
-
-
-        //ｲﾝﾀｰﾌｪｲｽ
-        public object Clone()
-        {
-            //valueとWideValue以外をｺﾋﾟｰ
-            PathData p = new PathData()
-            {
-                FilePath = this.FilePath,
-                SheetName = this.SheetName,
-                Address = this.Address,
-                Layer = this.Layer,
-            };
-            return p;
-        }
-        //違いを確認する
-        public object Clone( int x)
-        {
-            return MemberwiseClone();
-        }
-
 
     }
 
@@ -99,9 +69,9 @@ namespace PathLink
 
         public static Dictionary<string, PathData> PartsDic { get; set; } = new Dictionary<string, PathData>();
 
-        public static List<PathData> OrList { get; protected set; } = null;
-        public static List<PathData> AndList { get; protected set; } = null;
-        public static List<string> LayerList { get;  set; } = null;
+        public static List<PathData> OrList { get;  private set; } = null;
+        public static List<PathData> AndList { get; private set; } = null;
+        public static List<string> LayerList { get; private set; } = null;
 
 
 
@@ -125,12 +95,8 @@ namespace PathLink
         /// <param name="layer">レイヤーフィールド</param>
         public static void TextSearch(string body, string layer)
         {
-
-
-
-
-
-
+            CreateAndList(body, layer);
+            CreateOrList(body, layer);
         }
 
 
@@ -193,6 +159,26 @@ namespace PathLink
         {
             if (layer == "") return list;
             return list = list.FindAll(p => p.Layer == layer);
+        }
+
+
+        //データを読み込んだあとはLayerListも作成しておく
+        //ユニークなテーブルを作成するためhashsetを使用
+        //Listに変換　並び替えは必要？
+        public static void CreateLayerList()
+        {
+            HashSet<int> hash = new HashSet<int>();
+            foreach (PathData p in PathDB.PartsDic.Values)
+            {
+                if(p.Layer != null)
+                    hash.Add( int.Parse(p.Layer));
+            }
+
+            List<int> sorted = hash.ToList();
+            sorted.Sort();
+
+            LayerList =  sorted.ConvertAll(s => s.ToString());
+            LayerList.Insert(0, "");
         }
     }
 }
