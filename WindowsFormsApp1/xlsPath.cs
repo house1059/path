@@ -1,9 +1,6 @@
-﻿using System;
+﻿using ClosedXML.Excel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClosedXML.Excel;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PathLink
@@ -15,8 +12,7 @@ namespace PathLink
     {
 
         public string FilePath { get; set; }    //データ変換ツール
-        XLWorkbook wb = null;
-
+       
 
 
         public XlsPath()
@@ -32,104 +28,121 @@ namespace PathLink
         /// </summary>
         public void DataConvert(string filePath)
         {
-            //メンバ
-            IXLRange range = null;
+            IXLWorksheet sh = null;
+            List<string> filePathList = new List<string>();
 
 
+            try
+            {
+                //ﾃﾞｰﾀ変換ツールを開いてリストを作成します。
+                FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                XLWorkbook wb = new XLWorkbook(fs, XLEventTracking.Disabled);
+                if (!wb.TryGetWorksheet("変換設定", out sh))
+                {
+                    MessageBox.Show("変換設定のシートが見つかりませんでした", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            //ファイルが存在するかの確認を行う
-            if (!System.IO.File.Exists(filePath))
+
+                //ファイルパスを抜く ｾﾙの検索が無いのでC1からC下限まで逐次検索
+                
+                for (int i = 1; i < sh.LastRowUsed().RowNumber(); i++)
+                {
+                    if (wb.Worksheet("変換設定").Cell($"C{i}").Value.ToString() == "変換ファイル名（フルパス）")
+                    {
+                        if (wb.Worksheet("変換設定").Cell($"D{i}").Value.ToString() != "")
+                        {
+                            filePathList.Add(wb.Worksheet("変換設定").Cell($"D{i}").Value.ToString());
+                        }
+                    }
+                }
+
+
+            }
+            catch (System.IO.FileNotFoundException)
             {
                 MessageBox.Show(filePath + "が見つかりません", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
-
-            XLWorkbook wb = null;
-            //データ変換ツールを開いてまずはすべてのパスを確認し、xls形式が存在しないか確認する。
-            try
-            {
-                wb = new XLWorkbook(filePath);
-            }
-            catch (System.IO.IOException)
+            }catch (System.IO.IOException)
             {
                 MessageBox.Show("ﾃﾞｰﾀ変換ツールを一旦閉じてください", "Error", MessageBoxButtons.OK);
                 return;
-
             }
+      
+           
 
-
-            IXLWorksheet sh;
-            if (wb.TryGetWorksheet("変換設定", out sh) )
+            //ファイルパルの取得完了したので生死判定と拡張子判定
+            string dedString = "";
+            string dedExtension = "";
+            foreach (string list in filePathList)
             {
-                MessageBox.Show("変換設定のシートが見つかりませんでした", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FileInfo info = new FileInfo(list);
+                if (!File.Exists(list))
+                {
+                    dedString += list.ToString() + "\n";
+                }
+
+                if (!(info.Extension == ".xlsx" || info.Extension == ".xlsm"))
+                {
+                    dedExtension += list.ToString() + "\n";
+                }
+            }
+            if (dedString != "")
+            {
+                MessageBox.Show("以下のリンクが見つかりません\n" + dedString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            else
+            if(dedExtension != "")
             {
-
+                MessageBox.Show("拡張子は.xlsxか.xlsmのみしか取得できません\n" + dedExtension, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
 
-            //ファイルパスを抜く ｾﾙの検索が無いのでC1からC下限まで逐次検索
-            range = wb.Worksheet("変換設定").Range("C1");
-
-            for (int i = 1; i < sh.RangeUsed. )
-
-
-            //    For colNo = 1 To wb.RangeUsed.RangeAddress.LastAddress.ColumnNumber
-            //       Dim cell = ws.Cell(rowNo, colNo)
-            //            sb.Add(cell.Value.ToString)
-            //        Next
+            //ﾃﾞｰﾀ取得処理を行う。
+            foreach(string list in filePathList)
+            {
+                FileStream fs = new FileStream(list, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                XLWorkbook wb = new XLWorkbook(fs, XLEventTracking.Disabled);
 
 
+                foreach ( IXLWorksheet sheet in wb.Worksheets)
+                {
+                    switch (sheet.Name)
+                    {
+                        case "ランプ部品":
+                            break;
 
-                //    string address = wb.Worksheet("変換設定").Range("C65536").RowsUsed()
-                //    while()
+                        case "サウンド部品":
+                            break;
 
+                        case "モータ部品":
+                            break;
 
-                //    Set objRange = vrWkBook.Sheets("変換設定").Cells.Find("◎",,, 1,,, 0)  '//シート名固定
-                //    if ( range )
+                        case "選択テーブル部品":
+                            break;
 
-                //    If Not objRange Is Nothing Then
+                        case "ＳＥＬ":
+                            break;
 
-                //    strStart = objRange.ADDRESS
+                        case "パターン":
+                            break;
 
-                //    i = 1
+                        case "ＰＡＴ":
+                            break;
 
-                //    Do
-                //        Do While objRange.Offset(i, 1).Value = "変換ファイル名（フルパス）"   '//このキーで探す
+                        case "ＴＢ":
+                            break;
 
-                //            If objRange.Offset(i, 2).value <> "" Then
-                //                 ReDim Preserve strFileName(Ubound(strFileName)+1)
-                // ReDim Preserve strFileAdd(Ubound(strFileAdd) + 1)
+                        case "関数部品":
+                            break;
 
-                //                strFileName(Ubound(strFileName) - 1) = objRange.Offset(i, 2).value
+                        case "サウンドフレーズ部品":
+                            break;
 
-                //            '//	デバッグ
-
-                //                strFileAdd(Ubound(strFileAdd) - 1) = objRange.Offset(i, 2).address
-
-                //            End If
-
-                //            i = i + 1
-
-                //        Loop
-                //        Set objRange = vrWkBook.Sheets("変換設定").Cells.FindNext(objRange)
-
-                //        i = 1
-
-                //    Loop While Not objRange Is Nothing And objRange.ADDRESS<> strStart
-
-                //End If
-
-                //vrWkBook.Saved = True
-
-                //vrWkBook.Close
-
-
-
-                //}
-
+                    }
+                }
+            }
         }
 
     }
