@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+
 
 namespace PathLink
 {
@@ -37,23 +40,15 @@ namespace PathLink
                 //ﾃﾞｰﾀ変換ツールを開いてリストを作成します。
                 FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 XLWorkbook wb = new XLWorkbook(fs, XLEventTracking.Disabled);
-                if (!wb.TryGetWorksheet("変換設定", out sh))
-                {
-                    MessageBox.Show("変換設定のシートが見つかりませんでした", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
+                sh = wb.Worksheet("変換設定");
 
                 //ファイルパスを抜く ｾﾙの検索が無いのでC1からC下限まで逐次検索
-                
                 for (int i = 1; i < sh.LastRowUsed().RowNumber(); i++)
                 {
-                    if (wb.Worksheet("変換設定").Cell($"C{i}").Value.ToString() == "変換ファイル名（フルパス）")
+                    string path = sh.Cell($"D{i}").Value.ToString();
+                    if (sh.Cell($"C{i}").Value.ToString() == "変換ファイル名（フルパス）" && path != "")
                     {
-                        if (wb.Worksheet("変換設定").Cell($"D{i}").Value.ToString() != "")
-                        {
-                            filePathList.Add(wb.Worksheet("変換設定").Cell($"D{i}").Value.ToString());
-                        }
+                        filePathList.Add(path);
                     }
                 }
 
@@ -68,35 +63,18 @@ namespace PathLink
                 MessageBox.Show("ﾃﾞｰﾀ変換ツールを一旦閉じてください", "Error", MessageBoxButtons.OK);
                 return;
             }
-      
-           
+            catch (System.Exception)
+            {
+                MessageBox.Show("変換設定のシートが見つかりませんでした", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+
 
             //ファイルパルの取得完了したので生死判定と拡張子判定
-            string dedString = "";
-            string dedExtension = "";
-            foreach (string list in filePathList)
-            {
-                FileInfo info = new FileInfo(list);
-                if (!File.Exists(list))
-                {
-                    dedString += list.ToString() + "\n";
-                }
-
-                if (!(info.Extension == ".xlsx" || info.Extension == ".xlsm"))
-                {
-                    dedExtension += list.ToString() + "\n";
-                }
-            }
-            if (dedString != "")
-            {
-                MessageBox.Show("以下のリンクが見つかりません\n" + dedString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!DeadOrAlive(filePathList))
                 return;
-            }
-            if(dedExtension != "")
-            {
-                MessageBox.Show("拡張子は.xlsxか.xlsmのみしか取得できません\n" + dedExtension, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
 
 
             //ﾃﾞｰﾀ取得処理を行う。
@@ -141,9 +119,133 @@ namespace PathLink
                             break;
 
                     }
+                    System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
                 }
             }
         }
+
+        //EEplus版
+        public void DataConvertEE(string filePath)
+        {
+            List<string> filePathList = new List<string>();
+            try
+            {
+                //ﾃﾞｰﾀ変換ツールを開いてリストを作成します。
+                ExcelPackage excel = new ExcelPackage(new FileInfo(filePath));
+                ExcelWorksheet sh = excel.Workbook.Worksheets["変換設定"];      //ｼｰﾄがない場合はnullが返る
+
+                if (sh == null)
+                {
+                    MessageBox.Show("変換設定のシートが見つかりませんでした", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                for(int i = 1; i < sh.Dimension.Rows; i++)
+                {
+                    string path = sh.Cells[$"D{i}"].Value == null ? "": sh.Cells[$"D{i}"].Value.ToString();
+                    if (sh.Cells[$"C{i}"].Value == null ? false : sh.Cells[$"C{i}"].Value.ToString().ToString() == "変換ファイル名（フルパス）" && path != "")
+                    {
+                        filePathList.Add(path);
+                    }
+                }
+            }
+            catch (System.IO.FileNotFoundException notFound)
+            {
+                MessageBox.Show(filePath + "が見つかりません" + "\n" + notFound, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            catch (System.IO.IOException ioExp)
+            {
+                MessageBox.Show("ﾃﾞｰﾀ変換ツールを一旦閉じてください" + "\n" + ioExp, "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+
+            //ファイルパルの取得完了したので生死判定と拡張子判定
+            if (!DeadOrAlive(filePathList))
+                return;
+
+
+            //ﾃﾞｰﾀ取得処理を行う。
+            foreach (string list in filePathList)
+            {
+                ExcelPackage excel = new ExcelPackage(new FileInfo(list));
+
+                foreach (ExcelWorksheet sheet in excel.Workbook.Worksheets)
+                {
+                    switch (sheet.Name)
+                    {
+                        case "ランプ部品":
+                            break;
+
+                        case "サウンド部品":
+                            break;
+
+                        case "モータ部品":
+                            break;
+
+                        case "選択テーブル部品":
+                            break;
+
+                        case "ＳＥＬ":
+                            break;
+
+                        case "パターン":
+                            break;
+
+                        case "ＰＡＴ":
+                            break;
+
+                        case "ＴＢ":
+                            break;
+
+                        case "関数部品":
+                            break;
+
+                        case "サウンドフレーズ部品":
+                            break;
+
+                    }
+                    System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
+                }
+                excel.Dispose();    //GCの前に殺す
+            }
+
+
+        }
+
+
+        private bool DeadOrAlive(List<string> filePathList)
+        {
+            //ファイルパルの取得完了したので生死判定と拡張子判定
+            string dedString = "";
+            string dedExtension = "";
+            foreach (string list in filePathList)
+            {
+                FileInfo info = new FileInfo(list);
+                if (!File.Exists(list))
+                {
+                    dedString += list.ToString() + "\n";
+                }
+
+                if (!(info.Extension == ".xlsx" || info.Extension == ".xlsm"))
+                {
+                    dedExtension += list.ToString() + "\n";
+                }
+            }
+            if (dedString != "")
+            {
+                MessageBox.Show("以下のリンクが見つかりません\n" + dedString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (dedExtension != "")
+            {
+                MessageBox.Show("拡張子は.xlsxか.xlsmのみしか取得できません\n" + dedExtension, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+
 
     }
 }
