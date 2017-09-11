@@ -44,7 +44,7 @@ namespace PathLink
                 sh = wb.Worksheet("変換設定");
 
                 //ファイルパスを抜く ｾﾙの検索が無いのでC1からC下限まで逐次検索
-                for (int i = 1; i < sh.LastRowUsed().RowNumber(); i++)
+                for (int i = 1; i <= sh.LastRowUsed().RowNumber(); i++)
                 {
                     string path = sh.Cell($"D{i}").Value.ToString();
                     if (sh.Cell($"C{i}").Value.ToString() == "変換ファイル名（フルパス）" && path != "")
@@ -78,9 +78,12 @@ namespace PathLink
                 return;
 
             progress prg = new progress();
-            int whole = 0;
-            Stopwatch stp = new Stopwatch();
             prg.Show();
+            Stopwatch stp = new Stopwatch();
+
+            prg.wholeProgress.Maximum = filePathList.Count;
+            prg.wholeProgress.Minimum = 0;
+            prg.wholeProgress.Value = 0;
 
             //ﾃﾞｰﾀ取得処理を行う。
             foreach (string list in filePathList)
@@ -88,14 +91,20 @@ namespace PathLink
                 stp.Start();
                 FileStream fs = new FileStream(list, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 XLWorkbook wb = new XLWorkbook(fs, XLEventTracking.Disabled);
-                prg.wholeLabel.Text = new FileInfo(list).Name;
-                prg.wholeProgress.Value = whole / filePathList.Count * 100;
 
-                int single = 0;
+                prg.wholeLabel.Text = new FileInfo(list).Name;
+                prg.wholeProgress.Value++;
+                prg.singleProgress.Maximum = wb.Worksheets.Count;
+                prg.singleProgress.Minimum = 0;
+                prg.singleProgress.Value = 0;
+
+
                 foreach ( IXLWorksheet sheet in wb.Worksheets)
                 {
                     prg.singleLabel.Text = sheet.Name;
-                    prg.singleProgress.Value = single / wb.Worksheets.Count;
+                    prg.singleProgress.Value++;
+                    prg.Update();
+                    //System.Threading.Thread.Sleep(1000);    //1秒エミュレート
 
                     switch (sheet.Name)
                     {
@@ -135,7 +144,7 @@ namespace PathLink
             }
             prg.Dispose();
             stp.Start();
-            System.Console.WriteLine(stp.Elapsed);
+            System.Console.WriteLine("処理時間：" + stp.Elapsed);
         }
 
         //EEplus版
@@ -181,10 +190,12 @@ namespace PathLink
 
 
             progress prg = new progress();
-            Stopwatch stp = new Stopwatch();
-            prg.wholeProgress.Maximum = filePathList.Count;
-            prg.wholeProgress.Value = 0;
             prg.Show();
+            Stopwatch stp = new Stopwatch();
+
+            prg.wholeProgress.Maximum = filePathList.Count;
+            prg.wholeProgress.Minimum = 0;
+            prg.wholeProgress.Value = 0;
 
 
             //ﾃﾞｰﾀ取得処理を行う。
@@ -193,13 +204,11 @@ namespace PathLink
                 stp.Start();
                 ExcelPackage excel = new ExcelPackage(new FileInfo(list));
 
-                prg.singleProgress.Maximum = excel.Workbook.Worksheets.Count;
                 prg.wholeLabel.Text = new FileInfo(list).Name;
-
-                //計算方法　進捗/トータル
                 prg.wholeProgress.Value++;
+                prg.singleProgress.Maximum = excel.Workbook.Worksheets.Count;
+                prg.singleProgress.Minimum = 0;
                 prg.singleProgress.Value = 0;
-                prg.Update();
 
 
                 foreach (ExcelWorksheet sheet in excel.Workbook.Worksheets)
@@ -207,7 +216,7 @@ namespace PathLink
                     prg.singleLabel.Text = sheet.Name;
                     prg.singleProgress.Value++;
                     prg.Update();
-                    System.Threading.Thread.Sleep(1000);    //1秒エミュレート
+                    //System.Threading.Thread.Sleep(1000);    //1秒エミュレート
                     switch (sheet.Name)
                     {
                         case "ランプ部品":
@@ -247,8 +256,8 @@ namespace PathLink
             }
 
             prg.Dispose();
-            stp.Start();
-            System.Console.WriteLine(stp.Elapsed);
+            stp.Stop();
+            System.Console.WriteLine("処理時間EE：" + stp.Elapsed);
 
 
         }

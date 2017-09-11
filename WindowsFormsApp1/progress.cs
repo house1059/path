@@ -21,12 +21,12 @@ namespace PathLink
             wholeProgress = this.ProgressWhole;
             singleProgress = this.ProgressSingle;
 
-            wholeProgress.Value = 0;
-            singleProgress.Value = 0;
             wholeProgress.Minimum = 0;
             singleProgress.Minimum = 0;
 
         }
+
+
 
         public Label wholeLabel { get; set; }
         public Label singleLabel { get; set; }
