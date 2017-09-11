@@ -100,6 +100,12 @@
     <Compile Include="MyList.Designer.cs">
       <DependentUpon>MyList.cs</DependentUpon>
     </Compile>
+    <Compile Include="progress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="progress.Designer.cs">
+      <DependentUpon>progress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MyList.resx">
       <DependentUpon>MyList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="progress.resx">
+      <DependentUpon>progress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Search.resx">
       <DependentUpon>Search.cs</DependentUpon>

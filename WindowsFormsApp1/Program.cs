@@ -1,4 +1,4 @@
-﻿#define EXCEL_ON
+﻿//#define EXCEL_ON
 
 using Microsoft.VisualBasic;
 using System;

@@ -59,6 +59,7 @@
             this.contextParentMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ParentToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ParentToolStripMenuSearchWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.ParentToolStripMenuToMyList = new System.Windows.Forms.ToolStripMenuItem();
             this.ParentToolStripMenuSplit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,6 +67,7 @@
             this.contextChildMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ChildToolStripMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ChildToolStripMenuSearchWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.ChildToolStripMenuToMyList = new System.Windows.Forms.ToolStripMenuItem();
             this.ChildToolStripMenuSplit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -77,8 +79,6 @@
             this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.OpeenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ChildToolStripMenuSearchWindow = new System.Windows.Forms.ToolStripMenuItem();
-            this.ParentToolStripMenuSearchWindow = new System.Windows.Forms.ToolStripMenuItem();
             MainToolStripMyListView = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMainMenuStrip.SuspendLayout();
             this.contextParentMenuStrip.SuspendLayout();
@@ -89,7 +89,7 @@
             // MainToolStripMyListView
             // 
             MainToolStripMyListView.Name = "MainToolStripMyListView";
-            MainToolStripMyListView.Size = new System.Drawing.Size(163, 22);
+            MainToolStripMyListView.Size = new System.Drawing.Size(147, 22);
             MainToolStripMyListView.Text = "MyListの表示";
             MainToolStripMyListView.Click += new System.EventHandler(this.MainToolStripMyListView_Click);
             // 
@@ -131,26 +131,26 @@
             this.toolStripMenuItem3,
             MainToolStripMyListView});
             this.contextMainMenuStrip.Name = "contextMenuStrip1";
-            this.contextMainMenuStrip.Size = new System.Drawing.Size(164, 104);
+            this.contextMainMenuStrip.Size = new System.Drawing.Size(148, 104);
             // 
             // MainToolStripOpen
             // 
             this.MainToolStripOpen.Enabled = false;
             this.MainToolStripOpen.Name = "MainToolStripOpen";
-            this.MainToolStripOpen.Size = new System.Drawing.Size(163, 22);
+            this.MainToolStripOpen.Size = new System.Drawing.Size(147, 22);
             this.MainToolStripOpen.Text = "開く(&O)";
             this.MainToolStripOpen.Click += new System.EventHandler(this.MainToolStripMenuOpen_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 6);
             // 
             // MainToolStripToMyList
             // 
             this.MainToolStripToMyList.Enabled = false;
             this.MainToolStripToMyList.Name = "MainToolStripToMyList";
-            this.MainToolStripToMyList.Size = new System.Drawing.Size(163, 22);
+            this.MainToolStripToMyList.Size = new System.Drawing.Size(147, 22);
             this.MainToolStripToMyList.Text = "MyListへ(&M)";
             this.MainToolStripToMyList.Click += new System.EventHandler(this.MainToolStripToMyList_Click);
             // 
@@ -158,14 +158,14 @@
             // 
             this.MainToolStripSplit.Enabled = false;
             this.MainToolStripSplit.Name = "MainToolStripSplit";
-            this.MainToolStripSplit.Size = new System.Drawing.Size(163, 22);
+            this.MainToolStripSplit.Size = new System.Drawing.Size(147, 22);
             this.MainToolStripSplit.Text = "List切り離し(&C)";
             this.MainToolStripSplit.Click += new System.EventHandler(this.MainToolStripSplit_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(144, 6);
             // 
             // textBox2
             // 
@@ -364,43 +364,51 @@
             this.toolStripMenuItem6,
             this.ParentToolStripMenuListView});
             this.contextParentMenuStrip.Name = "contextParentMenuStrip";
-            this.contextParentMenuStrip.Size = new System.Drawing.Size(164, 148);
+            this.contextParentMenuStrip.Size = new System.Drawing.Size(153, 126);
             // 
             // ParentToolStripMenuOpen
             // 
             this.ParentToolStripMenuOpen.Name = "ParentToolStripMenuOpen";
-            this.ParentToolStripMenuOpen.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuOpen.Size = new System.Drawing.Size(152, 22);
             this.ParentToolStripMenuOpen.Text = "開く(&O)";
             this.ParentToolStripMenuOpen.Click += new System.EventHandler(this.ParentToolStripMenuOpen_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
+            // 
+            // ParentToolStripMenuSearchWindow
+            // 
+            this.ParentToolStripMenuSearchWindow.Enabled = false;
+            this.ParentToolStripMenuSearchWindow.Name = "ParentToolStripMenuSearchWindow";
+            this.ParentToolStripMenuSearchWindow.Size = new System.Drawing.Size(152, 22);
+            this.ParentToolStripMenuSearchWindow.Text = "検索Windowへ";
+            this.ParentToolStripMenuSearchWindow.Click += new System.EventHandler(this.ParentToolStripMenuSearchWindow_Click);
             // 
             // ParentToolStripMenuToMyList
             // 
             this.ParentToolStripMenuToMyList.Name = "ParentToolStripMenuToMyList";
-            this.ParentToolStripMenuToMyList.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuToMyList.Size = new System.Drawing.Size(152, 22);
             this.ParentToolStripMenuToMyList.Text = "MyListへ(&M)";
             this.ParentToolStripMenuToMyList.Click += new System.EventHandler(this.ParentToolStripMenuToMyList_Click);
             // 
             // ParentToolStripMenuSplit
             // 
             this.ParentToolStripMenuSplit.Name = "ParentToolStripMenuSplit";
-            this.ParentToolStripMenuSplit.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuSplit.Size = new System.Drawing.Size(152, 22);
             this.ParentToolStripMenuSplit.Text = "List切り離し(&C)";
             this.ParentToolStripMenuSplit.Click += new System.EventHandler(this.ParentToolStripMenuSplit_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(160, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
             // 
             // ParentToolStripMenuListView
             // 
             this.ParentToolStripMenuListView.Name = "ParentToolStripMenuListView";
-            this.ParentToolStripMenuListView.Size = new System.Drawing.Size(163, 22);
+            this.ParentToolStripMenuListView.Size = new System.Drawing.Size(152, 22);
             this.ParentToolStripMenuListView.Text = "MyListの表示";
             this.ParentToolStripMenuListView.Click += new System.EventHandler(this.ParentToolStripMenuListView_Click);
             // 
@@ -415,26 +423,34 @@
             this.toolStripMenuItem4,
             this.ChildToolStripMenuListView});
             this.contextChildMenuStrip.Name = "contextMenuStrip2";
-            this.contextChildMenuStrip.Size = new System.Drawing.Size(165, 126);
+            this.contextChildMenuStrip.Size = new System.Drawing.Size(158, 126);
             // 
             // ChildToolStripMenuOpen
             // 
             this.ChildToolStripMenuOpen.Enabled = false;
             this.ChildToolStripMenuOpen.Name = "ChildToolStripMenuOpen";
-            this.ChildToolStripMenuOpen.Size = new System.Drawing.Size(164, 22);
+            this.ChildToolStripMenuOpen.Size = new System.Drawing.Size(157, 22);
             this.ChildToolStripMenuOpen.Text = "開く(&O)";
             this.ChildToolStripMenuOpen.Click += new System.EventHandler(this.ChildStripMenuOpen_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(154, 6);
+            // 
+            // ChildToolStripMenuSearchWindow
+            // 
+            this.ChildToolStripMenuSearchWindow.Enabled = false;
+            this.ChildToolStripMenuSearchWindow.Name = "ChildToolStripMenuSearchWindow";
+            this.ChildToolStripMenuSearchWindow.Size = new System.Drawing.Size(157, 22);
+            this.ChildToolStripMenuSearchWindow.Text = "検索Windowsへ";
+            this.ChildToolStripMenuSearchWindow.Click += new System.EventHandler(this.ChildToolStripMenuSearchWindow_Click);
             // 
             // ChildToolStripMenuToMyList
             // 
             this.ChildToolStripMenuToMyList.Enabled = false;
             this.ChildToolStripMenuToMyList.Name = "ChildToolStripMenuToMyList";
-            this.ChildToolStripMenuToMyList.Size = new System.Drawing.Size(164, 22);
+            this.ChildToolStripMenuToMyList.Size = new System.Drawing.Size(157, 22);
             this.ChildToolStripMenuToMyList.Text = "MyListへ(&M)";
             this.ChildToolStripMenuToMyList.Click += new System.EventHandler(this.ChildToolStripMenuToMyList_Click);
             // 
@@ -442,19 +458,19 @@
             // 
             this.ChildToolStripMenuSplit.Enabled = false;
             this.ChildToolStripMenuSplit.Name = "ChildToolStripMenuSplit";
-            this.ChildToolStripMenuSplit.Size = new System.Drawing.Size(164, 22);
+            this.ChildToolStripMenuSplit.Size = new System.Drawing.Size(157, 22);
             this.ChildToolStripMenuSplit.Text = "List切り離し(&C)";
             this.ChildToolStripMenuSplit.Click += new System.EventHandler(this.ChildToolStripMenuSplit_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(154, 6);
             // 
             // ChildToolStripMenuListView
             // 
             this.ChildToolStripMenuListView.Name = "ChildToolStripMenuListView";
-            this.ChildToolStripMenuListView.Size = new System.Drawing.Size(164, 22);
+            this.ChildToolStripMenuListView.Size = new System.Drawing.Size(157, 22);
             this.ChildToolStripMenuListView.Text = "MyListの表示";
             this.ChildToolStripMenuListView.Click += new System.EventHandler(this.ChildToolStripMenuListView_Click);
             // 
@@ -501,7 +517,7 @@
             this.ファイルFToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(629, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(629, 24);
             this.menuStrip1.TabIndex = 15;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -512,36 +528,20 @@
             this.toolStripMenuItem7,
             this.OpeenToolStripMenuItem});
             this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
-            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(85, 22);
+            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
             // 
             // toolStripMenuItem7
             // 
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(116, 6);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(107, 6);
             // 
             // OpeenToolStripMenuItem
             // 
             this.OpeenToolStripMenuItem.Name = "OpeenToolStripMenuItem";
-            this.OpeenToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.OpeenToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.OpeenToolStripMenuItem.Text = "開く(&O)";
             this.OpeenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
-            // 
-            // ChildToolStripMenuSearchWindow
-            // 
-            this.ChildToolStripMenuSearchWindow.Enabled = false;
-            this.ChildToolStripMenuSearchWindow.Name = "ChildToolStripMenuSearchWindow";
-            this.ChildToolStripMenuSearchWindow.Size = new System.Drawing.Size(164, 22);
-            this.ChildToolStripMenuSearchWindow.Text = "検索Windowsへ";
-            this.ChildToolStripMenuSearchWindow.Click += new System.EventHandler(this.ChildToolStripMenuSearchWindow_Click);
-            // 
-            // ParentToolStripMenuSearchWindow
-            // 
-            this.ParentToolStripMenuSearchWindow.Enabled = false;
-            this.ParentToolStripMenuSearchWindow.Name = "ParentToolStripMenuSearchWindow";
-            this.ParentToolStripMenuSearchWindow.Size = new System.Drawing.Size(163, 22);
-            this.ParentToolStripMenuSearchWindow.Text = "検索Windowへ";
-            this.ParentToolStripMenuSearchWindow.Click += new System.EventHandler(this.ParentToolStripMenuSearchWindow_Click);
             // 
             // Search
             // 

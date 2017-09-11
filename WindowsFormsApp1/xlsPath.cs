@@ -165,14 +165,22 @@ namespace PathLink
             if (!DeadOrAlive(filePathList))
                 return;
 
+            progress prg = new progress();
+            int whole = 0;
 
             //ﾃﾞｰﾀ取得処理を行う。
             foreach (string list in filePathList)
             {
                 ExcelPackage excel = new ExcelPackage(new FileInfo(list));
+                prg.wholeLabel.Text = new FileInfo(list).Name;
+                prg.wholeProgress.Value = whole / filePathList.Count * 100;
 
+                int single = 0;
                 foreach (ExcelWorksheet sheet in excel.Workbook.Worksheets)
                 {
+                    prg.singleLabel.Text = sheet.Name;
+                    prg.singleProgress.Value = single / excel.Workbook.Worksheets.Count;
+
                     switch (sheet.Name)
                     {
                         case "ランプ部品":
