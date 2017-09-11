@@ -15,18 +15,27 @@ namespace PathLink
         public progress()
         {
             InitializeComponent();
-            this.LabelWhole = wholeLabel;
-            this.LabelSingle = singleLabel;
-            this.ProgressWhole = wholeProgress;
-            this.ProgressSingle = singleProgress;
+
+            wholeLabel = this.LabelWhole;
+            singleLabel = this.LabelSingle;
+            wholeProgress = this.ProgressWhole;
+            singleProgress = this.ProgressSingle;
+
+            wholeProgress.Value = 0;
+            singleProgress.Value = 0;
+            wholeProgress.Minimum = 0;
+            singleProgress.Minimum = 0;
+
         }
 
-        public Label wholeLabel { get; }
-        public Label singleLabel { get; }
+        public Label wholeLabel { get; set; }
+        public Label singleLabel { get; set; }
 
 
-        public ProgressBar wholeProgress { get; }
-        public ProgressBar singleProgress { get; }
+        public ProgressBar wholeProgress { get; set; }
+        public ProgressBar singleProgress { get; set; }
+
+
 
 
     }

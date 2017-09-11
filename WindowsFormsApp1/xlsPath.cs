@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System.Diagnostics;
 
 
 namespace PathLink
@@ -76,16 +77,26 @@ namespace PathLink
             if (!DeadOrAlive(filePathList))
                 return;
 
+            progress prg = new progress();
+            int whole = 0;
+            Stopwatch stp = new Stopwatch();
+            prg.Show();
 
             //ﾃﾞｰﾀ取得処理を行う。
-            foreach(string list in filePathList)
+            foreach (string list in filePathList)
             {
+                stp.Start();
                 FileStream fs = new FileStream(list, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 XLWorkbook wb = new XLWorkbook(fs, XLEventTracking.Disabled);
+                prg.wholeLabel.Text = new FileInfo(list).Name;
+                prg.wholeProgress.Value = whole / filePathList.Count * 100;
 
-
+                int single = 0;
                 foreach ( IXLWorksheet sheet in wb.Worksheets)
                 {
+                    prg.singleLabel.Text = sheet.Name;
+                    prg.singleProgress.Value = single / wb.Worksheets.Count;
+
                     switch (sheet.Name)
                     {
                         case "ランプ部品":
@@ -122,6 +133,9 @@ namespace PathLink
                     System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
                 }
             }
+            prg.Dispose();
+            stp.Start();
+            System.Console.WriteLine(stp.Elapsed);
         }
 
         //EEplus版
@@ -140,7 +154,7 @@ namespace PathLink
                     return;
                 }
 
-                for(int i = 1; i < sh.Dimension.Rows; i++)
+                for(int i = 1; i <= sh.Dimension.Rows + 1; i++)
                 {
                     string path = sh.Cells[$"D{i}"].Value == null ? "": sh.Cells[$"D{i}"].Value.ToString();
                     if (sh.Cells[$"C{i}"].Value == null ? false : sh.Cells[$"C{i}"].Value.ToString().ToString() == "変換ファイル名（フルパス）" && path != "")
@@ -165,22 +179,35 @@ namespace PathLink
             if (!DeadOrAlive(filePathList))
                 return;
 
+
             progress prg = new progress();
-            int whole = 0;
+            Stopwatch stp = new Stopwatch();
+            prg.wholeProgress.Maximum = filePathList.Count;
+            prg.wholeProgress.Value = 0;
+            prg.Show();
+
 
             //ﾃﾞｰﾀ取得処理を行う。
             foreach (string list in filePathList)
             {
+                stp.Start();
                 ExcelPackage excel = new ExcelPackage(new FileInfo(list));
-                prg.wholeLabel.Text = new FileInfo(list).Name;
-                prg.wholeProgress.Value = whole / filePathList.Count * 100;
 
-                int single = 0;
+                prg.singleProgress.Maximum = excel.Workbook.Worksheets.Count;
+                prg.wholeLabel.Text = new FileInfo(list).Name;
+
+                //計算方法　進捗/トータル
+                prg.wholeProgress.Value++;
+                prg.singleProgress.Value = 0;
+                prg.Update();
+
+
                 foreach (ExcelWorksheet sheet in excel.Workbook.Worksheets)
                 {
                     prg.singleLabel.Text = sheet.Name;
-                    prg.singleProgress.Value = single / excel.Workbook.Worksheets.Count;
-
+                    prg.singleProgress.Value++;
+                    prg.Update();
+                    System.Threading.Thread.Sleep(1000);    //1秒エミュレート
                     switch (sheet.Name)
                     {
                         case "ランプ部品":
@@ -218,6 +245,10 @@ namespace PathLink
                 }
                 excel.Dispose();    //GCの前に殺す
             }
+
+            prg.Dispose();
+            stp.Start();
+            System.Console.WriteLine(stp.Elapsed);
 
 
         }
