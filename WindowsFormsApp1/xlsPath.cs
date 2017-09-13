@@ -98,7 +98,7 @@ namespace PathLink
                 prg.singleProgress.Minimum = 0;
                 prg.singleProgress.Value = 0;
 
-
+                Application.DoEvents();
                 foreach ( IXLWorksheet sheet in wb.Worksheets)
                 {
                     prg.singleLabel.Text = sheet.Name;
@@ -139,7 +139,7 @@ namespace PathLink
                             break;
 
                     }
-                    System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
+                    //System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
                 }
             }
             prg.Dispose();
@@ -210,7 +210,7 @@ namespace PathLink
                 prg.singleProgress.Minimum = 0;
                 prg.singleProgress.Value = 0;
 
-
+                Application.DoEvents();
                 foreach (ExcelWorksheet sheet in excel.Workbook.Worksheets)
                 {
                     prg.singleLabel.Text = sheet.Name;
@@ -250,9 +250,9 @@ namespace PathLink
                             break;
 
                     }
-                    System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
+                    //System.Console.WriteLine("ｼｰﾄの処理：" + sheet.Name);
                 }
-                excel.Dispose();    //GCの前に殺す
+                //excel.Dispose();    //GCの前に殺す
             }
 
             prg.Dispose();

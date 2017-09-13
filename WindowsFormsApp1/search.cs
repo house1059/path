@@ -565,7 +565,7 @@ namespace PathLink
 
                 XlsPath x = new XlsPath();
                 x.DataConvertEE(fd.FileName);    //ここで引数を渡せばいいのでは？
-                x.DataConvert(fd.FileName);
+                //x.DataConvert(fd.FileName);   ファイルオープンだけの比較でもEEPlus版が２倍ほど早い
 
             }
 

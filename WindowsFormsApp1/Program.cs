@@ -1,4 +1,4 @@
-﻿//#define EXCEL_ON
+﻿#define EXCEL_ON
 
 using Microsoft.VisualBasic;
 using System;
@@ -142,9 +142,9 @@ namespace PathLink
                     WideValue = Strings.StrConv(st1[3].ToUpper(), VbStrConv.Wide | VbStrConv.Uppercase)
                 };
 
-
+                int layer = 0;
                 //◎PathVer4.1.4.vbsだとサウンド設定ファイルの出力が悪いのでここで弾く
-                if (int.TryParse(st1[st1.Length - 1], out int layer))
+                if (int.TryParse(st1[st1.Length - 1], out  layer))
                 {
                     p.Layer = Strings.StrConv(st1[st1.Length - 1].ToUpper(), VbStrConv.Narrow); //数値に変換したいので小文字
                 }
